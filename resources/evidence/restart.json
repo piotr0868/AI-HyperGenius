@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "projects_preserved": 1,
+  "service_restarted": true,
+  "health": {
+    "service": "ok",
+    "ai_configured": false,
+    "model": "gpt-5-mini",
+    "sandbox": {
+      "available": true,
+      "image": "python@sha256:a6e34c598f2467ed0e9a8d349809fcd8b5c603269512df273a0bb1784edc11b1"
+    },
+    "limits": {
+      "model_calls": 12,
+      "tool_calls": 40,
+      "corrections": 3,
+      "tokens": 120000,
+      "seconds": 1200,
+      "command_seconds": 35,
+      "max_estimated_cost_usd": null
+    },
+    "cost_available": false
+  }
+}

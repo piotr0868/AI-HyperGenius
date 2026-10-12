@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "browser": "/usr/bin/chromium",
+  "checks": [
+    "pagina italiana",
+    "avvio progetto",
+    "credenziale assente: stato intervento",
+    "recupero dopo ricarica",
+    "documento persistente",
+    "layout 390px",
+    "nessun errore JavaScript"
+  ],
+  "ai_verified": false
+}

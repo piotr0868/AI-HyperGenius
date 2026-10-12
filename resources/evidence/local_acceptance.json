@@ -1,0 +1,78 @@
+{
+  "reference_backend": {
+    "exit_code": 0,
+    "timeout": false,
+    "stdout": "OFFICINA_CHECK={\"unit_tests\": 8, \"unit_failures\": 0, \"unit_errors\": 0, \"unit_skipped\": 0, \"unit_expected_failures\": 0, \"unit_unexpected_successes\": 0, \"contract\": [\"creazione\", \"consultazione\", \"validazione\", \"idempotenza\", \"persistenza dopo riavvio\"], \"unit_ok\": true, \"server_log\": \"Backend attività sulla porta 44933\\nBackend attività sulla porta 44933\\n\", \"passed\": true}\n",
+    "stderr": "test_concurrent_idempotency (test_activities.ActivityTests.test_concurrent_idempotency) ... ok\ntest_conflicting_request (test_activities.ActivityTests.test_conflicting_request) ... ok\ntest_create_and_list (test_activities.ActivityTests.test_create_and_list) ... ok\ntest_invalid_titles (test_activities.ActivityTests.test_invalid_titles) ... ok\ntest_missing_key (test_activities.ActivityTests.test_missing_key) ... ok\ntest_repeated_request (test_activities.ActivityTests.test_repeated_request) ... ok\ntest_restart_persistence (test_activities.ActivityTests.test_restart_persistence) ... ok\ntest_sql_is_data (test_activities.ActivityTests.test_sql_is_data) ... ok\n\n----------------------------------------------------------------------\nRan 8 tests in 0.059s\n\nOK\n",
+    "passed": true,
+    "check": {
+      "unit_tests": 8,
+      "unit_failures": 0,
+      "unit_errors": 0,
+      "unit_skipped": 0,
+      "unit_expected_failures": 0,
+      "unit_unexpected_successes": 0,
+      "contract": [
+        "creazione",
+        "consultazione",
+        "validazione",
+        "idempotenza",
+        "persistenza dopo riavvio"
+      ],
+      "unit_ok": true,
+      "server_log": "Backend attività sulla porta 44933\nBackend attività sulla porta 44933\n",
+      "passed": true
+    }
+  },
+  "intentional_fault": {
+    "exit_code": 1,
+    "timeout": false,
+    "stdout": "OFFICINA_CHECK={\"unit_tests\": 8, \"unit_failures\": 3, \"unit_errors\": 0, \"unit_skipped\": 0, \"unit_expected_failures\": 0, \"unit_unexpected_successes\": 0, \"contract\": [\"creazione\", \"consultazione\"], \"unit_ok\": false, \"contract_error\": \"AssertionError: Input non valido accettato: {'title': ''}\", \"server_log\": \"Backend attività sulla porta 39255\\n\", \"passed\": false}\n",
+    "stderr": "test_concurrent_idempotency (test_activities.ActivityTests.test_concurrent_idempotency) ... ok\ntest_conflicting_request (test_activities.ActivityTests.test_conflicting_request) ... ok\ntest_create_and_list (test_activities.ActivityTests.test_create_and_list) ... ok\ntest_invalid_titles (test_activities.ActivityTests.test_invalid_titles) ... \n  test_invalid_titles (test_activities.ActivityTests.test_invalid_titles) (value='') ... FAIL\n  test_invalid_titles (test_activities.ActivityTests.test_invalid_titles) (value='   ') ... FAIL\ntest_invalid_titles (test_activities.ActivityTests.test_invalid_titles) ... FAIL\ntest_missing_key (test_activities.ActivityTests.test_missing_key) ... ok\ntest_repeated_request (test_activities.ActivityTests.test_repeated_request) ... ok\ntest_restart_persistence (test_activities.ActivityTests.test_restart_persistence) ... ok\ntest_sql_is_data (test_activities.ActivityTests.test_sql_is_data) ... ok\n\n======================================================================\nFAIL: test_invalid_titles (test_activities.ActivityTests.test_invalid_titles) (value='')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/work/tests/test_activities.py\", line 34, in test_invalid_titles\n    with self.assertRaises(ValueError):\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ValueError not raised\n\n======================================================================\nFAIL: test_invalid_titles (test_activities.ActivityTests.test_invalid_titles) (value='   ')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/work/tests/test_activities.py\", line 34, in test_invalid_titles\n    with self.assertRaises(ValueError):\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ValueError not raised\n\n======================================================================\nFAIL: test_invalid_titles (test_activities.ActivityTests.test_invalid_titles)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/work/tests/test_activities.py\", line 36, in test_invalid_titles\n    self.assertEqual(self.store.all(), [])\nAssertionError: Lists differ: [{'id': 1, 'title': ''}] != []\n\nFirst list contains 1 additional elements.\nFirst extra element 0:\n{'id': 1, 'title': ''}\n\n- [{'id': 1, 'title': ''}]\n+ []\n\n----------------------------------------------------------------------\nRan 8 tests in 0.010s\n\nFAILED (failures=3)\n",
+    "passed": false,
+    "check": {
+      "unit_tests": 8,
+      "unit_failures": 3,
+      "unit_errors": 0,
+      "unit_skipped": 0,
+      "unit_expected_failures": 0,
+      "unit_unexpected_successes": 0,
+      "contract": [
+        "creazione",
+        "consultazione"
+      ],
+      "unit_ok": false,
+      "contract_error": "AssertionError: Input non valido accettato: {'title': ''}",
+      "server_log": "Backend attività sulla porta 39255\n",
+      "passed": false
+    }
+  },
+  "restored_reference": {
+    "exit_code": 0,
+    "timeout": false,
+    "stdout": "OFFICINA_CHECK={\"unit_tests\": 8, \"unit_failures\": 0, \"unit_errors\": 0, \"unit_skipped\": 0, \"unit_expected_failures\": 0, \"unit_unexpected_successes\": 0, \"contract\": [\"creazione\", \"consultazione\", \"validazione\", \"idempotenza\", \"persistenza dopo riavvio\"], \"unit_ok\": true, \"server_log\": \"Backend attività sulla porta 49257\\nBackend attività sulla porta 49257\\n\", \"passed\": true}\n",
+    "stderr": "test_concurrent_idempotency (test_activities.ActivityTests.test_concurrent_idempotency) ... ok\ntest_conflicting_request (test_activities.ActivityTests.test_conflicting_request) ... ok\ntest_create_and_list (test_activities.ActivityTests.test_create_and_list) ... ok\ntest_invalid_titles (test_activities.ActivityTests.test_invalid_titles) ... ok\ntest_missing_key (test_activities.ActivityTests.test_missing_key) ... ok\ntest_repeated_request (test_activities.ActivityTests.test_repeated_request) ... ok\ntest_restart_persistence (test_activities.ActivityTests.test_restart_persistence) ... ok\ntest_sql_is_data (test_activities.ActivityTests.test_sql_is_data) ... ok\n\n----------------------------------------------------------------------\nRan 8 tests in 0.005s\n\nOK\n",
+    "passed": true,
+    "check": {
+      "unit_tests": 8,
+      "unit_failures": 0,
+      "unit_errors": 0,
+      "unit_skipped": 0,
+      "unit_expected_failures": 0,
+      "unit_unexpected_successes": 0,
+      "contract": [
+        "creazione",
+        "consultazione",
+        "validazione",
+        "idempotenza",
+        "persistenza dopo riavvio"
+      ],
+      "unit_ok": true,
+      "server_log": "Backend attività sulla porta 49257\nBackend attività sulla porta 49257\n",
+      "passed": true
+    }
+  },
+  "fault_detection_passed": true,
+  "ai_used": false,
+  "note": "La correzione di questa prova è un ripristino deterministico; la prova di correzione IA è separata."
+}

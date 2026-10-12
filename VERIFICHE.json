@@ -1,0 +1,84 @@
+{
+  "platform": "Linux",
+  "date": "2026-10-12",
+  "pytest": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "tests": "35",
+    "time": "14.518",
+    "timestamp": "2026-10-12T13:10:04.181749+00:00",
+    "hostname": "d679e40bb841"
+  },
+  "reference_unit_tests": 8,
+  "independent_contract": [
+    "creazione",
+    "consultazione",
+    "validazione",
+    "idempotenza",
+    "persistenza dopo riavvio"
+  ],
+  "injected_fault_detected": true,
+  "restored_reference_passed": true,
+  "browser": {
+    "passed": true,
+    "browser": "/usr/bin/chromium",
+    "checks": [
+      "pagina italiana",
+      "avvio progetto",
+      "credenziale assente: stato intervento",
+      "recupero dopo ricarica",
+      "documento persistente",
+      "layout 390px",
+      "nessun errore JavaScript"
+    ],
+    "ai_verified": false
+  },
+  "restart": {
+    "passed": true,
+    "projects_preserved": 1,
+    "service_restarted": true,
+    "health": {
+      "service": "ok",
+      "ai_configured": false,
+      "model": "gpt-5-mini",
+      "sandbox": {
+        "available": true,
+        "image": "python@sha256:a6e34c598f2467ed0e9a8d349809fcd8b5c603269512df273a0bb1784edc11b1"
+      },
+      "limits": {
+        "model_calls": 12,
+        "tool_calls": 40,
+        "corrections": 3,
+        "tokens": 120000,
+        "seconds": 1200,
+        "command_seconds": 35,
+        "max_estimated_cost_usd": null
+      },
+      "cost_available": false
+    }
+  },
+  "live_ai": {
+    "status": "not_run",
+    "exit_code": 2,
+    "reason": "AI_PROVIDER_KEY absent"
+  },
+  "windows": {
+    "status": "not_run"
+  },
+  "cloud": {
+    "draft_saved": true,
+    "published": false,
+    "fresh_task_verified": false
+  },
+  "source_sha256": {
+    "app/agent.py": "ac5db1867ea189f0345e9f6b8b8d8ccb5cc262455e4730b032e0673b7fb219a7",
+    "app/sandbox.py": "03740c23c4f71a5ce12526de415c8175322cf5346823ae436cfc8cdb8bbaf4b1",
+    "app/acceptance_contract.py": "6f6d3dbc0de77adb9b368dcee638cf8ad31f43a1c47af0fbb1be02fae00d5c4c",
+    "app/main.py": "2307ab12fd9b9b114af01b0fe972001cea96b62b074ec731703b561848988796",
+    "examples/activity_backend/main.py": "c7e2072a64eef1302d8c94071d8381eb067f18c6f2315e646d949865f6040f65",
+    "uv.lock": "f1d349c533a4520102c739837caf319d7de2200090ad0980dd43c53d6815125f",
+    "requirements.lock": "b38a66551d3292f096ffda45da64181bd20e67085019dc872ea62a0af791e760"
+  }
+}

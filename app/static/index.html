@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Officina · Assistente personale</title>
+  <link rel="stylesheet" href="/static/style.css"><script src="/static/app.js" defer></script>
+</head>
+<body>
+<header><div class="brand"><span class="mark" aria-hidden="true">O</span><div><strong>Officina</strong><span>Il tuo assistente di programmazione</span></div></div><span class="local">Sul tuo computer · memoria persistente</span></header>
+<div class="layout">
+  <aside aria-label="Progetti salvati"><button id="new-project" class="secondary">+ Nuovo obiettivo</button><h2>Il tuo lavoro</h2><div id="projects"></div><p class="muted small">Puoi chiudere l’app. Ritroverai qui obiettivi, file e verifiche.</p></aside>
+  <main>
+    <div id="error" class="notice error" role="alert" hidden></div>
+    <section id="goal-card" class="card">
+      <p class="eyebrow">Un passo alla volta</p><h1>Da un’idea a un progetto verificato.</h1>
+      <p>Tu descrivi il risultato. L’agente conserva il piano, crea i file e controlla ciò che ha costruito.</p>
+      <form id="goal-form"><label for="goal">Descrivi cosa vuoi ottenere</label><textarea id="goal" rows="5" minlength="10" maxlength="4000" required>Crea un piccolo backend locale per registrare attività in SQLite. Voglio API per creare e consultare le attività, validazione degli input, richieste ripetute senza duplicazioni e dati conservati dopo un riavvio.</textarea>
+      <p class="muted small">Prima versione: backend attività in Python, senza dipendenze esterne. Le prove coprono API, input, idempotenza e riavvio.</p><button id="start" type="submit">Avvia</button></form>
+    </section>
+    <section id="work-card" class="card" hidden aria-label="Avanzamento del progetto">
+      <div class="state-row"><span id="state" class="badge">Preparazione</span><span id="pause-state" class="muted small"></span></div>
+      <h1 id="summary">Preparo il progetto.</h1><p id="description" class="muted"></p>
+      <div class="next"><span class="eyebrow">Prossimo passo</span><p id="next-step"></p></div>
+      <div id="controls" class="buttons"><button id="pause" class="secondary">Pausa</button><button id="resume">Riprendi</button><button id="stop" class="secondary danger">Ferma</button></div>
+      <form id="answer-form" hidden><label id="question" for="answer"></label><textarea id="answer" rows="3" maxlength="4000" required></textarea><button type="submit">Rispondi e continua</button></form>
+      <div id="evidence" class="notice" hidden></div>
+      <a id="download" class="button-link" hidden>Scarica progetto e risultati</a>
+    </section>
+    <details class="card" id="technical"><summary>Dettagli del lavoro e verifiche</summary>
+      <h2>Risultato atteso</h2><p id="outcome">Disponibile dopo la preparazione.</p>
+      <h2>Passaggi</h2><ol id="plan"></ol><h2>Criteri di riuscita</h2><ul id="criteria"></ul>
+      <h2>Uso e limiti</h2><p id="usage">Nessuna chiamata IA eseguita.</p><p id="limits" class="muted small"></p>
+      <h2>Ultima verifica</h2><pre id="check">Nessuna prova eseguita.</pre>
+      <h2>File</h2><ul id="files"></ul>
+      <h2>Versioni ripristinabili</h2><p class="small muted">Ferma il lavoro prima di annullare una modifica. Le verifiche precedenti verranno invalidate.</p>
+      <div class="restore"><select id="versions" aria-label="Versione da ripristinare"></select><button id="rollback" class="secondary" disabled>Ripristina</button></div>
+      <h2>Registro delle operazioni</h2><pre id="events">Il registro apparirà qui.</pre>
+    </details>
+    <details class="card"><summary>Configurazione e primo avvio</summary>
+      <div id="configuration" class="notice"></div>
+      <p>Per abilitare l’IA, apri <code>configura_ia.bat</code> sul tuo PC e inserisci la chiave nella finestra locale con input nascosto. Poi riavvia Officina. Non incollare la chiave nell’obiettivo, nei documenti o nella chat. La configurazione avanzata è nel file locale <code>.env</code>.</p>
+      <p>L’abbonamento ChatGPT non comprende automaticamente le API. Controlla credito e limiti nel tuo account OpenAI. Il modello e i limiti operativi sono modificabili in <code>.env</code>.</p>
+      <p>Per l’esecuzione sicura: installa Docker Desktop, attiva i container Linux ed esegui <code>prepara_isolamento.bat</code>. Il codice generato viene eseguito senza rete, credenziali, cartelle personali o socket Docker.</p>
+      <p class="small muted">I costi mostrati sono stime solo se inserisci i prezzi correnti in .env. Il limite in USD usa quei prezzi; non sostituisce i limiti di fatturazione del provider. La chiave resta nel processo dell’assistente e non entra nel container.</p>
+    </details>
+    <details class="card"><summary>Documenti e conoscenza</summary>
+      <p>Aggiungi documentazione o trascrizioni. L’agente recupera estratti pertinenti con fonte e data. Il contenuto è trattato come materiale di consultazione.</p>
+      <form id="document-form"><label for="doc-title">Titolo</label><input id="doc-title" required maxlength="180"><label for="doc-source">Fonte o riferimento</label><input id="doc-source" required maxlength="500" placeholder="URL ufficiale o titolo del tutorial"><label for="doc-date">Data della fonte</label><input id="doc-date" type="date" required><label for="doc-file">Documento di testo (facoltativo, .txt o .md)</label><input id="doc-file" type="file" accept=".txt,.md"><label for="doc-content">Testo o trascrizione</label><textarea id="doc-content" rows="5" required maxlength="64000"></textarea><button type="submit">Salva documento</button></form>
+      <p id="document-result" role="status"></p><ul id="documents"></ul>
+    </details>
+    <details class="card"><summary>Le tue procedure riutilizzabili</summary>
+      <p>Trasforma una correzione in un suggerimento. Ogni modifica crea una versione; prima dell’adozione, la versione deve superare un esempio reale con l’IA. Queste prove controllano il testo del piano, non garantiscono da sole la correttezza del codice.</p>
+      <form id="procedure-form"><label for="proc-title">Nome</label><input id="proc-title" required maxlength="150"><label for="proc-trigger">Quando è pertinente</label><input id="proc-trigger" required minlength="3" maxlength="300" placeholder="API, richieste ripetute, database"><label for="proc-guidance">La tua correzione</label><textarea id="proc-guidance" rows="3" required minlength="10" maxlength="3000"></textarea><label for="proc-example">Un esempio su cui verificarla</label><textarea id="proc-example" rows="2" required minlength="10" maxlength="2000" placeholder="Pianifica un’API che registri attività e gestisca richieste ripetute."></textarea><label for="proc-expected">Elementi che il piano deve citare (separati da virgole)</label><input id="proc-expected" required placeholder="idempotenza, test"><button id="save-procedure" type="submit">Salva bozza</button></form><p id="procedure-result" role="status"></p><div id="procedures"></div>
+    </details>
+    <footer>Prima versione · nessuna pubblicazione automatica, gestione di denaro o chiavi di portafogli.</footer>
+  </main>
+</div>
+</body>
+</html>
