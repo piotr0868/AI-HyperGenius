@@ -2,6 +2,7 @@
 import hashlib
 from pathlib import Path
 import sys
+import tomllib
 import zipfile
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -12,7 +13,8 @@ DIRS = {'app', 'scripts', 'tests', 'examples', 'resources'}
 
 
 def main():
-    path = ROOT.parent / 'Officina-v0.1.zip'
+    version = tomllib.loads((ROOT / 'pyproject.toml').read_text())['project']['version']
+    path = ROOT.parent / f'Officina-v{version}.zip'
     files = [p for p in ROOT.rglob('*') if p.is_file() and
         (p.relative_to(ROOT).as_posix() in TOP or p.relative_to(ROOT).parts[0] in DIRS) and
         not set(p.relative_to(ROOT).parts).intersection({'.env', '.git', '.data', '.venv', '__pycache__', '.pytest_cache'})

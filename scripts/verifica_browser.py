@@ -33,7 +33,7 @@ async def main():
         await page.get_by_role('button', name='Avvia', exact=True).click()
         if not settings.api_key:
             await expect(page.locator('#state')).to_have_text('Serve il tuo intervento')
-            assert 'AI_PROVIDER_KEY' in await page.locator('#summary').inner_text()
+            assert settings.credential_var in await page.locator('#summary').inner_text()
             assert await page.locator('#state').inner_text() != 'Pronto'
         await page.reload()
         await page.wait_for_selector('#work-card:not([hidden])')
@@ -55,7 +55,7 @@ async def main():
     result = {'passed': True, 'browser': binary or 'playwright Chromium',
         'checks': ['pagina italiana', 'avvio progetto', 'credenziale assente: stato intervento',
                    'recupero dopo ricarica', 'documento persistente', 'layout 390px', 'nessun errore JavaScript'],
-        'ai_verified': False}
+        'ai_verified': False, 'provider': settings.provider}
     (output / 'browser.json').write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding='utf-8')
     print(json.dumps(result, ensure_ascii=False))
 

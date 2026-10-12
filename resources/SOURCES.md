@@ -6,6 +6,12 @@ con URL e data nel file `official_docs.json`; non sostituiscono aggiornamenti fu
 - SDK OpenAI 3.29.0: <https://github.com/openai/openai-python>.
   Consultati README e tipi ufficiali `FunctionToolParam`, `ResponseFunctionToolCall`,
   `ResponseUsage` e `ResponseCreateParams`. Licenza in `licenses/OpenAI-SDK.txt`.
+- SDK Groq 1.7.0: <https://github.com/groq/groq-python>. Consultati README,
+  schema Chat Completions e metodo ufficiale, inclusi tools, max_completion_tokens e
+  parallel_tool_calls. Licenza in `licenses/Groq-SDK.txt`.
+- Cookbook Groq: <https://github.com/groq/groq-api-cookbook>, chiave gratuita e tool use.
+  Le quote correnti della pagina console.groq.com/docs/rate-limits non sono state
+  verificabili nella rete iniziale; controllarle nell’account.
 - Python 3.12: documentazione ufficiale `http.server`, `sqlite3`, `unittest`,
   da <https://github.com/python/cpython/tree/3.12/Doc/library>.
   Licenza in `licenses/Python.txt`.

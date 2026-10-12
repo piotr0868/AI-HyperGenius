@@ -6,9 +6,9 @@
     "errors": "0",
     "failures": "0",
     "skipped": "0",
-    "tests": "35",
-    "time": "14.518",
-    "timestamp": "2026-10-12T13:10:04.181749+00:00",
+    "tests": "44",
+    "time": "20.692",
+    "timestamp": "2026-10-12T15:09:23.979130+00:00",
     "hostname": "d679e40bb841"
   },
   "reference_unit_tests": 8,
@@ -33,16 +33,20 @@
       "layout 390px",
       "nessun errore JavaScript"
     ],
-    "ai_verified": false
+    "ai_verified": false,
+    "provider": "groq"
   },
   "restart": {
     "passed": true,
+    "provider": "groq",
     "projects_preserved": 1,
     "service_restarted": true,
     "health": {
       "service": "ok",
       "ai_configured": false,
-      "model": "gpt-5-mini",
+      "provider": "groq",
+      "credential_var": "GROQ_API_KEY",
+      "model": "openai/gpt-oss-20b",
       "sandbox": {
         "available": true,
         "image": "python@sha256:a6e34c598f2467ed0e9a8d349809fcd8b5c603269512df273a0bb1784edc11b1"
@@ -54,15 +58,17 @@
         "tokens": 120000,
         "seconds": 1200,
         "command_seconds": 35,
-        "max_estimated_cost_usd": null
+        "max_estimated_cost_usd": null,
+        "min_interval_seconds": 6
       },
       "cost_available": false
     }
   },
   "live_ai": {
+    "provider": "groq",
     "status": "not_run",
     "exit_code": 2,
-    "reason": "AI_PROVIDER_KEY absent"
+    "reason": "GROQ_API_KEY absent"
   },
   "windows": {
     "status": "not_run"
@@ -73,12 +79,16 @@
     "fresh_task_verified": false
   },
   "source_sha256": {
-    "app/agent.py": "ac5db1867ea189f0345e9f6b8b8d8ccb5cc262455e4730b032e0673b7fb219a7",
+    "app/agent.py": "50cc48f6b67c82101bcbbd933f9a878674d5ef3644095849e4a3f30d69580462",
+    "app/providers.py": "bd2e8c738f3e6035f3db36955a31c04deb1b575c8438219f4f16a66faf8accce",
+    "app/config.py": "60400df06eb837fe033109bc0ee454fcc43aede75b8efefe5e7077c1168e0404",
     "app/sandbox.py": "03740c23c4f71a5ce12526de415c8175322cf5346823ae436cfc8cdb8bbaf4b1",
     "app/acceptance_contract.py": "6f6d3dbc0de77adb9b368dcee638cf8ad31f43a1c47af0fbb1be02fae00d5c4c",
-    "app/main.py": "2307ab12fd9b9b114af01b0fe972001cea96b62b074ec731703b561848988796",
+    "app/main.py": "03bd0b56df0b1005396df76403c6d00a53c50310a2c0f29b2436513533616d48",
     "examples/activity_backend/main.py": "c7e2072a64eef1302d8c94071d8381eb067f18c6f2315e646d949865f6040f65",
-    "uv.lock": "f1d349c533a4520102c739837caf319d7de2200090ad0980dd43c53d6815125f",
-    "requirements.lock": "b38a66551d3292f096ffda45da64181bd20e67085019dc872ea62a0af791e760"
-  }
+    "uv.lock": "835d81d203c90b40bf836cbfddbea6ed45374cef0a2c4f939e91547213e10e1f",
+    "requirements.lock": "9add5abb1e6d640f9ac118bdb54ef9b13b5159e511d610a4c42d16bdf793f967"
+  },
+  "version": "0.2.0",
+  "provider": "groq"
 }

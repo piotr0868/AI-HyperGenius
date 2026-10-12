@@ -10,5 +10,6 @@
     "layout 390px",
     "nessun errore JavaScript"
   ],
-  "ai_verified": false
+  "ai_verified": false,
+  "provider": "groq"
 }

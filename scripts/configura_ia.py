@@ -10,8 +10,17 @@ ROOT = Path(__file__).resolve().parent.parent
 
 
 def main():
-    print('Configura OpenAI sul tuo computer. Non incollare la chiave nella chat.')
-    print('Le API richiedono un account e credito separati dall’abbonamento ChatGPT.')
+    provider = 'openai' if '--openai' in sys.argv else 'groq'
+    variable = 'AI_PROVIDER_KEY' if provider == 'openai' else 'GROQ_API_KEY'
+    print(f'Configura {provider} sul tuo computer. Non incollare la chiave nella chat.')
+    if provider == 'groq':
+        print('Crea un account Free e una chiave su https://console.groq.com/keys')
+        print('Controlla nella console le quote del piano gratuito. Non occorre un account OpenAI.')
+        if '--no-browser' not in sys.argv:
+            import webbrowser
+            webbrowser.open('https://console.groq.com/keys')
+    else:
+        print('Opzione OpenAI: API a pagamento, separate dall’abbonamento ChatGPT.')
     key = getpass('Chiave API (input nascosto, Invio per annullare): ').strip()
     if not key:
         print('Configurazione annullata. Nessuna modifica.')
@@ -22,7 +31,8 @@ def main():
     path = ROOT / '.env'
     if not path.exists():
         path.write_text((ROOT / '.env.example').read_text(encoding='utf-8'), encoding='utf-8')
-    set_key(str(path), 'AI_PROVIDER_KEY', key, quote_mode='always')
+    set_key(str(path), variable, key, quote_mode='always')
+    set_key(str(path), 'AI_PROVIDER', provider, quote_mode='always')
     if sys.platform == 'win32':
         account = os.environ.get('USERNAME', '')
         domain = os.environ.get('USERDOMAIN', '')

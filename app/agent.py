@@ -3,9 +3,8 @@ import json
 import time
 from pathlib import Path
 
-from openai import AsyncOpenAI, APIConnectionError, APIStatusError, APITimeoutError
-
 from .documentation import consult
+from .providers import create_client, generate, ProviderError
 from .sandbox import SandboxUnavailable
 
 
@@ -136,6 +135,18 @@ class Agent:
         return time.monotonic() - started if paused else 0
 
     async def perform(self, pid, name, args):
+        spec = next((t for t in TOOLS if t['name'] == name), None)
+        if spec is None or not isinstance(args, dict):
+            raise ValueError('Strumento o argomenti non consentiti')
+        properties = spec['parameters']['properties']
+        if set(args) != set(properties):
+            raise ValueError('Argomenti mancanti o non previsti dallo strumento')
+        for key, schema in properties.items():
+            value = args[key]
+            if schema['type'] == 'string' and not isinstance(value, str):
+                raise ValueError(f'{key} deve essere testo')
+            if schema['type'] == 'array' and (not isinstance(value, list) or not all(isinstance(v, str) for v in value)):
+                raise ValueError(f'{key} deve essere una lista di testi')
         p = self.store.project(pid)
         if p['tool_calls'] >= self.settings.max_tool_calls:
             raise NeedsIntervention('Limite di operazioni raggiunto.')
@@ -201,12 +212,13 @@ class Agent:
         before = self.store.project(pid)['elapsed']
         try:
             if not self.settings.api_key and self.client is None:
-                raise NeedsIntervention('Manca AI_PROVIDER_KEY. Inserisci la chiave API nel file locale .env e riavvia Officina. L’abbonamento ChatGPT non include automaticamente le API.')
+                raise NeedsIntervention(f'Manca {self.settings.credential_var}. Apri configura_ia.bat sul tuo PC, inserisci la chiave localmente e riavvia Officina. Fornitore scelto: {self.settings.provider}.')
             sandbox = await self.sandbox.status()
             if not sandbox['available']:
                 raise SandboxUnavailable(sandbox['reason'])
             if self.client is None:
-                self.client = AsyncOpenAI(api_key=self.settings.api_key, base_url='https://api.openai.com/v1', timeout=45, max_retries=0)
+                self.client = create_client(self.settings)
+            self.store.event(pid, 'fornitore', {'provider': self.settings.provider, 'model': self.settings.model})
             p = self.store.project(pid)
             history = repair_history(p['history'] or [])
             if not history:
@@ -223,25 +235,25 @@ class Agent:
                 if p['failed_checks'] > self.settings.max_corrections:
                     raise NeedsIntervention('Limite di correzioni raggiunto. Consulta gli errori nelle verifiche.')
                 preflight(self.settings, p, history)
+                if p['model_calls'] and self.settings.min_interval:
+                    await asyncio.sleep(self.settings.min_interval)
+                    started += await self.checkpoint(pid)
                 self.store.update(pid, model_calls=p['model_calls'] + 1)
                 remaining = self.settings.task_timeout - before - (time.monotonic() - started)
                 async with asyncio.timeout(max(.1, remaining)):
-                    response = await self.client.responses.create(model=self.settings.model, instructions=INSTRUCTIONS,
-                        input=history, tools=TOOLS, parallel_tool_calls=False, max_output_tokens=self.settings.max_output_tokens,
-                        store=False)
-                usage = response.usage
-                if usage:
-                    cost = estimate(self.settings, usage.input_tokens, usage.output_tokens)
-                    self.store.update(pid, input_tokens=p['input_tokens'] + usage.input_tokens,
-                        output_tokens=p['output_tokens'] + usage.output_tokens,
+                    response = await generate(self.settings, self.client, history, INSTRUCTIONS, tools=TOOLS)
+                if response.input_tokens is not None and response.output_tokens is not None:
+                    cost = estimate(self.settings, response.input_tokens, response.output_tokens)
+                    self.store.update(pid, input_tokens=p['input_tokens'] + response.input_tokens,
+                        output_tokens=p['output_tokens'] + response.output_tokens,
                         estimated_cost=(p['estimated_cost'] or 0) + cost if cost is not None else None)
-                    self.store.event(pid, 'utilizzo', {'input_tokens': usage.input_tokens, 'output_tokens': usage.output_tokens,
+                    self.store.event(pid, 'utilizzo', {'input_tokens': response.input_tokens, 'output_tokens': response.output_tokens,
                                                       'estimated_usd': cost, 'response_id': response.id})
                 else:
                     raise NeedsIntervention('Utilizzo API non disponibile: interrompo per non perdere il controllo del budget.')
-                history.extend(item.model_dump(mode='json', exclude_none=True) for item in response.output)
+                history.extend(response.output)
                 self.store.update(pid, history=history)
-                calls = [item for item in response.output if item.type == 'function_call']
+                calls = [item for item in response.output if item.get('type') == 'function_call']
                 if not calls:
                     if response.output_text:
                         self.store.event(pid, 'messaggio_ia', {'text': response.output_text[:6000]})
@@ -249,17 +261,17 @@ class Agent:
                 for call in calls:
                     started += await self.checkpoint(pid)
                     try:
-                        args = json.loads(call.arguments)
+                        args = json.loads(call['arguments'])
                         remaining = self.settings.task_timeout - before - (time.monotonic() - started)
                         async with asyncio.timeout(max(.1, remaining)):
-                            result = await self.perform(pid, call.name, args)
+                            result = await self.perform(pid, call['name'], args)
                     except (ValueError, KeyError, OSError) as exc:
                         result = {'error': str(exc)[:1500]}
-                        self.store.event(pid, 'errore_strumento', {'tool': call.name, 'message': result['error']})
+                        self.store.event(pid, 'errore_strumento', {'tool': call['name'], 'message': result['error']})
                     rendered = json.dumps(result, ensure_ascii=False)
                     if len(rendered) > 18000:
                         rendered = json.dumps({'truncated': True, 'excerpt': rendered[:17000]}, ensure_ascii=False)
-                    history.append({'type': 'function_call_output', 'call_id': call.call_id, 'output': rendered})
+                    history.append({'type': 'function_call_output', 'call_id': call['call_id'], 'output': rendered})
                     self.store.update(pid, history=history)
                     if self.store.project(pid)['state'] in ('Pronto', 'Serve il tuo intervento'):
                         return
@@ -268,14 +280,17 @@ class Agent:
             raise
         except (NeedsIntervention, SandboxUnavailable) as exc:
             self.intervention(pid, str(exc))
-        except APIStatusError as exc:
+        except ProviderError as exc:
             detail = {401: 'Chiave API non accettata. Controlla la configurazione locale.',
                       403: 'Accesso API negato. Controlla permessi e regole di rete.',
-                      429: 'Limite o credito API esaurito. Controlla l’account del provider.'}.get(exc.status_code,
-                      f'Il provider ha risposto HTTP {exc.status_code}. Nessuna riuscita dichiarata.')
+                      404: 'Modello non disponibile. Controlla GROQ_MODEL o AI_MODEL per il fornitore scelto.',
+                      429: 'Quota API raggiunta. Attendi il rinnovo indicato nella console del provider. Nessun passaggio automatico a servizi a pagamento.'}.get(exc.status,
+                      f'Il provider ha risposto HTTP {exc.status}. Nessuna riuscita dichiarata.')
+            if exc.status is None:
+                detail = f'Connessione API non riuscita. Controlla Internet, accesso a {self.settings.api_host} e configurazione TLS.'
+            if exc.retry_after is not None:
+                detail += f' Riprova tra almeno {exc.retry_after} secondi.'
             self.intervention(pid, detail)
-        except (APIConnectionError, APITimeoutError):
-            self.intervention(pid, 'Connessione API non riuscita. Controlla Internet, accesso a api.openai.com e configurazione TLS.')
         except TimeoutError:
             self.intervention(pid, 'Timeout operativo raggiunto; file e memoria sono conservati.')
         except Exception as exc:

@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 import os
 
@@ -10,8 +10,10 @@ ROOT = Path(__file__).resolve().parent.parent
 @dataclass(frozen=True)
 class Settings:
     data_dir: Path
-    api_key: str = ""
-    model: str = "gpt-5-mini"
+    api_key: str = field(default="", repr=False)
+    provider: str = "groq"
+    model: str = "openai/gpt-oss-20b"
+    min_interval: float = 0
     port: int = 8765
     max_model_calls: int = 12
     max_tool_calls: int = 40
@@ -25,9 +27,20 @@ class Settings:
     max_cost: float | None = None
     sandbox_image: str = ""
 
+    @property
+    def credential_var(self):
+        return 'GROQ_API_KEY' if self.provider == 'groq' else 'AI_PROVIDER_KEY'
+
+    @property
+    def api_host(self):
+        return 'api.groq.com' if self.provider == 'groq' else 'api.openai.com'
+
 
 def load_settings() -> Settings:
     load_dotenv(ROOT / ".env", override=False)
+    provider = os.getenv('AI_PROVIDER', 'groq').strip().lower()
+    if provider not in ('groq', 'openai'):
+        raise ValueError('AI_PROVIDER: scegli groq oppure openai.')
     def number(name, default, low, high):
         value = int(os.getenv(name, str(default)))
         if not low <= value <= high:
@@ -41,8 +54,10 @@ def load_settings() -> Settings:
         return value
     return Settings(
         data_dir=Path(os.getenv("APP_DATA_DIR", str(ROOT / ".data"))).resolve(),
-        api_key=os.getenv("AI_PROVIDER_KEY", ""),
-        model=os.getenv("AI_MODEL", "gpt-5-mini"),
+        api_key=os.getenv('GROQ_API_KEY' if provider == 'groq' else 'AI_PROVIDER_KEY', ''),
+        provider=provider,
+        model=os.getenv('GROQ_MODEL', 'openai/gpt-oss-20b') if provider == 'groq' else os.getenv('AI_MODEL', 'gpt-5-mini'),
+        min_interval=number('AI_MIN_INTERVAL_SECONDS', 6 if provider == 'groq' else 0, 0, 60),
         port=number("APP_PORT", 8765, 1024, 65535),
         max_model_calls=number("MAX_MODEL_CALLS", 12, 1, 40),
         max_tool_calls=number("MAX_TOOL_CALLS", 40, 1, 100),

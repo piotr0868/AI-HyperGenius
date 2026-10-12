@@ -1,11 +1,14 @@
 {
   "passed": true,
+  "provider": "groq",
   "projects_preserved": 1,
   "service_restarted": true,
   "health": {
     "service": "ok",
     "ai_configured": false,
-    "model": "gpt-5-mini",
+    "provider": "groq",
+    "credential_var": "GROQ_API_KEY",
+    "model": "openai/gpt-oss-20b",
     "sandbox": {
       "available": true,
       "image": "python@sha256:a6e34c598f2467ed0e9a8d349809fcd8b5c603269512df273a0bb1784edc11b1"
@@ -17,7 +20,8 @@
       "tokens": 120000,
       "seconds": 1200,
       "command_seconds": 35,
-      "max_estimated_cost_usd": null
+      "max_estimated_cost_usd": null,
+      "min_interval_seconds": 6
     },
     "cost_available": false
   }

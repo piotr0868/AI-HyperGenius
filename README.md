@@ -1,13 +1,15 @@
-# Officina — assistente personale, v0.1
+# Officina — assistente personale, v0.2
 
 Interfaccia italiana nel browser, memoria SQLite e agente di programmazione integrato
-con l’SDK ufficiale OpenAI e la Responses API. Questa prima versione si concentra su
+con l’SDK ufficiale Groq, scelta predefinita per usare un account Free. OpenAI resta
+un’opzione esplicita, con credenziale separata. Questa prima versione si concentra su
 un piccolo backend attività in Python: è il traguardo verificabile da cui partire,
 prima di estendere l’assistente ad altri backend e alle infrastrutture blockchain.
 
 L’applicazione si avvia anche senza credenziale, ma non inventa risposte IA: mostra
 **Serve il tuo intervento**. Le prove con un vero modello richiedono una chiave API.
-L’abbonamento ChatGPT non comprende automaticamente l’utilizzo delle API.
+Le quote gratuite non sono illimitate: controlla il piano e i limiti nella console Groq.
+L’app non attiva la fatturazione e non passa automaticamente a un altro fornitore.
 
 ## Codice su GitHub
 
@@ -40,9 +42,10 @@ Per attivare il lavoro autonomo dell’agente:
    Avvialo con il motore WSL 2 e i container Linux.
 2. Apri **prepara_isolamento.bat**. Scarica l’immagine Python, conserva il digest
    verificato da Docker e prepara l’esecuzione isolata.
-3. Apri **configura_ia.bat**. Inserisci la chiave API nella finestra locale con input
+3. Apri **configura_ia.bat**. Lo script apre la pagina delle chiavi Groq. Crea un account Free e inserisci
+   la tua chiave API nella finestra locale con input
    nascosto; il valore viene salvato soltanto in `.env`, escluso da Git e dal pacchetto.
-   In alternativa copia `.env.example` in `.env` e imposta `AI_PROVIDER_KEY` manualmente.
+   In alternativa copia `.env.example` in `.env` e imposta `AI_PROVIDER=groq` e `GROQ_API_KEY` manualmente.
 4. Riavvia **avvia.bat**, descrivi il risultato e premi **Avvia**. Se avevi iniziato un
    progetto senza credenziale, selezionalo e premi **Riprendi**.
 
@@ -65,7 +68,7 @@ libreria standard. Il contratto indipendente verifica:
 - Conservazione delle attività **e della chiave di idempotenza** dopo il riavvio del processo.
 - Test del progetto non vuoti, senza skip o expectedFailure.
 
-Per verificare la generazione e correzione con l’IA reale, dopo la configurazione:
+Per verificare la generazione e correzione con Groq reale, dopo la configurazione:
 
 ```powershell
 .venv\Scripts\python.exe scripts\prova_agente.py
@@ -77,6 +80,29 @@ un **secondo progetto**, copia il risultato e introduce un difetto in
 ripeta le prove e conservi il progetto originale. I risultati vengono salvati in
 `.data/live-acceptance/RESULTS.json`. L’assenza della chiave produce exit code 2,
 **NON ESEGUITA**, senza simulazioni o addebiti API. Un risultato fallito produce exit code 1.
+
+## Controllo della chiave e compatibilità
+
+Dopo aver configurato Groq, puoi verificare accesso e disponibilità del modello
+senza avviare una generazione:
+
+```powershell
+.venv\Scripts\python.exe scripts\controlla_ia.py
+```
+
+Questo controllo non certifica il piano gratuito o le capacità dell’agente. La prova
+completa resta `scripts/prova_agente.py`. Crea l’account e la chiave personalmente:
+l’app non gestisce registrazioni, accettazione di condizioni o dati di fatturazione.
+
+Le installazioni precedenti conservano `.env` e `.data`: aggiorna il codice con
+`git pull`, esegui `installa.bat`, poi `configura_ia.bat` e riavvia. Le vecchie
+cronologie Responses vengono convertite nel formato Chat Completions senza perdere
+le chiamate agli strumenti e i risultati salvati.
+
+Per scegliere esplicitamente l’opzione OpenAI: `AI_PROVIDER=openai`,
+`AI_PROVIDER_KEY` e `AI_MODEL` in `.env`, oppure esegui
+`python scripts/configura_ia.py --openai`. Richiede API OpenAI a pagamento, separate
+da ChatGPT; la chiave Groq non viene inviata a OpenAI e viceversa.
 
 ## Interfaccia e memoria
 
@@ -94,7 +120,7 @@ L’esportazione non comprende `.env`, credenziali o memoria di altri progetti.
 
 Puoi aggiungere file `.md` e `.txt`, testi e trascrizioni con fonte e data. SQLite FTS5
 recupera estratti pertinenti, fino a quattro fonti diverse. Sono già incluse copie
-datate della documentazione ufficiale Python e del README dell’SDK OpenAI, consultate
+datate della documentazione ufficiale Python e dei README degli SDK Groq/OpenAI, consultate
 durante lo sviluppo. Il tool di consultazione HTTPS può aggiornare le fonti consentite.
 Documenti, tutorial, repository e output restano **dati non fidati**, subordinati alle
 regole e ai limiti dell’agente.
@@ -110,20 +136,26 @@ alcun modello.
 `.env.example` descrive i limiti: chiamate IA, operazioni, correzioni, token, tempo
 complessivo e timeout di ogni comando. I contatori sono persistenti per progetto:
 premere Riprendi non azzera il budget. Per modificare i limiti, cambia `.env` e riavvia.
-Il modello predefinito è `gpt-5-mini`; disponibilità e autorizzazione vanno verificate
-sul tuo account. L’SDK è bloccato alla versione 3.29.0 consultata il 12 ottobre 2026.
+Il fornitore predefinito è `groq` e il modello è `openai/gpt-oss-20b`, indicato
+nel README ufficiale dell’SDK Groq 1.7.0 consultato il 12 ottobre 2026. Il prefisso
+`openai/` è parte del nome del modello ospitato da Groq: con questa configurazione
+le richieste vanno soltanto a `api.groq.com`, senza richiedere un account OpenAI.
+Disponibilità del modello, quota e piano Free vanno verificati sul tuo account.
+`GROQ_MODEL` seleziona il modello; `AI_MIN_INTERVAL_SECONDS` imposta una pausa tra
+richieste, 6 secondi per impostazione predefinita. Un errore HTTP 429 ferma il lavoro
+e mostra quando riprovare se il provider comunica il tempo di attesa.
 
 Il registro conserva token effettivi quando il provider li restituisce. Il costo è
 una **stima** soltanto se imposti entrambi i prezzi per milione di token. Il limite
 facoltativo `MAX_ESTIMATED_COST_USD` prenota prudentemente il costo prima di chiamare
 l’API. Prezzi, cache e fatturazione effettiva dipendono dal provider: configura anche
-il budget nell’account OpenAI. Un errore di rete può impedire di conoscere l’utilizzo
+il budget nell’account del fornitore. Mantieni il piano Free di Groq per evitare addebiti. Un errore di rete può impedire di conoscere l’utilizzo
 di una chiamata già ricevuta dal provider.
 
 Il backend dell’assistente ascolta solo su loopback. Le modifiche API richiedono un
 token di sessione e un’origine locale; non è un servizio pubblico. La chiave rimane
 nel processo locale dell’assistente. Obiettivi, documenti pertinenti, codice e risultati
-dei tool sono trasmessi a OpenAI per il lavoro: non inserire dati che non vuoi inviare.
+dei tool sono trasmessi al fornitore scelto per il lavoro: non inserire dati che non vuoi inviare.
 
 Il codice generato usa container temporanei senza rete, bind mount, segreti o socket
 Docker, con utente non privilegiato, filesystem di sistema in sola lettura, capacità

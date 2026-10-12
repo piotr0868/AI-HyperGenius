@@ -6,8 +6,8 @@ import urllib.parse
 import urllib.request
 
 HOSTS = {'docs.python.org', 'www.sqlite.org', 'sqlite.org', 'fastapi.tiangolo.com',
-         'docs.docker.com', 'developers.openai.com', 'platform.openai.com', 'raw.githubusercontent.com'}
-RAW_PREFIXES = ('/openai/openai-python/', '/python/cpython/', '/fastapi/fastapi/')
+         'docs.docker.com', 'developers.openai.com', 'platform.openai.com', 'console.groq.com', 'raw.githubusercontent.com'}
+RAW_PREFIXES = ('/openai/openai-python/', '/groq/groq-python/', '/groq/groq-api-cookbook/', '/python/cpython/', '/fastapi/fastapi/')
 
 
 def check_url(url):

@@ -39,9 +39,10 @@
     <details class="card"><summary>Configurazione e primo avvio</summary>
       <div id="configuration" class="notice"></div>
       <p>Per abilitare l’IA, apri <code>configura_ia.bat</code> sul tuo PC e inserisci la chiave nella finestra locale con input nascosto. Poi riavvia Officina. Non incollare la chiave nell’obiettivo, nei documenti o nella chat. La configurazione avanzata è nel file locale <code>.env</code>.</p>
-      <p>L’abbonamento ChatGPT non comprende automaticamente le API. Controlla credito e limiti nel tuo account OpenAI. Il modello e i limiti operativi sono modificabili in <code>.env</code>.</p>
+      <p>Groq è la scelta predefinita. Crea un account e una chiave nel piano Free da <a href="https://console.groq.com/keys" target="_blank" rel="noopener noreferrer">console.groq.com</a>. La quota gratuita è limitata: quando si esaurisce, il lavoro si ferma e puoi riprenderlo dopo il rinnovo. Nessun passaggio automatico a OpenAI.</p>
+      <p>L’app non può verificare il tuo piano di fatturazione: mantieni il piano Free se vuoi evitare addebiti. Modello, intervallo tra richieste e limiti operativi sono modificabili in <code>.env</code>.</p>
       <p>Per l’esecuzione sicura: installa Docker Desktop, attiva i container Linux ed esegui <code>prepara_isolamento.bat</code>. Il codice generato viene eseguito senza rete, credenziali, cartelle personali o socket Docker.</p>
-      <p class="small muted">I costi mostrati sono stime solo se inserisci i prezzi correnti in .env. Il limite in USD usa quei prezzi; non sostituisce i limiti di fatturazione del provider. La chiave resta nel processo dell’assistente e non entra nel container.</p>
+      <p class="small muted">I costi sono stime solo se inserisci i prezzi del tuo piano in .env. Con quote gratuite non configurate, viene mostrato l’uso in token, senza inventare un costo. La chiave resta nel processo dell’assistente e non entra nel container.</p>
     </details>
     <details class="card"><summary>Documenti e conoscenza</summary>
       <p>Aggiungi documentazione o trascrizioni. L’agente recupera estratti pertinenti con fonte e data. Il contenuto è trattato come materiale di consultazione.</p>

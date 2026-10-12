@@ -29,7 +29,8 @@ def test_missing_key_reports_intervention_never_ready(api):
         if project['state'] == 'Serve il tuo intervento':
             break
     assert project['state'] == 'Serve il tuo intervento'
-    assert 'AI_PROVIDER_KEY' in project['summary']
+    assert health['provider'] == 'groq' and health['credential_var'] == 'GROQ_API_KEY'
+    assert 'GROQ_API_KEY' in project['summary']
     assert project['model_calls'] == 0 and project['last_check'] is None
 
 
@@ -78,3 +79,37 @@ def test_empty_goal_and_missing_id_are_rejected(api):
     client, _ = api
     assert client.post('/api/projects', json={'description': ' ' * 20}).status_code == 400
     assert client.get('/api/projects/' + 'a' * 32).status_code == 404
+
+
+def test_procedure_uses_official_groq_sdk_and_can_only_activate_after_pass(monkeypatch, tmp_path):
+    """Trasporto simulato: verifica l'adozione dopo la prova testuale, non un modello reale."""
+    import httpx
+    from groq import AsyncGroq
+    import app.main
+    requests = []
+    def respond(request):
+        import json
+        body = json.loads(request.content)
+        requests.append(request.url.host)
+        assert body['max_completion_tokens'] == 1000 and 'tools' not in body
+        return httpx.Response(200, json={'id': 'chat_procedure', 'object': 'chat.completion', 'created': 1,
+            'model': 'openai/gpt-oss-20b', 'choices': [{'index': 0, 'finish_reason': 'stop',
+                'message': {'role': 'assistant', 'content': 'Piano: test di idempotenza delle richieste.'}}],
+            'usage': {'prompt_tokens': 50, 'completion_tokens': 30, 'total_tokens': 80}})
+    sdk = AsyncGroq(api_key='offline-test-only', max_retries=0,
+        http_client=httpx.AsyncClient(transport=httpx.MockTransport(respond)))
+    monkeypatch.setattr(app.main, 'create_client', lambda *args, **kwargs: sdk)
+    store = Store(tmp_path)
+    app = create_app(Settings(data_dir=tmp_path, api_key='offline-test-only'), store=store)
+    with TestClient(app, base_url='http://localhost:8765') as client:
+        client.headers['X-App-Token'] = client.get('/api/session').json()['token']
+        body = {'title': 'Idempotenza', 'trigger': 'API database', 'guidance': 'Prevedi test di idempotenza per richieste ripetute.',
+                'examples': [{'prompt': 'Pianifica un backend per attività', 'expected_contains': ['test', 'idempotenza']}]}
+        p = client.post('/api/procedures', json=body).json()
+        assert client.post(f"/api/procedures/{p['id']}/activate", json={}).status_code == 409
+        result = client.post(f"/api/procedures/{p['id']}/test", json={}).json()
+        assert result['passed'] and result['input_tokens'] == 50 and result['output_tokens'] == 30
+        assert requests == ['api.groq.com']
+        assert client.post(f"/api/procedures/{p['id']}/activate", json={}).status_code == 200
+        assert store.relevant_procedures('API con database')[0]['version'] == 1
+    store.close()

@@ -20,7 +20,7 @@ async def test_isolation_has_no_secrets_mounts_or_external_network(sandbox):
     probe = '''
 import json,os,socket,pathlib
 assert os.getuid() == 65534
-assert not any(name in os.environ for name in ('AI_PROVIDER_KEY','OPENAI_API_KEY','GH_TOKEN','GITHUB_TOKEN'))
+assert not any(name in os.environ for name in ('GROQ_API_KEY','AI_PROVIDER_KEY','OPENAI_API_KEY','GH_TOKEN','GITHUB_TOKEN'))
 assert not pathlib.Path('/var/run/docker.sock').exists()
 assert not pathlib.Path('/workspace').exists()
 try:

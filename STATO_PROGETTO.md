@@ -1,82 +1,95 @@
-# Stato progetto — Officina v0.1
+# Stato progetto — Officina v0.2 (Groq)
 
-Aggiornato il 12 ottobre 2026. Il repository iniziale era vuoto, senza commit o branch
-remoti. È stata creata una nuova applicazione nella cartella esistente conservando
-i metadati Git; non è stato eliminato alcun repository GitHub o ambiente cloud.
+Aggiornato il 12 ottobre 2026. Il nuovo obiettivo è usare il piano gratuito Groq,
+con quote operative, senza passaggio automatico a servizi a pagamento.
 
-## Obiettivo del primo traguardo
+## Architettura e cambiamenti
 
-Assistente personale in italiano per un backend attività Python, con memoria
-persistente, pianificazione, documentazione, file versionati e verifiche Docker.
-Architettura: FastAPI, SQLite/FTS5, SDK ufficiale OpenAI 3.29.0, Responses API,
-frontend HTML/CSS/JavaScript senza build Node e container Python 3.12.
+FastAPI, SQLite/FTS5, interfaccia italiana HTML/CSS/JavaScript e Docker per eseguire
+il codice generato. Groq è il fornitore predefinito: SDK ufficiale 1.7.0,
+Chat Completions con tool calling, modello `openai/gpt-oss-20b` indicato nel README
+ufficiale. Il prefisso openai è il nome del modello; il servizio è api.groq.com.
+OpenAI resta un'opzione esplicita con SDK 3.29.0 e Responses API.
 
-## Implementato
+`AI_PROVIDER=groq` usa soltanto `GROQ_API_KEY` e `GROQ_MODEL`.
+`AI_PROVIDER=openai` usa soltanto `AI_PROVIDER_KEY` e `AI_MODEL`.
+Le chiavi non vengono riutilizzate tra fornitori. Sono nascoste anche nel repr delle
+impostazioni. Nessuna credenziale viene inclusa nel container o nella consegna.
 
-- Obiettivo, Avvia/Pausa/Riprendi/Ferma, chiarimenti indispensabili, stati e prossimo passo.
-- Piano e criteri prima del codice; consultazione di fonti ufficiali e retrieval con fonte/data.
-- Memoria del lavoro, decisioni, correzioni, risultati e cronologia del protocollo IA.
-- Limiti persistenti, timeout, token e costo stimato quando i prezzi sono configurati.
-- Workspace separati, versioni ripristinabili, esportazione del solo progetto.
-- Esecuzione Docker senza rete, segreti, cartelle host o socket Docker; nessun ripiego sull’host.
-- Pronto subordinato ai test e al contratto indipendente sui file correnti.
-- Documenti e trascrizioni; procedure versionate, testate su esempi con il modello prima di adottarle.
-- Recupero dopo chiusura; chiamate tool interrotte segnate come risultato ignoto.
-- Avvio Windows tramite file .bat, inserimento della chiave con input nascosto, lockfile con hash.
+Il protocollo interno persistente è conservato: le vecchie cronologie Responses
+sono convertite in messaggi Chat Completions, mantenendo chiamate e risultati dei
+tool. Le istruzioni restano prioritarie rispetto a documenti e output non fidati.
+Gli argomenti dei tool sono validati sull'host oltre ai vincoli del filesystem.
+
+Pausa predefinita di 6 secondi tra le chiamate Groq, contatori persistenti e retry SDK
+automatici disabilitati. HTTP 429 ferma il progetto e mostra Retry-After quando
+presente. Riprendi non azzera i budget. Le procedure su esempi usano il fornitore scelto.
+
+Restano: obiettivo, piano/criteri prima del codice, Avvia/Pausa/Riprendi/Ferma,
+chiarimenti, documenti con fonte/data, ricerca FTS5, procedure versionate e adottabili
+solo dopo test su esempi, snapshots ripristinabili, registro e ZIP del solo progetto.
+Pronto richiede unittest non vuoti, contratto indipendente e hash dei file invariato.
+Docker non ha rete, segreti, cartelle host o socket Docker; niente ripiego sull'host.
 
 ## Verifiche effettive
 
-Eseguite su Linux, Python 3.12.14 e Docker 28.4.0. Consultare
-`RISULTATI_VERIFICHE.md` e `resources/evidence/` per gli esiti aggiornati.
+Su Linux, Python 3.12.14, Docker 28.4.0 e Chromium di sistema:
 
-- Backend di riferimento: 8 test unitari, nessun fallimento/skip.
-- Contratto indipendente: creazione, consultazione, input, idempotenza e persistenza dopo riavvio.
-- Difetto deliberato in copia: rilevato da test e contratto; ripristino deterministico verificato.
-- App: **35 test passati**, 0 falliti/errori/skipped; API, memoria, sicurezza, budget, SDK, controlli e Docker.
-- Chromium: interfaccia italiana, intervento per credenziale assente, recupero, documenti, layout mobile.
-- Installazione separata con pip e hash: riuscita su Linux.
+- **44 test passati**, 0 errori/fallimenti/skipped.
+- SDK ufficiali Groq e OpenAI con trasporto HTTP simulato e Docker reale: scrittura,
+  difetto rilevato, correzione predisposta dal test e nuova verifica passata.
+- Quota Groq, credenziali separate, migrazione cronologie, argomenti non fidati,
+  prova/adozione procedure e configurazione locale della chiave (valore fittizio).
+- Backend di riferimento: 8 unittest e 5 verifiche indipendenti, inclusi idempotenza
+  e riavvio; difetto deliberato respinto e ripristino deterministico verificato.
+- Browser: italiano, Groq selezionato, credenziale assente -> intervento,
+  recupero, documenti persistenti e layout 390px, nessun errore JavaScript.
+- Riavvio reale del servizio con configurazione Groq e progetti preservati.
+- Setup uv congelato ripetuto e pip separato con verifica degli hash, SDK Groq incluso.
 
-I test del protocollo usano un trasporto HTTP simulato e lo dichiarano: non dimostrano
-capacità di un modello. Il test completo offline collega SDK, scrittura, Docker,
-fallimento, correzione predisposta dal test e nuova verifica.
+Vedi RISULTATI_VERIFICHE.md, VERIFICHE.json e resources/evidence.
+Il backend di riferimento è scritto per la consegna, non attribuito al modello.
+Le risposte simulate esistono solo nei test: non convalidano capacità di un'IA reale.
 
-## Bloccato / non verificato
+## Requisiti esterni ancora mancanti
 
-`AI_PROVIDER_KEY` manca sia nell’ambiente iniziale sia nella configurazione locale.
-`scripts/prova_agente.py` ha restituito exit code 2, NON ESEGUITA: nessuna chiamata IA.
-La generazione reale, la correzione autonoma del modello, la prova di procedure con IA
-e l’autenticazione/modello/fatturazione OpenAI restano da verificare.
+`GROQ_API_KEY` assente. scripts/controlla_ia.py e scripts/prova_agente.py hanno
+restituito exit 2, NON ESEGUITI: zero chiamate live. Autenticazione, disponibilità
+per l'account del modello, generazione/correzione autonome e procedure con il modello
+reale restano da verificare. La creazione dell'account e della chiave spetta all'utente.
 
-Windows 11, Python Windows, Docker Desktop/WSL 2 e i .bat non sono stati eseguiti:
-sono predisposti per la verifica sul PC dell’utente. Non è stata verificata la
-restaurazione in un nuovo task cloud o la pubblicazione dell’ambiente.
+Il piano Free e le quote non sono rilevabili affidabilmente dall'app. L'utente deve
+controllarli nella console Groq; non è garantito accesso illimitato o assenza di
+addebiti se l'account ha già fatturazione attiva. Nessun cambio automatico a OpenAI.
 
-Questa versione supporta il contratto backend attività Python con libreria standard.
-Altri backend, installazione di dipendenze nel codice generato e infrastrutture
-blockchain sono traguardi successivi. Nessuna gestione di denaro, portafogli,
-pubblicazione automatica o accesso a repository/test Nodveta.
+Windows 11, Docker Desktop/WSL 2 e i .bat sono predisposti ma non eseguiti su Windows.
+Pubblicazione dell'ambiente e ripristino in un nuovo task cloud non verificati.
+Questa versione supporta il contratto backend attività Python con libreria standard;
+altri backend e blockchain sono traguardi successivi. Nessuna gestione di denaro,
+portafogli, pubblicazione automatica o uso di repository/test Nodveta.
 
 ## Ripresa
 
-1. Usa il checkout esistente `/workspace/AI-HyperGenius`; ogni task cloud è già isolato.
-   Non creare un worktree aggiuntivo salvo richiesta esplicita.
-2. Installa dipendenze con `uv sync --frozen`; prepara Docker con
-   `.venv/bin/python scripts/prepara_isolamento.py` se l’immagine non è disponibile.
-3. Avvia `.venv/bin/python avvia.py --no-browser`; verifica la pagina e `/api/health`
-   tramite richieste locali. Non interpretare una porta aperta come prova funzionale.
-4. Sulla macchina locale l’utente può eseguire `configura_ia.bat`; nel cloud usa le
-   impostazioni dell’ambiente per la credenziale, mai la chat. Riavvia dopo la modifica.
-5. Esegui `scripts/prova_agente.py` con il provider reale. Verifica generazione e
-   correzione nella copia separata. Conserva gli esiti falliti e non cambiare test per farli passare.
-6. Aggiorna questo file con risultati effettivi, senza proclamare riuscite non verificate.
+1. Usa il checkout esistente /workspace/AI-HyperGenius: ogni task è già isolato.
+   Non creare un worktree salvo richiesta esplicita; preserva .env e .data.
+2. `uv sync --frozen`, poi prepara l'immagine con scripts/prepara_isolamento.py.
+3. Avvia `.venv/bin/python avvia.py --no-browser`; verifica / e /api/health tramite
+   richieste locali, separando disponibilità del servizio, chiave e Docker.
+4. L'utente crea la chiave nel proprio account Free su https://console.groq.com/keys.
+   Su Windows: configura_ia.bat (input nascosto). Nel cloud: impostazioni sicure
+   dell'ambiente per GROQ_API_KEY, mai valori in chat. Riavvia dopo la configurazione.
+5. `scripts/controlla_ia.py` verifica accesso/modello; `scripts/prova_agente.py`
+   verifica generazione e correzione nella copia separata. Conserva gli esiti
+   negativi e aggiorna questo file con risultati effettivi.
 
-Il progetto è ora versionato e caricato su GitHub nel branch `main`, con origine
-`https://github.com/piotr0868/AI-HyperGenius.git`. Il commit iniziale
-`7131d2ee80c74bf5f5c102c4f26bb9961236c974` è stato inviato e verificato
-con `git ls-remote origin refs/heads/main`. Questo non pubblica l’ambiente cloud
-é verifica le chiamate IA, per le quali manca ancora AI_PROVIDER_KEY.
-Il pacchetto e il repository escludono credenziali, `.data` e `.venv`; il pacchetto
-esclude anche `.git`. La configurazione cloud è stata salvata con install_script, start_skill, requisito
-personale AI_PROVIDER_KEY per api.openai.com e domini ufficiali di documentazione.
-È una bozza confermata: non implica aggiornamento runtime o pubblicazione.
-L’utente deve revisionare e salvare nelle impostazioni, poi pubblicare se desidera usarla.
+## Git e configurazione cloud
+
+Repository: https://github.com/piotr0868/AI-HyperGenius, branch main.
+Ogni invio viene verificato confrontando HEAD con git ls-remote origin refs/heads/main.
+La consegna esclude .env, .data, .venv e .git; Git esclude credenziali e dati locali.
+
+Bozza cloud aggiornata e confermata: istruzioni d'avvio, requisito personale
+GROQ_API_KEY per api.groq.com, variabili AI_PROVIDER/GROQ_MODEL e dominio console.groq.com.
+Installazione congelata conservata; opzione OpenAI precedente preservata.
+Salvare la bozza non applica né pubblica: revisionare/salvare nelle impostazioni,
+poi pubblicare se desiderato. La prova live Groq resta bloccata dalla chiave mancante.

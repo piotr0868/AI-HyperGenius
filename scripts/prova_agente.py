@@ -18,7 +18,7 @@ GOAL = 'Crea un backend locale per attività con SQLite, API per creare e consul
 async def main():
     config = load_settings()
     if not config.api_key:
-        print('NON ESEGUITA: manca AI_PROVIDER_KEY nel file locale .env. Non è stata fatta alcuna chiamata IA.')
+        print(f'NON ESEGUITA: manca {config.credential_var} nel file locale .env. Nessuna chiamata IA. Fornitore: {config.provider}.')
         return 2
     settings = replace(config, data_dir=config.data_dir / 'live-acceptance')
     store, sandbox = Store(settings.data_dir), Sandbox(settings)

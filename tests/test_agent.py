@@ -92,7 +92,7 @@ async def test_official_sdk_function_call_protocol_and_usage(tmp_path):
                 'input_tokens_details': {'cached_tokens': 0}, 'output_tokens_details': {'reasoning_tokens': 0}}})
     client = AsyncOpenAI(api_key='offline-test-only', http_client=httpx.AsyncClient(transport=httpx.MockTransport(respond)))
     store = Store(tmp_path)
-    agent = Agent(Settings(data_dir=tmp_path), store, OfflineSandbox(), client=client)
+    agent = Agent(Settings(data_dir=tmp_path, provider="openai", model="gpt-5-mini"), store, OfflineSandbox(), client=client)
     p = store.create_project('Backend con API')
     await agent.run(p['id'])
     result = store.project(p['id'])
@@ -106,12 +106,14 @@ async def test_official_sdk_function_call_protocol_and_usage(tmp_path):
     store.close()
 
 
-async def test_offline_protocol_drives_real_docker_failure_repair_and_retest(tmp_path):
+@pytest.mark.parametrize('provider', ['openai', 'groq'])
+async def test_offline_protocol_drives_real_docker_failure_repair_and_retest(tmp_path, provider):
     """Chiamate predisposte dal test, SDK vero e Docker vero: non è una prova del modello."""
     from pathlib import Path
     from app.config import load_settings
     from app.sandbox import Sandbox
-    settings = replace(load_settings(), data_dir=tmp_path)
+    settings = replace(load_settings(), data_dir=tmp_path, provider=provider,
+                       model='gpt-5-mini' if provider == 'openai' else 'openai/gpt-oss-20b', min_interval=0)
     sandbox = Sandbox(settings)
     if not (await sandbox.status())['available']:
         pytest.skip('Docker non disponibile: protocollo con esecuzione reale non verificato.')
@@ -129,12 +131,24 @@ async def test_offline_protocol_drives_real_docker_failure_repair_and_retest(tmp
     def respond(request):
         sent.append(json.loads(request.content))
         name, args = next(calls)
+        if provider == 'groq':
+            assert request.url.host == 'api.groq.com'
+            assert sent[-1]['parallel_tool_calls'] is False
+            assert 'store' not in sent[-1] and 'max_output_tokens' not in sent[-1]
+            assert 'strict' not in sent[-1]['tools'][0]['function']
+            return httpx.Response(200, json={'id': f'chat_{len(sent)}', 'object': 'chat.completion', 'created': 1,
+                'model': settings.model, 'choices': [{'index': 0, 'finish_reason': 'tool_calls',
+                'message': {'role': 'assistant', 'content': None, 'tool_calls': [{'id': f'call_{len(sent)}',
+                    'type': 'function', 'function': {'name': name, 'arguments': json.dumps(args)}}]}}],
+                'usage': {'prompt_tokens': 100, 'completion_tokens': 20, 'total_tokens': 120}})
         return httpx.Response(200, json={'id': f'resp_{len(sent)}', 'object': 'response', 'created_at': 1,
             'model': settings.model, 'status': 'completed', 'output': [{'type': 'function_call', 'id': f'fc_{len(sent)}',
             'call_id': f'call_{len(sent)}', 'name': name, 'arguments': json.dumps(args)}],
             'usage': {'input_tokens': 100, 'output_tokens': 20, 'total_tokens': 120,
             'input_tokens_details': {'cached_tokens': 0}, 'output_tokens_details': {'reasoning_tokens': 0}}})
-    client = AsyncOpenAI(api_key='offline-test-only', http_client=httpx.AsyncClient(transport=httpx.MockTransport(respond)))
+    from groq import AsyncGroq
+    sdk = AsyncGroq if provider == 'groq' else AsyncOpenAI
+    client = sdk(api_key='offline-test-only', max_retries=0, http_client=httpx.AsyncClient(transport=httpx.MockTransport(respond)))
     store = Store(tmp_path)
     store.add_document('SQLite', 'https://docs.python.org/3.12/library/sqlite3.html', '2026-10-12', 'SQLite transazioni e idempotenza.')
     agent = Agent(settings, store, sandbox, client=client)
@@ -147,9 +161,42 @@ async def test_offline_protocol_drives_real_docker_failure_repair_and_retest(tmp
     checks = [e['detail'] for e in reversed(store.events(p['id'])) if e['kind'] == 'verifica']
     assert checks[0]['passed'] is False and checks[-1]['passed'] is True
     assert result['failed_checks'] == 1
-    assert any(json.loads(i['output']).get('passed') is False for i in sent[5]['input'] if i.get('type') == 'function_call_output')
+    if provider == 'openai':
+        assert any(json.loads(i['output']).get('passed') is False for i in sent[5]['input'] if i.get('type') == 'function_call_output')
+    else:
+        assert any(json.loads(i['content']).get('passed') is False for i in sent[5]['messages'] if i.get('role') == 'tool')
     await agent.shutdown()
     store.close()
+
+
+async def test_groq_rate_limit_stops_without_paid_fallback(tmp_path):
+    from groq import AsyncGroq
+    requests = []
+    def respond(request):
+        requests.append(request.url.host)
+        return httpx.Response(429, headers={'Retry-After': '7'}, json={'error': {'message': 'Quota reached', 'type': 'rate_limit_error'}})
+    client = AsyncGroq(api_key='offline-test-only', max_retries=0,
+                       http_client=httpx.AsyncClient(transport=httpx.MockTransport(respond)))
+    store = Store(tmp_path)
+    agent = Agent(Settings(data_dir=tmp_path), store, OfflineSandbox(), client=client)
+    p = store.create_project('Backend con quota gratuita')
+    await agent.run(p['id'])
+    row = store.project(p['id'])
+    assert row['state'] == 'Serve il tuo intervento'
+    assert 'Quota API raggiunta' in row['summary'] and '7 secondi' in row['summary']
+    assert requests == ['api.groq.com'] and row['model_calls'] == 1
+    await agent.shutdown()
+    store.close()
+
+
+async def test_tool_arguments_are_validated_on_host(agent):
+    p = agent.store.create_project('Test argomenti non fidati')
+    for name, args in [('execute_python', {'argv': 'python -c evil'}),
+                       ('read_file', {'path': 'main.py', 'unexpected': 'ignore rules'}),
+                       ('unknown_tool', {})]:
+        with pytest.raises(ValueError):
+            await agent.perform(p['id'], name, args)
+    assert agent.store.project(p['id'])['tool_calls'] == 0
 
 
 async def test_stop_cancels_inflight_request_and_preserves_project(tmp_path):
@@ -159,7 +206,7 @@ async def test_stop_cancels_inflight_request_and_preserves_project(tmp_path):
         await asyncio.Event().wait()
     client = AsyncOpenAI(api_key='offline-test-only', http_client=httpx.AsyncClient(transport=httpx.MockTransport(respond)))
     store = Store(tmp_path)
-    agent = Agent(Settings(data_dir=tmp_path), store, OfflineSandbox(), client=client)
+    agent = Agent(Settings(data_dir=tmp_path, provider="openai", model="gpt-5-mini"), store, OfflineSandbox(), client=client)
     p = store.create_project('Progetto da interrompere')
     agent.launch(p['id'])
     await asyncio.wait_for(entered.wait(), 2)

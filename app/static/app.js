@@ -139,9 +139,9 @@ $('procedure-form').onsubmit = async event => {
 async function start() {
   token = (await api('/session')).token;
   const health = await api('/health');
-  text('configuration', `${health.ai_configured ? 'Chiave API configurata; autenticazione da verificare con una chiamata reale.' : 'Chiave API mancante: l’agente non può ancora iniziare.'} ${health.sandbox.available ? 'Immagine Docker disponibile; le prove verificheranno l’esecuzione.' : health.sandbox.reason}`);
+  text('configuration', `Fornitore: ${health.provider} · modello: ${health.model}. ${health.ai_configured ? 'Chiave API configurata; autenticazione da verificare con una chiamata reale.' : `Manca ${health.credential_var}: apri configura_ia.bat sul tuo PC.`} ${health.sandbox.available ? 'Immagine Docker disponibile; le prove verificheranno l’esecuzione.' : health.sandbox.reason}`);
   const l = health.limits;
-  text('limits', `Limiti per progetto: ${l.model_calls} chiamate IA, ${l.tool_calls} operazioni, ${l.corrections} correzioni, ${l.tokens} token, ${l.seconds} secondi; ${l.command_seconds} secondi per comando.`);
+  text('limits', `Limiti per progetto: ${l.model_calls} chiamate IA, ${l.tool_calls} operazioni, ${l.corrections} correzioni, ${l.tokens} token, ${l.seconds} secondi; ${l.command_seconds} secondi per comando. Intervallo tra richieste: ${l.min_interval_seconds} secondi.`);
   select(selected); await refresh(); await loadDocuments(); await loadProcedures();
   setInterval(() => refresh(), 2000);
 }
