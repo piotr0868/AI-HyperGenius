@@ -70,9 +70,11 @@ pubblicazione automatica o accesso a repository/test Nodveta.
    correzione nella copia separata. Conserva gli esiti falliti e non cambiare test per farli passare.
 6. Aggiorna questo file con risultati effettivi, senza proclamare riuscite non verificate.
 
-Il progetto è preparato per il versionamento Git sul branch `main`, con origine
-`https://github.com/piotr0868/AI-HyperGenius.git`. L’invio remoto va confermato
-con `git ls-remote origin refs/heads/main`; non equivale a pubblicare l’ambiente cloud.
+Il progetto è ora versionato e caricato su GitHub nel branch `main`, con origine
+`https://github.com/piotr0868/AI-HyperGenius.git`. Il commit iniziale
+`7131d2ee80c74bf5f5c102c4f26bb9961236c974` è stato inviato e verificato
+con `git ls-remote origin refs/heads/main`. Questo non pubblica l’ambiente cloud
+é verifica le chiamate IA, per le quali manca ancora AI_PROVIDER_KEY.
 Il pacchetto e il repository escludono credenziali, `.data` e `.venv`; il pacchetto
 esclude anche `.git`. La configurazione cloud è stata salvata con install_script, start_skill, requisito
 personale AI_PROVIDER_KEY per api.openai.com e domini ufficiali di documentazione.
