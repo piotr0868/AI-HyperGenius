@@ -95,15 +95,29 @@
     },
     "docker_desktop": {
       "engine_running": "visible in screenshot",
-      "unsupported_version_warning": "visible in screenshot",
-      "update": "pending"
+      "unsupported_version_warning": "visible in earlier screenshot, before successful update",
+      "update": "winget reports installation successful; package Docker.DockerDesktop 4.95.0, installer hash verified"
     },
     "not_verified": [
-      "quota correction on Windows",
-      "Docker Desktop update",
+      "exact cause of latest incomplete AI acceptance",
       "complete AI generation and repair",
-      "Officina browser workflow on Windows"
-    ]
+      "Officina browser workflow beyond page opening"
+    ],
+    "latest_attempt": {
+      "date": "2026-10-13",
+      "source": "Subsequent user-pasted Windows command output",
+      "source_update": "checksum verification and backup reported successful",
+      "groq_profile": "60-second interval and limited waits applied by updater; run reported resumed",
+      "docker_update": "installation successful reported by winget, version 4.95.0",
+      "reference_backend": "passed",
+      "deliberate_fault": "detected",
+      "deterministic_restore": "passed",
+      "ai_acceptance": "not completed",
+      "failure_reason": "not present in pasted tail; needs current live-acceptance/RESULTS.json",
+      "generation_and_repair_stage": "unknown from pasted tail",
+      "officina_browser": "page opened reported by user",
+      "server_pid_reported": 12136
+    }
   },
   "cloud": {
     "draft_saved": true,
@@ -152,7 +166,7 @@
     "passed": true,
     "api_transport": "simulated in tests",
     "docker": "real in full SDK protocol checks",
-    "new_profile_on_windows": "not_run",
+    "new_profile_on_windows": "applied and acceptance resumed according to user log; acceptance still incomplete, current cause unknown",
     "startup": {
       "platform": "Linux",
       "passed": true,

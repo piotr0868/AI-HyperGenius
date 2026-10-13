@@ -1,6 +1,6 @@
 # Stato progetto — Officina v0.2 (Groq)
 
-Aggiornato il 12 ottobre 2026. Il nuovo obiettivo è usare il piano gratuito Groq,
+Aggiornato il 13 ottobre 2026. Il nuovo obiettivo è usare il piano gratuito Groq,
 con quote operative, senza passaggio automatico a servizi a pagamento.
 
 ### Aggiornamento Windows del 13 ottobre 2026
@@ -77,8 +77,9 @@ difetto dopo correzione e ricontrolla in Docker i progetti già pronti. Il helpe
 aggiorna_quota scarica quattro sorgenti da un commit esplicito, con checksum prima
 di ogni modifica e copie ripristinabili. Mantiene chiave e memoria; configura il
 profilo e può tentare l'aggiornamento Docker con winget prima di riprendere.
-La correzione deve ancora essere applicata e verificata sul PC Windows; non
-dichiarare completata la generazione finché non arrivano esiti effettivi positivi.
+La correzione è stata applicata sul PC Windows secondo il successivo log;
+la prova ripresa è ancora NON COMPLETATA. Non dichiarare completata la
+generazione finché non arrivano esiti effettivi positivi.
 Suite corrente: **65 verifiche passate su Linux**, zero fallimenti/skipped.
 I nuovi controlli coprono ripresa della vecchia prova senza reset, correzione
 già eseguita conservata, ricontrollo dei pronti, quota breve/lunga e copie con checksum.
@@ -92,6 +93,22 @@ chiude soltanto quel PID. Se non lo identifica, non ferma altri processi e non
 modifica sorgenti. Il ramo PowerShell resta da verificare sul PC Windows; nei
 test Linux sono verificati i rifiuti, l'ordine delle operazioni e la riservatezza
 del token di sessione. Chiave, database e file dei progetti non vengono rimossi.
+
+### Esito aggiornamento e seconda prova Windows
+
+Il nuovo log conferma sorgenti aggiornati con checksum e copie precedenti,
+profilo Groq applicato, installer Docker Desktop 4.95.0 scaricato con hash
+verificato e "Installazione riuscita" da winget. Nessun riavvio imposto.
+Accesso Groq/modello e prove del riferimento (backend, difetto, ripristino) sono
+nuovamente passati. L'accettazione IA ha ripreso la generazione salvata, mantenendo
+file, storia e contatori, ma è terminata con NON COMPLETATA. Il motivo dell'ultimo
+arresto non compare nella coda incollata: leggere RESULTS.json della prova attuale
+prima di attribuirlo alla quota o modificare i limiti. Il precedente 429 rimane
+un risultato storico, non una diagnosi del secondo tentativo.
+Il server riavviato riporta PID 12136; l'utente conferma apertura della pagina.
+Non richiedere una nuova chiave, non azzerare i contatori e non dichiarare riuscita
+la generazione o la correzione separata. I risultati Windows sono log dell'utente,
+non comandi eseguiti dall'assistente nel cloud.
 
 ## Architettura e cambiamenti
 
@@ -155,8 +172,8 @@ controllarli nella console Groq; non è garantito accesso illimitato o assenza d
 addebiti se l'account ha già fatturazione attiva. Nessun cambio automatico a OpenAI.
 
 Windows 11: setup, casella, SDK/modello, Docker, prova senza IA e avvio server
-confermati da log dell'utente. Nuova correzione della quota e aggiornamento Docker
-ancora da verificare. Le verifiche automatiche dell'assistente restano su Linux.
+confermati da log dell'utente. Correzione della quota applicata e aggiornamento Docker
+riuscito secondo il nuovo log; accettazione IA ancora incompleta, causa da leggere. Le verifiche automatiche dell'assistente restano su Linux.
 Pubblicazione dell'ambiente e ripristino in un nuovo task cloud non verificati.
 Questa versione supporta il contratto backend attività Python con libreria standard;
 altri backend e blockchain sono traguardi successivi. Nessuna gestione di denaro,

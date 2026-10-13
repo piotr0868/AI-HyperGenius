@@ -27,7 +27,7 @@ restano quelle del 12 ottobre; il nuovo avvio e la suite sono stati verificati i
 | Sintassi Python e JavaScript | **Passata**; verifiche supplementari, non sostituiscono le prove funzionali |
 | Generazione e correzione con Groq reale nel cloud | **NON ESEGUITA**, exit code 2: manca `GROQ_API_KEY`; zero chiamate live dal cloud |
 | SDK/modello e prova agente sul PC Windows | **Log dell'utente**: accesso al modello riuscito; generazione tentata e **NON COMPLETATA**, HTTP 429, Retry-After 48 secondi; correzione IA separata non eseguita |
-| Correzione quota e ripresa | **Controlli locali passati**: testo ridotto senza perdere memoria, attesa breve limitata e persistente, nessun nuovo difetto dopo ripresa, progetti pronti ricontrollati in Docker; applicazione della correzione sul PC ancora da verificare |
+| Correzione quota e ripresa | **Controlli locali passati**: testo ridotto senza perdere memoria, attesa breve limitata e persistente, nessun nuovo difetto dopo ripresa, progetti pronti ricontrollati in Docker; correzione applicata e prova ripresa secondo il log Windows; accettazione ancora incompleta, causa attuale da leggere |
 | Aggiornamento con checksum e copie precedenti | **Passato offline**: rifiuto checksum errato prima di modifiche, chiave conservata, sorgenti precedenti archiviati, app attiva impedisce l'aggiornamento |
 | Prova di procedure con Groq reale | **NON ESEGUITA**, stessa credenziale mancante |
 | Quota Groq HTTP 429 | **Passato offline**: stop, indicazione Retry-After, nessuna chiamata a OpenAI |
@@ -35,8 +35,8 @@ restano quelle del 12 ottobre; il nuovo avvio e la suite sono stati verificati i
 | Configurazione locale della chiave | **Passata su Linux con chiave fittizia**: input non stampato, chiave precedente preservata, permessi 0600 |
 | Accesso/modello e piano Free Groq | **Accesso/modello confermati dal log Windows**. Piano Free e fatturazione non rilevabili dal controllo: quote da consultare nell'account |
 | Windows: Python e dipendenze | **Confermati dal log dell'utente**: Python 3.12.10, venv e installazione completata; non eseguiti dall'assistente |
-| Windows: casella grafica, salvataggio chiave, Docker Linux, API e server | **Confermati dal log dell'utente**, inclusa prova senza IA e avvio server; interfaccia Officina nel browser non ancora confermata |
-| Aggiornamento Docker Desktop sul PC | **PENDENTE**: screenshot con avviso di versione non supportata; installazione/aggiornamento winget non eseguiti dall'assistente |
+| Windows: casella grafica, salvataggio chiave, Docker Linux, API e server | **Confermati dal log dell'utente**, inclusa prova senza IA e avvio server; apertura pagina Officina confermata dall’utente, flusso completo ancora da verificare |
+| Aggiornamento Docker Desktop sul PC | **RIUSCITO secondo il log Windows**: winget, Docker Desktop 4.95.0, hash installer verificato; non eseguito dall'assistente |
 | Nuovo task cloud e pubblicazione | **NON VERIFICATI**: bozza salvata, pubblicazione a cura dell’utente |
 
 Le risposte simulate compaiono soltanto nei test del protocollo. L’applicazione usa
