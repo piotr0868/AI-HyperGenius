@@ -182,8 +182,14 @@ async def test_resume_does_not_inject_fault_again_and_rechecks_ready_projects(tm
                  last_check={'passed': True}, model_calls=8)
     fixed = 'def normalize_title(value):\n    return value.strip()\n'
     store.write_file(repair['id'], 'regression_target.py', fixed)
-    store.update(repair['id'], state='Serve il tuo intervento', model_calls=5)
-    store.event(repair['id'], 'verifica', {'passed': False})
+    store.write_file(repair['id'], 'tests/test_regression_injected.py', 'import unittest\nfrom regression_target import normalize_title\nclass Regression(unittest.TestCase):\n    def test_strip(self):\n        self.assertEqual(normalize_title("  attività  "), "attività")\n')
+    # Risposta predisposta dal test: la certificazione richiede una scrittura IA riuscita.
+    history = [{'type': 'function_call', 'call_id': 'offline_fixed', 'name': 'write_file',
+                'arguments': json.dumps({'path': 'regression_target.py', 'content': fixed})},
+               {'type': 'function_call_output', 'call_id': 'offline_fixed',
+                'output': json.dumps({'path': 'regression_target.py', 'previous_version': 1})}]
+    store.update(repair['id'], state='Serve il tuo intervento', model_calls=5, history=history)
+    store.event(repair['id'], 'verifica', {'passed': False, 'stderr': 'FAIL: test_strip'})
     previous = {'generation': {'id': original['id']}, 'repair': {'project': {'id': repair['id']}}}
     live.save_json(tmp_path / 'live-acceptance/RESULTS.json', previous)
     store.close()

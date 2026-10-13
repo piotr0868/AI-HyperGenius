@@ -3,6 +3,37 @@
 Aggiornato il 13 ottobre 2026. Il nuovo obiettivo è usare il piano gratuito Groq,
 con quote operative, senza passaggio automatico a servizi a pagamento.
 
+### Situazione attuale: diagnosi Windows e correzione del riavvio
+
+Il rapporto aggiornato dell'utente conferma che **main.py esiste** e che tutti
+i **5 controlli indipendenti delle API passano**. Dei 6 unittest generati, 5
+passano e quello del riavvio fallisce con `Address already in use`: il listener
+precedente non viene rilasciato prima di creare il successivo sulla stessa porta.
+16 richieste IA, 74968 token input e 10486 output, 3 verifiche fallite; contatori
+conservati. L'ultima risposta del modello è un rifiuto testuale, senza strumenti;
+la sua causa non è determinata. La riserva token del rapporto precede quell'ultima
+risposta e non dimostra che il nuovo arresto sia dovuto al budget.
+
+Predisposta una procedura del **sistema/Codex**, versione 1, che aggiunge
+`server_close()` dopo `shutdown()` solo per questo errore riconosciuto e per
+un'importazione standard non personalizzata di ThreadingHTTPServer. Nessun test
+modificato, codice mai importato/eseguito sull'host, precedente main.py versionato
+e ripristinabile. La procedura non viene attribuita al modello Groq.
+Docker Linux ha riprodotto l'errore e poi superato gli stessi 9 test della fixture
+e i 5 controlli API dopo la modifica; rollback verificato. Applicazione sul PC
+Windows e nuova prova con il modello reale **ancora da confermare**.
+
+La prova separata usa una copia, un contesto nuovo limitato al difetto deliberato,
+piano e riferimenti ufficiali realmente preparati dal sistema. Il modello deve
+scrivere la correzione; certificazione solo con difetto `test_strip` prima rilevato,
+scrittura IA riuscita corrispondente al file finale, test invariati, nuove prove
+passate e originale invariato. SDK reale con risposte HTTP simulate e Docker reale:
+flusso passato con 3 chiamate della copia, 16 precedenti conservate (19 su 20).
+Questa prova offline **non verifica le capacità dell'IA reale**. Nessun aumento
+dei limiti token/tempo, nessuna nuova chiave richiesta, nessun ripiego a pagamento.
+Il PID Windows più recente comunicato è 21380; usare soltanto il controllo mirato
+del programma di aggiornamento, senza fermare tutti i processi Python.
+
 ### Aggiornamento Windows del 13 ottobre 2026
 
 Il log dell'utente conferma Python Install Manager e Python 3.12.10 installati,
@@ -297,7 +328,7 @@ Docker non ha rete, segreti, cartelle host o socket Docker; niente ripiego sull'
 
 Su Linux, Python 3.12.14, Docker 28.4.0 e Chromium di sistema:
 
-- **104 test passati** nella suite corrente, 0 errori/fallimenti/skipped.
+- **117 test passati** nella suite corrente, 0 errori/fallimenti/skipped.
 - SDK ufficiali Groq e OpenAI con trasporto HTTP simulato e Docker reale: scrittura,
   difetto rilevato, correzione predisposta dal test e nuova verifica passata.
 - Quota Groq, credenziali separate, migrazione cronologie, argomenti non fidati,
@@ -318,7 +349,9 @@ Le risposte simulate esistono solo nei test: non convalidano capacità di un'IA 
 Nel **cloud** `GROQ_API_KEY` è ancora assente: zero chiamate live da questo ambiente.
 Sul **PC Windows** la credenziale e il modello sono verificati dal log; la prova
 con IA è tentata e non completata: primo tentativo per quota, secondo per HTTP 400,
-terzo per la riserva locale dei token. Generazione/correzione complete e
+terzo per la riserva locale dei token; ultimo rapporto: cinque controlli API
+passati e un unittest di riavvio fallito, poi rifiuto testuale del modello.
+Generazione/correzione complete e
 procedure con il modello reale restano da verificare. Non richiedere nuovamente
 una chiave locale già salvata; usare avvio_automatico che carica il file fuori OneDrive.
 
@@ -329,7 +362,10 @@ addebiti se l'account ha già fatturazione attiva. Nessun cambio automatico a Op
 Windows 11: setup, casella, SDK/modello, Docker, prova senza IA e avvio server
 confermati da log dell'utente. Correzione della quota applicata e aggiornamento Docker
 riuscito secondo il nuovo log; accettazione IA ancora incompleta, ultimo
-stop per riserva token. Il dettaglio del precedente 400 non era registrato. Le verifiche automatiche dell'assistente restano su Linux.
+stop dopo il test di riavvio e risposta senza strumenti. Il dettaglio del precedente
+400 non era registrato. La nuova correzione della chiusura del server e la prova
+separata restano da verificare sul PC. Le verifiche automatiche dell'assistente
+restano su Linux.
 Pubblicazione dell'ambiente e ripristino in un nuovo task cloud non verificati.
 Questa versione supporta il contratto backend attività Python con libreria standard;
 altri backend e blockchain sono traguardi successivi. Nessuna gestione di denaro,

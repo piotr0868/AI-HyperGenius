@@ -7,7 +7,7 @@ restano quelle del 12 ottobre; il nuovo avvio e la suite sono stati verificati i
 
 | Prova | Esito effettivo |
 | --- | --- |
-| Suite applicazione pytest | **104 passati**, 0 falliti, 0 errori, 0 skipped |
+| Suite applicazione pytest | **117 passati**, 0 falliti, 0 errori, 0 skipped |
 | Nuovo avvio automatico | **12 controlli passati su Linux**, API simulate: protezione chiave, posizione fuori dal progetto, annullamento, blocco su errori, tentativi limitati, prove perse/modificate invalidate |
 | Avvio automatico → applicazione e API locali | **Passato su Linux** dopo annullamento chiave, nessuna chiamata IA; interfaccia italiana e risposta salute effettive |
 | Backend di riferimento in Docker | **8 test passati**, 0 falliti, 0 skipped |
@@ -33,7 +33,10 @@ restano quelle del 12 ottobre; il nuovo avvio e la suite sono stati verificati i
 | Riserva token basata sulla richiesta SDK | **4 nuovi casi passati su Linux**: memoria originale preservata, storico non reinviato escluso dalla riserva, limiti invariati, consumo esaurito blocca API; rapporto Windows letto: 69159 token usati, nuova riserva ancora da applicare |
 | Verifica dei file prima della ripresa IA | **3 casi passati con Docker reale e SDK simulato**: riferimento certificato senza ulteriore API, zero test e input invalido respinti; contatori preservati e tempo conteggiato |
 | Recupero scrittura IA bloccata | **10 nuovi casi passati su Linux**: solo main.py assente e mai versionato da richiesta bloccata sui prerequisiti; codice esatto, versione/rollback, verifiche in Docker e nessuna nuova API nel caso valido; Windows ancora da provare |
-| Diagnosi del progetto senza IA | **4 nuovi controlli indipendenti passati su Linux**: database e file invariati, codice analizzato senza import/exec, riferimenti esterni rifiutati, mascheramento chiavi, invocazione Notepad simulata; nessuna nuova suite completa oltre i 104 già registrati |
+| Diagnosi del progetto senza IA | **4 controlli passati nella suite Linux**: database e file invariati, codice analizzato senza import/exec, riferimenti esterni rifiutati, mascheramento chiavi, invocazione Notepad simulata |
+| Ultima diagnosi reale Windows | **5 controlli API passati**, **5 di 6 unittest passati**; errore di riavvio `Address already in use`. main.py presente. 16 chiamate IA, 85454 token usati; ultima risposta del modello: rifiuto testuale, causa sconosciuta. Accettazione completa ancora incompleta |
+| Procedura di chiusura server del sistema | **9 nuovi controlli passati su Linux**: difetto della porta riprodotto in Docker, implementazione corretta senza modificare test, 9 unittest e 5 API passati, rollback, nessuna esecuzione del codice sull'host, strutture non riconosciute rifiutate |
+| Prova separata dopo correzione del sistema | **Passata offline**: SDK Groq reale con risposte HTTP simulate e Docker reale; 10 unittest e 5 API passati dopo difetto rilevato e scrittura prevista dal test, 3 chiamate della copia (19 complessive), originale e test invariati. Modello reale sul PC **ancora da verificare** |
 | Avvio dopo correzione HTTP 400 | **Passato su Linux**: pagina italiana, API, Docker disponibile, creazione progetto e credenziale assente dichiarata; limite ordinario app ancora 12, zero chiamate live |
 | Aggiornamento con checksum e copie precedenti | **Passato offline**: rifiuto checksum errato prima di modifiche, chiave conservata, sorgenti precedenti archiviati, app attiva impedisce l'aggiornamento |
 | Prova di procedure con Groq reale | **NON ESEGUITA**, stessa credenziale mancante |

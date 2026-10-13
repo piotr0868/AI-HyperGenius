@@ -300,3 +300,13 @@ questi siano ora soddisfatti, registra origine e hash, conserva il risultato
 fallito storico e permette rollback. Non recupera file eliminati o esiti ignoti
 e non inserisce codice di riferimento al posto del modello. I file recuperati
 devono comunque superare le verifiche in Docker. Nessun budget viene azzerato.
+
+Per il difetto riconosciuto di riavvio (`Address already in use` con gli altri
+controlli API passati), la prova può applicare una procedura del sistema che
+rilascia il listener dopo `shutdown()`. Conserva la versione precedente, lascia
+invariati i test e ripete le prove in Docker. Il rapporto `system_corrections`
+attribuisce questa modifica a Codex/sistema, senza presentarla come correzione Groq.
+La copia con difetto deliberato ha un contesto separato: piano e documentazione
+sono preparati dal sistema, ma la correzione deve essere scritta dal modello.
+L'accettazione richiede l'errore `test_strip` iniziale, una scrittura IA riuscita
+corrispondente al file finale, tutti i controlli passati, test e originale invariati.

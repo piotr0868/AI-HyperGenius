@@ -51,3 +51,10 @@ Consultate il 13 ottobre 2026 anche le pagine attuali:
   consultata (30 RPM, 1K RPD, 8K TPM, 200K TPD). I limiti effettivi dell'account
   dell'utente non sono stati consultati; fare riferimento alla sua console e ai
   metadati numerici registrati, senza attribuire il precedente 400 alla quota.
+
+Consultata anche https://docs.python.org/3.12/library/socketserver.html il
+13 ottobre 2026: `shutdown()` arresta il ciclo `serve_forever()` e attende la
+terminazione; `server_close()` libera le risorse del server. La prima operazione
+deve essere chiamata mentre il ciclo gira su un thread diverso. La procedura del
+sistema conserva questa condizione e aggiunge la chiusura del listener; le prove
+di riavvio restano immutate e vengono eseguite soltanto nel container.

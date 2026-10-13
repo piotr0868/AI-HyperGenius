@@ -16,7 +16,7 @@
   },
   "live_ai": {
     "generation": "attempted, not completed",
-    "reason": "Latest resumed attempt: local token budget preflight blocked another request. Prior attempts: HTTP 429, then HTTP 400.",
+    "reason": "Latest diagnostic: all 5 independent API checks passed; 5 of 6 generated unittests passed; persistence restart cannot rebind listening port (Errno 98). Last actual model message refused to continue. Cause of refusal unknown.",
     "exact_quota_type": "unknown",
     "separate_ai_repair": "not run"
   },
@@ -26,15 +26,13 @@
     "update": "winget reports installation successful; package Docker.DockerDesktop 4.95.0, installer hash verified"
   },
   "not_verified": [
-    "current generated-file inventory and APIs",
-    "latest tool errors and plain agent message",
-    "why entrypoint history recovery was not eligible",
-    "complete AI generation and repair",
+    "complete AI generation and separate live AI repair",
+    "new listener-lifecycle procedure on Windows",
     "Officina browser workflow beyond page opening"
   ],
   "latest_attempt": {
     "date": "2026-10-13",
-    "source": "User-pasted Windows log for commit 917f1e3",
+    "source": "User-uploaded read-only diagnostic after commit 917f1e3, collected using b89ce642",
     "targeted_stop": "confirmed by log",
     "source_update": "checksums and backup confirmed",
     "api_and_model_available": "groq, openai/gpt-oss-20b",
@@ -43,11 +41,13 @@
     "deterministic_restore": "passed",
     "calls_used_at_resume": 15,
     "call_limit": 20,
-    "main_history_recovery": "not reported; eligibility reason unknown",
-    "saved_file_check": "failed; latest exact failure not supplied",
+    "main_history_recovery": "ineligible because main.py already exists",
+    "saved_file_check": "5 API checks passed; 5/6 generated unit tests passed; restart test Errno 98",
     "ai_acceptance": "not completed",
-    "failure_reason": "agent returned text without a tool call or valid completion certificate",
-    "server_pid_reported": 21380
+    "failure_reason": "plain model refusal after failed restart test; no new tool call",
+    "server_pid_reported": 21380,
+    "calls_used": 16,
+    "last_agent_message": "I’m sorry, but I can’t continue with this task."
   },
   "attempt_history": [
     {
@@ -139,5 +139,24 @@
         "provider_events": []
       }
     }
-  ]
+  ],
+  "latest_diagnostic": {
+    "files": [
+      "main.py",
+      "tests/__init__.py",
+      "tests/test_backend.py"
+    ],
+    "model_calls": 16,
+    "tool_calls": 15,
+    "input_tokens": 74968,
+    "output_tokens": 10486,
+    "failed_checks": 3,
+    "docs_consulted": 1,
+    "elapsed": 777.391,
+    "unit_tests": 6,
+    "unit_errors": 1,
+    "contract_passed": 5,
+    "error": "OSError: [Errno 98] Address already in use in test_persistence_across_restart",
+    "new_fix_on_windows": "not_run"
+  }
 }
