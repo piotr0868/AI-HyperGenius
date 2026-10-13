@@ -8,7 +8,7 @@ import zipfile
 ROOT = Path(__file__).resolve().parent.parent
 TOP = {'.env.example', '.gitignore', 'README.md', 'STATO_PROGETTO.md', 'RISULTATI_VERIFICHE.md',
        'VERIFICHE.json', 'pyproject.toml', 'uv.lock', 'requirements.lock', 'avvia.py',
-       'installa.bat', 'avvia.bat', 'configura_ia.bat', 'prepara_isolamento.bat', 'verifica_senza_ia.bat'}
+       'installa.bat', 'avvia.bat', 'avvio_automatico.bat', 'configura_ia.bat', 'prepara_isolamento.bat', 'verifica_senza_ia.bat'}
 DIRS = {'app', 'scripts', 'tests', 'examples', 'resources'}
 
 

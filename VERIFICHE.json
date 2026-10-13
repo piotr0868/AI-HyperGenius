@@ -1,14 +1,14 @@
 {
   "platform": "Linux",
-  "date": "2026-10-12",
+  "date": "2026-10-13",
   "pytest": {
     "name": "pytest",
     "errors": "0",
     "failures": "0",
     "skipped": "0",
-    "tests": "44",
-    "time": "20.692",
-    "timestamp": "2026-10-12T15:09:23.979130+00:00",
+    "tests": "56",
+    "time": "21.080",
+    "timestamp": "2026-10-13T15:08:26.240899+00:00",
     "hostname": "d679e40bb841"
   },
   "reference_unit_tests": 8,
@@ -71,7 +71,22 @@
     "reason": "GROQ_API_KEY absent"
   },
   "windows": {
-    "status": "not_run"
+    "status": "partially_user_reported",
+    "confirmed_from_user_log": [
+      "Python Install Manager",
+      "Python 3.12.10",
+      "venv created",
+      "dependencies installed",
+      "local key prompt reached"
+    ],
+    "not_verified": [
+      "API key saved",
+      "Groq authentication and model",
+      "Tkinter key dialog",
+      "Docker Desktop installation and WSL",
+      "generated backend and AI repair",
+      "browser application"
+    ]
   },
   "cloud": {
     "draft_saved": true,
@@ -87,8 +102,30 @@
     "app/main.py": "03bd0b56df0b1005396df76403c6d00a53c50310a2c0f29b2436513533616d48",
     "examples/activity_backend/main.py": "c7e2072a64eef1302d8c94071d8381eb067f18c6f2315e646d949865f6040f65",
     "uv.lock": "835d81d203c90b40bf836cbfddbea6ed45374cef0a2c4f939e91547213e10e1f",
-    "requirements.lock": "9add5abb1e6d640f9ac118bdb54ef9b13b5159e511d610a4c42d16bdf793f967"
+    "requirements.lock": "9add5abb1e6d640f9ac118bdb54ef9b13b5159e511d610a4c42d16bdf793f967",
+    "scripts/avvio_automatico.py": "2d7abdc98a7727361e6fad308a4dd9a2e4477b95e55cd221ec0d73dda234f7a0",
+    "tests/test_automatic_setup.py": "7da263ee57906f3a8737252b6c3e937c5dff83cd8e7ab596e4b8cfc155c2fed9"
   },
   "version": "0.2.0",
-  "provider": "groq"
+  "provider": "groq",
+  "automatic_start": {
+    "platform": "Linux",
+    "passed": true,
+    "checks": [
+      "avvio automatico dopo annullamento chiave",
+      "risposta API salute",
+      "interfaccia italiana",
+      "credenziale assente dichiarata",
+      "Docker disponibile rilevato"
+    ],
+    "live_ai_verified": false,
+    "gui_windows_verified": false
+  },
+  "automatic_setup_tests": {
+    "passed": 12,
+    "platform": "Linux",
+    "api": "simulated in tests",
+    "windows_gui": "not_run"
+  },
+  "prior_evidence_date": "2026-10-12"
 }

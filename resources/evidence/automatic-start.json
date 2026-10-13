@@ -1,0 +1,13 @@
+{
+  "platform": "Linux",
+  "passed": true,
+  "checks": [
+    "avvio automatico dopo annullamento chiave",
+    "risposta API salute",
+    "interfaccia italiana",
+    "credenziale assente dichiarata",
+    "Docker disponibile rilevato"
+  ],
+  "live_ai_verified": false,
+  "gui_windows_verified": false
+}

@@ -26,6 +26,34 @@ Credenziali, memoria locale e dipendenze installate sono escluse dal repository.
 
 ## Avvio su Windows 11
 
+Per una copia con le dipendenze già installate, apri **avvio_automatico.bat**.
+Se manca la credenziale compare una casella locale mascherata: incolla la chiave
+e premi **Salva e continua**. Il programma controlla l'accesso API e il modello,
+avvia Docker Desktop (o tenta l'installazione per il solo utente tramite winget),
+prepara l'immagine con digest e timeout, esegue le prove senza IA e poi la prova
+con il modello reale. Infine apre l'app nel browser. Lascia aperta la finestra di avvio.
+Su Windows questo avvio conserva la chiave in
+`%LOCALAPPDATA%\Officina\credentials.env`, con permessi del tuo account, fuori dalla
+cartella del progetto e da Desktop/Documenti sincronizzati con OneDrive. Per
+riutilizzarla avvia sempre **avvio_automatico.bat**; il percorso manuale descritto
+sotto usa invece il file `.env` del progetto.
+
+Windows può richiedere intervento per Docker, WSL 2, condizioni del fornitore o
+autorizzazioni di sistema. Questi requisiti non vengono aggirati; se Docker Linux
+non è pronto, il codice generato non viene eseguito. La casella grafica e
+l'installazione Windows automatica restano da verificare su Windows.
+
+I risultati effettivi sono in `.data/setup/RESULTS.json` e
+`.data/live-acceptance/RESULTS.json`. La prova IA usa i limiti configurati e può
+esaurire una quota Free. Non viene ripetuta automaticamente a ogni apertura dopo
+fallimento o interruzione. Una prova passata viene riutilizzata solo se fonti,
+configurazione del modello/immagine ed evidenze dei progetti verificati sono ancora
+validi. Per un nuovo tentativo esplicito:
+`.venv\Scripts\python.exe scripts\avvio_automatico.py --riprova-verifica`. I risultati negativi precedenti
+restano nel registro dei progetti di accettazione; nessun cambio a un provider a pagamento.
+
+Per usare il percorso manuale:
+
 Procedi un passo alla volta. Estrai il pacchetto in una cartella del tuo profilo
 personale, per esempio `Documenti\Officina`.
 
@@ -57,8 +85,10 @@ Per attivare il lavoro autonomo dell’agente:
 4. Riavvia **avvia.bat**, descrivi il risultato e premi **Avvia**. Se avevi iniziato un
    progetto senza credenziale, selezionalo e premi **Riprendi**.
 
-La compatibilità Windows è predisposta ma **non è stata verificata su Windows**.
-Le verifiche registrate in questa consegna sono state eseguite su Linux.
+Il log condiviso dall'utente conferma su Windows Python 3.12.10, creazione di `.venv`
+e installazione delle dipendenze con `installa.bat`. API, casella grafica, Docker,
+prova agente e applicazione su Windows **restano da verificare**.
+Le verifiche automatiche registrate nella consegna sono state eseguite su Linux.
 
 ## Cosa puoi provare subito senza chiave
 

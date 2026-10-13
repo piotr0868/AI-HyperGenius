@@ -1,11 +1,15 @@
 # Risultati della consegna
 
-Verifica finale del 12 ottobre 2026, su **Linux**, Python 3.12.14, Docker 28.4.0,
+Suite rieseguita il 13 ottobre 2026, su **Linux**, Python 3.12.14, Docker 28.4.0,
 Chromium di sistema. I risultati completi sono in `resources/evidence/`.
+Le prove precedenti di browser, riavvio, installazione e riferimento con difetto
+restano quelle del 12 ottobre; il nuovo avvio e la suite sono stati verificati il 13.
 
 | Prova | Esito effettivo |
 | --- | --- |
-| Suite applicazione pytest | **44 passati**, 0 falliti, 0 errori, 0 skipped |
+| Suite applicazione pytest | **56 passati**, 0 falliti, 0 errori, 0 skipped |
+| Nuovo avvio automatico | **12 controlli passati su Linux**, API simulate: protezione chiave, posizione fuori dal progetto, annullamento, blocco su errori, tentativi limitati, prove perse/modificate invalidate |
+| Avvio automatico → applicazione e API locali | **Passato su Linux** dopo annullamento chiave, nessuna chiamata IA; interfaccia italiana e risposta salute effettive |
 | Backend di riferimento in Docker | **8 test passati**, 0 falliti, 0 skipped |
 | Contratto esterno backend | **5 verifiche passate**: creazione, consultazione, input, idempotenza, riavvio |
 | Errore deliberato in una copia | **Rilevato**: 3 fallimenti unitari e input invalido accettato; non dichiarato Pronto |
@@ -27,7 +31,8 @@ Chromium di sistema. I risultati completi sono in `resources/evidence/`.
 | Credenziali separate e cronologia preesistente | **Passato**: la chiave OpenAI non viene usata per Groq; chiamate e risultati preservati |
 | Configurazione locale della chiave | **Passata su Linux con chiave fittizia**: input non stampato, chiave precedente preservata, permessi 0600 |
 | Accesso/modello e piano Free Groq | **NON VERIFICATI**: manca la chiave; quote da controllare nella console dell’account |
-| Windows 11 / Docker Desktop / file .bat | **NON ESEGUITI**: predisposti, da provare sul PC Windows |
+| Windows: Python e dipendenze | **Confermati dal log dell'utente**: Python 3.12.10, venv e installazione completata; non eseguiti dall'assistente |
+| Windows: casella grafica, Docker Desktop, API e applicazione | **NON VERIFICATI**: predisposti, da provare sul PC Windows |
 | Nuovo task cloud e pubblicazione | **NON VERIFICATI**: bozza salvata, pubblicazione a cura dell’utente |
 
 Le risposte simulate compaiono soltanto nei test del protocollo. L’applicazione usa

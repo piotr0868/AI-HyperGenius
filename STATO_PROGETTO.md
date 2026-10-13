@@ -17,6 +17,40 @@ Per la copia già scaricata: creare .venv con il manager nella cartella del prog
 poi riaprire installa.bat. Le precedenti 44 verifiche Linux riguardano il codice
 dell'app, rimasto invariato; non convalidano questo script Windows.
 
+### Avvio automatico del 13 ottobre 2026
+
+Un successivo log dell'utente conferma la creazione di .venv tramite pymanager,
+l'installazione delle dipendenze e "Installazione completata" sul PC Windows.
+Il prompt locale per la chiave Groq è stato raggiunto; non è arrivata conferma
+del salvataggio o dell'autenticazione. Nessuna chiave è stata fornita alla chat.
+
+L'utente ha chiesto di automatizzare tutti i passaggi successivi. Aggiunti
+scripts/avvio_automatico.py e avvio_automatico.bat: casella mascherata su Windows,
+salvataggio locale, controllo API, avvio Docker Desktop e tentativo winget per-user,
+immagine a digest con timeout, prova Docker senza IA, generazione e correzione
+separate con il modello reale, risultati persistenti e apertura del browser.
+Su Windows l'avvio automatico conserva la credenziale in
+LOCALAPPDATA/Officina/credentials.env, fuori dal Desktop OneDrive usato dall'utente,
+e la carica soltanto nel processo locale. Non copia nuove chiavi nel repository.
+Può essere aggiunto alla copia già scaricata senza sovrascrivere .env, .data o
+i sorgenti preesistenti. Non gestisce registrazioni o accettazione di contratti,
+non aggira autorizzazioni Windows, non forza WSL o riavvii e non esegue codice
+generato sull'host. Un fallimento o un'interruzione IA non scatena nuovi tentativi
+a ogni avvio. Una prova dichiarata passata richiede ancora i file verificati.
+
+Suite completa rieseguita su Linux: **56 test passati**, zero falliti/skipped.
+Dodici controlli nuovi del flusso sono passati con API simulate,
+compresi credenziali preservate, annullamento, errori API/Docker, fallimento
+essenziale, limiti ai nuovi tentativi, invalidazione di prove perse o modificate e
+salvataggio Windows fuori dal progetto (ramo verificato simulando l'OS, non su Windows).
+Avviato realmente anche il nuovo flusso dopo annullamento della chiave: richieste
+alla pagina italiana e all'API salute passate, credenziale assente dichiarata,
+Docker Linux disponibile rilevato. Nessuna chiamata IA. Esito in
+resources/evidence/automatic-start.json. Il servizio di prova è stato arrestato.
+La casella Windows, winget, Docker Desktop e l'accesso Groq reale restano da provare
+sul PC. I risultati in .data/setup/RESULTS.json appartengono alla macchina che li
+ha eseguiti: non trasferire esiti Linux come se fossero verifiche Windows.
+
 ## Architettura e cambiamenti
 
 FastAPI, SQLite/FTS5, interfaccia italiana HTML/CSS/JavaScript e Docker per eseguire
