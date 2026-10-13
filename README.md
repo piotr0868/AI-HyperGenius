@@ -285,3 +285,10 @@ raggiunto ferma l'agente prima dell'API: leggere `last_token_budget` nel rapport
 prima di decidere se cambiare un limite. L'app non aumenta il budget da sola.
 Per comandi Windows lunghi: Windows+R → `cmd` → Invio, poi incollare il comando
 nel Prompt; non incollare l'intero comando lungo nella finestra Esegui.
+
+La prova ripresa ricontrolla i file già salvati in Docker prima di usare un'altra
+risposta del modello, se piano, criteri e documentazione sono presenti. Può
+certificarli automaticamente soltanto dopo test non vuoti e contratto indipendente
+passati sui file correnti. Il registro distingue questa verifica del sistema da
+una chiamata IA. Un controllo fallito viene consegnato al modello per la correzione
+entro i limiti; non viene presentato come riuscito.

@@ -6,9 +6,9 @@
     "errors": "0",
     "failures": "0",
     "skipped": "0",
-    "tests": "91",
-    "time": "20.334",
-    "timestamp": "2026-10-13T18:31:15.550879+00:00",
+    "tests": "94",
+    "time": "31.287",
+    "timestamp": "2026-10-13T18:44:04.366598+00:00",
     "hostname": "d679e40bb841"
   },
   "reference_unit_tests": 8,
@@ -99,8 +99,9 @@
       "update": "winget reports installation successful; package Docker.DockerDesktop 4.95.0, installer hash verified"
     },
     "not_verified": [
-      "latest reported token usage and generated-code check results",
+      "actual state and correctness of files generated after previous failed check",
       "payload-based token reservation on Windows",
+      "automatic saved-file check on Windows",
       "specific cause of original HTTP 400",
       "complete AI generation and repair",
       "Officina browser workflow beyond page opening"
@@ -117,10 +118,25 @@
       "generation_resume": "same saved files, history and counters; 8 model calls used at start",
       "explicit_total_call_limit": 20,
       "ai_acceptance": "not completed",
-      "failure_reason": "local token budget preflight refused another request; latest usage and check results not yet supplied",
+      "failure_reason": "local token budget preflight refused another request; reported usage 69159 below 120000, reservation consumed remaining headroom",
       "generation_and_repair_stage": "generation incomplete; separate repair not run",
       "server_pid_reported": 23792,
-      "officina_browser": "opening reported by launcher"
+      "officina_browser": "opening reported by launcher",
+      "generation_observations": {
+        "project_id": "4e61bd1e66894d04bb1993000a90a634",
+        "model_calls": 14,
+        "tool_calls": 12,
+        "input_tokens": 60306,
+        "output_tokens": 8853,
+        "used_tokens": 69159,
+        "remaining_before_reservation": 50841,
+        "elapsed_seconds": 646.0,
+        "failed_checks": 1,
+        "docs_consulted": 1,
+        "verified_hash": null,
+        "last_check": "failed before unittest execution: Start directory is not importable: tests",
+        "new_provider_events": []
+      }
     },
     "attempt_history": [
       {
@@ -169,11 +185,12 @@
     "requirements.lock": "9add5abb1e6d640f9ac118bdb54ef9b13b5159e511d610a4c42d16bdf793f967",
     "scripts/avvio_automatico.py": "2d7abdc98a7727361e6fad308a4dd9a2e4477b95e55cd221ec0d73dda234f7a0",
     "tests/test_automatic_setup.py": "7da263ee57906f3a8737252b6c3e937c5dff83cd8e7ab596e4b8cfc155c2fed9",
-    "scripts/prova_agente.py": "159efe549b07f5978b999a678c7c83b20ba55134a3cda99d717e16b18609e6d7",
+    "scripts/prova_agente.py": "fd177ace034a13cb31a497665240bdebeb5fabd296cf57706cab2fec6566ad6e",
     "scripts/aggiorna_quota.py": "6b6f700e9cd184cf92d631f7c071c10ec5f88a968f360370034664bad404764d",
     "tests/test_provider_recovery.py": "a0507c973c2be24436c8e1f6f03516816f243a753489dfe81d3a53e906f3b1e8",
     "tests/test_live_acceptance_resume.py": "ad98add01016db8d35fe3ddccd58309d1fcbc367ee0ed814c4ec0c3360d16bce",
-    "tests/test_token_budget.py": "faeefc114e586651ed4cb7f2a448ca478cf1081381098cd7d20cd9b5ce7064d6"
+    "tests/test_token_budget.py": "faeefc114e586651ed4cb7f2a448ca478cf1081381098cd7d20cd9b5ce7064d6",
+    "tests/test_resume_precheck.py": "50f145d966ce44438454e387dce85e023d965aee171448c59f04492c53338dba"
   },
   "version": "0.2.0",
   "provider": "groq",
@@ -202,7 +219,7 @@
     "passed": true,
     "api_transport": "simulated in tests",
     "docker": "real in full SDK protocol checks",
-    "new_profile_on_windows": "applied and acceptance resumed according to user log; acceptance still incomplete, current cause unknown",
+    "new_profile_on_windows": "applied; six additional calls with reported usage after resume, no new provider events in supplied report; latest stop was local token reservation",
     "startup": {
       "platform": "Linux",
       "passed": true,
@@ -263,6 +280,18 @@
     "full_history_preserved": true,
     "budget_diagnostics_in_acceptance_report": true,
     "windows_live_validation": "not yet run",
-    "latest_windows_report": "requested; counts not yet received"
+    "latest_windows_report": "received: 69159 reported tokens used out of 120000, 14 calls, 50841 remaining before reservation"
+  },
+  "resume_precheck": {
+    "tests_added": 3,
+    "platform": "Linux",
+    "docker": "real",
+    "reference_code": "handwritten fixture, not AI-generated",
+    "api_transport": "simulated with official SDK",
+    "valid_saved_files": "certified from fresh mandatory checks without additional model calls",
+    "zero_or_failed_tests": "not ready; failure supplied to agent as untrusted data",
+    "existing_usage_preserved": true,
+    "time_counted": true,
+    "windows_execution": "pending"
   }
 }

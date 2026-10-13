@@ -153,8 +153,10 @@ copie precedenti, credenziale/modello disponibili, riferimento/difetto/ripristin
 nuovamente verificati. La generazione è ripresa con limite complessivo 20,
 partendo da 8 chiamate già usate. Dopo vari cicli si è fermata per il controllo
 locale "Budget token insufficiente per un'altra chiamata". Non è un nuovo errore
-429 dimostrato. Contatori correnti e ultimo test devono ancora essere letti nel
-RESULTS.json del PC. Il server ora riporta PID 23792.
+429 dimostrato. Il nuovo RESULTS.json conferma 14 chiamate, 12 tool, 60306 token input e 8853
+output: 69159 usati, con 50841 residui prima della riserva. Documenti consultati 1;
+l'ultimo check è ancora quello fallito prima dell'esecuzione dei test. Non compaiono
+nuovi errori del provider in questo rapporto. Il server ora riporta PID 23792.
 Il primo comando era incompleto (.venv\Scri); il successivo comando nel Prompt
 è partito. Per evitare comandi lunghi nella finestra Esegui, usare Windows+R,
 scrivere soltanto cmd, poi incollare il comando lungo dentro il Prompt.
@@ -171,12 +173,29 @@ le chiamate prima dell'SDK. Il rapporto distingue consumo, riserva e limite.
 **91 test passati su Linux**, zero fallimenti/errori/skipped. Quattro nuovi casi
 coprono vecchia prenotazione eccessiva, conservazione del consumo/cronologia,
 payload specifici e stop su consumo esaurito; SDK con HTTP simulato, non prova IA.
-Resta necessario il rapporto aggiornato del PC prima di decidere una nuova
-esecuzione o un diverso limite. Non modificare .env alla cieca e non chiedere
-nuovamente la chiave già salvata. La correzione è pronta, non ancora provata sul PC.
-Il tentativo di leggere il rapporto ha incollato un percorso incompleto nel Prompt.
-Nella cartella già aperta usare soltanto notepad .data\live-acceptance\RESULTS.json,
-poi copiare il testo dal Blocco note. I nuovi contatori non sono ancora disponibili.
+Il rapporto aggiornato è stato ricevuto dopo aver semplificato il comando di
+apertura del Blocco note. Non modificare .env alla cieca e non chiedere nuovamente
+la chiave già salvata. La correzione è pronta, non ancora provata sul PC.
+
+### Ripresa con verifica dei file salvati
+
+Restano 6 delle 20 richieste complessive. Prima di chiamare di nuovo il modello,
+la prova ricontrolla in Docker i file di un progetto interrotto con piano, criteri
+e documentazione già acquisiti. Usa gli stessi run_checks e finish con hash e
+controlli obbligatori. Se passano, certifica i file come verifica AUTOMATICA DEL
+SISTEMA, senza fingere una nuova risposta del modello; il consumo IA resta invariato.
+Se falliscono, conserva il risultato come dato non fidato per il modello e aumenta
+il contatore di verifiche fallite. Il tempo viene conteggiato e sono rispettati
+limiti di operazioni/correzioni. Zero test o contratto fallito non consentono Pronto.
+La correzione separata resta una prova distinta, con difetto e nuova verifica.
+
+**94 test passati nella suite finale Linux**, zero fallimenti/errori/skipped.
+Tre nuovi casi con riferimento dichiarato, Docker reale e SDK HTTP simulato:
+passaggio alla certificazione senza nuova API, zero test respinto e difetto di
+validazione respinto prima di riprendere il modello. Non provano la qualità di una
+nuova generazione IA. Il prossimo comando aggiorna i sorgenti, arresta soltanto
+Officina dopo aver ricontrollato il PID 23792, conserva 14 richieste e 69159 token,
+e mantiene 20 richieste totali/120000 token. Nessuna nuova chiave richiesta.
 
 ## Architettura e cambiamenti
 
@@ -211,7 +230,7 @@ Docker non ha rete, segreti, cartelle host o socket Docker; niente ripiego sull'
 
 Su Linux, Python 3.12.14, Docker 28.4.0 e Chromium di sistema:
 
-- **91 test passati** nella suite corrente, 0 errori/fallimenti/skipped.
+- **94 test passati** nella suite corrente, 0 errori/fallimenti/skipped.
 - SDK ufficiali Groq e OpenAI con trasporto HTTP simulato e Docker reale: scrittura,
   difetto rilevato, correzione predisposta dal test e nuova verifica passata.
 - Quota Groq, credenziali separate, migrazione cronologie, argomenti non fidati,
