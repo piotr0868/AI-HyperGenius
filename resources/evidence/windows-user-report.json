@@ -26,41 +26,28 @@
     "update": "winget reports installation successful; package Docker.DockerDesktop 4.95.0, installer hash verified"
   },
   "not_verified": [
-    "whether eligible main.py code is retained in Windows history",
-    "history replay and contract checks on Windows",
+    "current generated-file inventory and APIs",
+    "latest tool errors and plain agent message",
+    "why entrypoint history recovery was not eligible",
     "complete AI generation and repair",
-    "specific cause of original HTTP 400",
     "Officina browser workflow beyond page opening"
   ],
   "latest_attempt": {
     "date": "2026-10-13",
-    "source": "User-pasted Windows updater log for commit c6ba62e",
-    "targeted_stop": "Officina stopped, files/key/progress retained according to log",
-    "source_update": "checksums verified and prior version retained",
+    "source": "User-pasted Windows log for commit 917f1e3",
+    "targeted_stop": "confirmed by log",
+    "source_update": "checksums and backup confirmed",
     "api_and_model_available": "groq, openai/gpt-oss-20b",
     "reference_backend": "passed",
     "deliberate_fault": "detected",
     "deterministic_restore": "passed",
+    "calls_used_at_resume": 15,
     "call_limit": 20,
-    "calls_used_at_resume": 14,
-    "saved_file_precheck": "failed: main.py missing; unittest test_backend.py import main raised ModuleNotFoundError and contract server could not open /work/main.py",
+    "main_history_recovery": "not reported; eligibility reason unknown",
+    "saved_file_check": "failed; latest exact failure not supplied",
     "ai_acceptance": "not completed",
-    "failure_reason": "local preflight: 78422 reported tokens used plus 40544 input reserve and 3000 output reserve = 121966, exceeding 120000 by 1966",
-    "separate_ai_repair": "not run",
-    "server_pid_reported": 11016,
-    "excerpt_observations": {
-      "input_tokens": 67974,
-      "output_tokens": 10448,
-      "used_tokens": 78422,
-      "reserved_input_tokens": 40544,
-      "reserved_output_tokens": 3000,
-      "required_tokens": 121966,
-      "limit_tokens": 120000,
-      "elapsed_seconds": 711.188,
-      "docs_consulted": 1,
-      "model_calls": "not included in excerpt; prior attempt started from 14",
-      "provider_events": []
-    }
+    "failure_reason": "agent returned text without a tool call or valid completion certificate",
+    "server_pid_reported": 21380
   },
   "attempt_history": [
     {
@@ -120,6 +107,36 @@
         "verified_hash": null,
         "last_check": "failed before unittest execution: Start directory is not importable: tests",
         "new_provider_events": []
+      }
+    },
+    {
+      "date": "2026-10-13",
+      "source": "User-pasted Windows updater log for commit c6ba62e",
+      "targeted_stop": "Officina stopped, files/key/progress retained according to log",
+      "source_update": "checksums verified and prior version retained",
+      "api_and_model_available": "groq, openai/gpt-oss-20b",
+      "reference_backend": "passed",
+      "deliberate_fault": "detected",
+      "deterministic_restore": "passed",
+      "call_limit": 20,
+      "calls_used_at_resume": 14,
+      "saved_file_precheck": "failed: main.py missing; unittest test_backend.py import main raised ModuleNotFoundError and contract server could not open /work/main.py",
+      "ai_acceptance": "not completed",
+      "failure_reason": "local preflight: 78422 reported tokens used plus 40544 input reserve and 3000 output reserve = 121966, exceeding 120000 by 1966",
+      "separate_ai_repair": "not run",
+      "server_pid_reported": 11016,
+      "excerpt_observations": {
+        "input_tokens": 67974,
+        "output_tokens": 10448,
+        "used_tokens": 78422,
+        "reserved_input_tokens": 40544,
+        "reserved_output_tokens": 3000,
+        "required_tokens": 121966,
+        "limit_tokens": 120000,
+        "elapsed_seconds": 711.188,
+        "docs_consulted": 1,
+        "model_calls": "not included in excerpt; prior attempt started from 14",
+        "provider_events": []
       }
     }
   ]

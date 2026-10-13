@@ -241,6 +241,29 @@ non convalida nuove capacità del modello reale. Il recupero sul PC deve ancora
 essere tentato; se non esiste una richiesta archiviata idonea, non inventare main.py.
 PID Windows corrente 11016, da ricontrollare prima del prossimo aggiornamento.
 
+### Quinta prova Windows: risposta senza strumenti, diagnosi necessaria
+
+Il log dopo 917f1e3 conferma arresto mirato, aggiornamento con checksum e prove
+senza IA passate. Generazione ripresa da 15 chiamate; il recupero main.py non è
+riportato. I file non passano il nuovo controllo e l'agente termina con testo
+senza strumenti/certificazione. Il contenuto di questa risposta e il nuovo errore
+non sono ancora disponibili. PID del server corrente 21380.
+L'errore main.py mancante apparteneva a un controllo precedente a una nuova
+scrittura: non trattarlo come prova dello stato attuale senza inventario aggiornato.
+
+Aggiunto scripts/leggi_diagnosi.py: legge SQLite in mode=ro, file attuali, firma
+sintattica dei moduli senza importarli, ultime operazioni/errori e ultimo messaggio
+IA. Non chiama API, non esegue test o codice generato, non cambia il database o i
+file del backend e non ferma Officina. Produce soltanto un rapporto diagnostico
+nuovo e su Windows lo apre nel Blocco note. Non legge il vault delle credenziali;
+maschera schemi di chiavi e salta collegamenti simbolici del workspace.
+**4 test indipendenti passati su Linux**: dati/file invariati, nessuna esecuzione
+del codice del progetto, rifiuto riferimenti esterni, output Windows nuovo e
+argomenti Notepad simulati. La suite funzionale resta quella effettiva di 104;
+non dichiarare una nuova suite completa 108 eseguita.
+Il prossimo comando serve solo a raccogliere questa diagnosi. Non rilanciare
+ancora l'accettazione o aumentare limiti prima di leggere lo stato corrente.
+
 ## Architettura e cambiamenti
 
 FastAPI, SQLite/FTS5, interfaccia italiana HTML/CSS/JavaScript e Docker per eseguire
