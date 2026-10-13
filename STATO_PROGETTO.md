@@ -83,6 +83,16 @@ Suite corrente: **65 verifiche passate su Linux**, zero fallimenti/skipped.
 I nuovi controlli coprono ripresa della vecchia prova senza reset, correzione
 già eseguita conservata, ricontrollo dei pronti, quota breve/lunga e copie con checksum.
 
+L'utente non riesce a identificare il terminale nelle finestre aperte: vede due
+finestre di chat, la pagina delle chiavi e il browser Officina. L'aggiornatore ora
+accetta --ferma-pid con il PID riportato dal log (18348). Prima controlla con
+Windows la porta loopback, il comando di avvio Python e il proprietario del
+processo; arresta tramite l'API gli eventuali lavori attivi, poi ricontrolla e
+chiude soltanto quel PID. Se non lo identifica, non ferma altri processi e non
+modifica sorgenti. Il ramo PowerShell resta da verificare sul PC Windows; nei
+test Linux sono verificati i rifiuti, l'ordine delle operazioni e la riservatezza
+del token di sessione. Chiave, database e file dei progetti non vengono rimossi.
+
 ## Architettura e cambiamenti
 
 FastAPI, SQLite/FTS5, interfaccia italiana HTML/CSS/JavaScript e Docker per eseguire

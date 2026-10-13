@@ -8,6 +8,7 @@ import re
 import shutil
 import subprocess
 import sys
+import time
 import urllib.request
 
 from dotenv import dotenv_values, set_key
@@ -121,13 +122,105 @@ def app_running():
         return False
 
 
+def local_port():
+    value = os.environ.get('APP_PORT') or dotenv_values(ROOT / '.env').get('APP_PORT') or '8765'
+    port = int(value)
+    if not 1024 <= port <= 65535:
+        raise ValueError('Porta locale non valida.')
+    return port
+
+
+def checked_windows_process(pid, port, stop=False):
+    """PID fornito dal log: controlla porta, programma Python e proprietario prima dell'arresto."""
+    if sys.platform != 'win32' or not 1 <= pid < 2 ** 31 or not 1024 <= port <= 65535:
+        return False
+    script = r'''
+$ErrorActionPreference = 'Stop'
+$officinaPid = __OFFICINA_PID__
+$officinaPort = __OFFICINA_PORT__
+$officinaListener = Get-NetTCPConnection -State Listen -LocalPort $officinaPort |
+    Where-Object { $_.OwningProcess -eq $officinaPid -and $_.LocalAddress -eq '127.0.0.1' }
+if (-not $officinaListener) { throw 'Listener not matched' }
+$officinaProcess = Get-CimInstance Win32_Process -Filter ('ProcessId = ' + $officinaPid)
+if ($officinaProcess.Name -notin @('python.exe', 'pythonw.exe', 'python3.12.exe')) { throw 'Program not matched' }
+if ($officinaProcess.CommandLine -notmatch '(?:[\\/\s"])(?:avvio_automatico|avvia)\.py(?:["\s]|$)') { throw 'Script not matched' }
+$officinaOwner = Invoke-CimMethod -InputObject $officinaProcess -MethodName GetOwner
+if ($officinaOwner.ReturnValue -ne 0 -or $officinaOwner.User -ne $env:USERNAME) { throw 'Owner not matched' }
+__OFFICINA_STOP__
+Write-Output 'OFFICINA_MATCH'
+'''
+    script = script.replace('__OFFICINA_PID__', str(pid)).replace('__OFFICINA_PORT__', str(port))
+    script = script.replace('__OFFICINA_STOP__', 'Stop-Process -Id $officinaPid -ErrorAction Stop' if stop else '')
+    try:
+        result = subprocess.run(['powershell.exe', '-NoProfile', '-NonInteractive', '-Command', script],
+                                capture_output=True, text=True, timeout=20)
+        return result.returncode == 0 and result.stdout.strip() == 'OFFICINA_MATCH'
+    except (OSError, subprocess.TimeoutExpired):
+        return False
+
+
+def stop_reported_instance(pid):
+    port = local_port()
+    if not checked_windows_process(pid, port):
+        print('Arresto non eseguito: il processo del log non è identificato come la tua Officina.', flush=True)
+        return False
+    # Prima chiude gli eventuali lavori con la stessa API del pulsante Ferma.
+    # Il token della sessione resta soltanto in memoria e non viene stampato.
+    base = f'http://127.0.0.1:{port}'
+    opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+
+    def get(path):
+        with opener.open(base + path, timeout=10) as response:
+            return json.loads(response.read(100000))
+
+    try:
+        session = get('/api/session')
+        projects = get('/api/projects')
+        for project in projects:
+            if project.get('state') != 'Pronto':
+                project_id = project.get('id', '')
+                if not re.fullmatch(r'[a-f0-9]{32}', project_id):
+                    raise ValueError('Identificativo non valido.')
+                detail = get('/api/projects/' + project_id)
+                if detail.get('worker_active'):
+                    request = urllib.request.Request(base + '/api/projects/' + project_id + '/control',
+                        data=b'{"action":"stop"}', method='POST',
+                        headers={'Content-Type': 'application/json', 'Origin': base,
+                                 'x-app-token': session['token']})
+                    with opener.open(request, timeout=15) as response:
+                        result = json.loads(response.read(10000))
+                    if result.get('ok') is not True:
+                        raise ValueError('Arresto del lavoro non confermato.')
+    except (OSError, ValueError, KeyError, TypeError):
+        print('Arresto automatico interrotto prima di chiudere il processo: controllo dei lavori non riuscito.', flush=True)
+        return False
+    # Ripete i controlli di identità immediatamente prima di arrestare il solo PID.
+    if not checked_windows_process(pid, port, stop=True):
+        return not app_running()
+    deadline = time.monotonic() + 10
+    while time.monotonic() < deadline:
+        if not app_running():
+            print('Officina fermata. File, chiave e progressi sono conservati.', flush=True)
+            return True
+        time.sleep(.3)
+    print('Officina non risulta ancora ferma: aggiornamento non iniziato.', flush=True)
+    return False
+
+
 def main():
     try:
         ref = sys.argv[1]
         if app_running():
-            print('Officina è ancora aperta. Nella sua finestra del terminale premi Ctrl+C, poi ripeti questo comando.', flush=True)
-            print('Nessun file è stato modificato.', flush=True)
-            return 1
+            if '--ferma-pid' in sys.argv:
+                index = sys.argv.index('--ferma-pid')
+                pid = int(sys.argv[index + 1])
+                if not stop_reported_instance(pid):
+                    print('Nessun sorgente modificato.', flush=True)
+                    return 1
+            else:
+                print('Officina è ancora aperta. Nella sua finestra del terminale premi Ctrl+C, poi ripeti questo comando.', flush=True)
+                print('Nessun file è stato modificato.', flush=True)
+                return 1
         update_code(ref)
         configure_free_profile()
         if '--aggiorna-docker' in sys.argv and not update_docker():

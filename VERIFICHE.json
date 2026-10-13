@@ -123,7 +123,7 @@
     "scripts/avvio_automatico.py": "2d7abdc98a7727361e6fad308a4dd9a2e4477b95e55cd221ec0d73dda234f7a0",
     "tests/test_automatic_setup.py": "7da263ee57906f3a8737252b6c3e937c5dff83cd8e7ab596e4b8cfc155c2fed9",
     "scripts/prova_agente.py": "ce0dcafae6856e81215ae1b71f2d5b11a95c570a0729b4bf9484a60d7114836f",
-    "scripts/aggiorna_quota.py": "0f889265a100742a3ad0e9437ae5510f032529e3192773f53dea4043753c11cb"
+    "scripts/aggiorna_quota.py": "6dc6125a9c5f7d20810c0c9d50519e770facfa3e0494fdb992c975479240862b"
   },
   "version": "0.2.0",
   "provider": "groq",
@@ -166,6 +166,12 @@
       ],
       "live_ai_verified": false,
       "windows_verified_by_this_check": false
+    },
+    "controlled_stop_tests": {
+      "passed": 6,
+      "platform": "Linux",
+      "native_windows_execution": "not_run",
+      "transport_and_process_controls": "simulated in tests"
     }
   }
 }

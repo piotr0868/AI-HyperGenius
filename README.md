@@ -134,6 +134,11 @@ predefiniti, verifica SHA-256 e sintassi prima di modificarli, conserva copie in
 o credenziali. `--aggiorna-docker` tenta l'aggiornamento ufficiale con winget e
 interrompe l'avvio IA se il gestore non lo completa. Nessuna verifica TLS/firma/checksum
 o autorizzazione Windows viene aggirata.
+Se il terminale precedente non è visibile, `--ferma-pid PID_DAL_LOG` consente un
+arresto controllato della sola istanza identificata: verifica processo/porta e
+proprietario, chiude eventuali lavori con l'API Ferma e controlla di nuovo prima
+di arrestare il processo. Questo passaggio Windows non è ancora stato eseguito
+dall'assistente; un'identità non riconosciuta interrompe l'aggiornamento.
 
 ## Controllo della chiave e compatibilità
 
