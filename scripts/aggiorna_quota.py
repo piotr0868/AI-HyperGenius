@@ -143,7 +143,7 @@ $officinaListener = Get-NetTCPConnection -State Listen -LocalPort $officinaPort 
 if (-not $officinaListener) { throw 'Listener not matched' }
 $officinaProcess = Get-CimInstance Win32_Process -Filter ('ProcessId = ' + $officinaPid)
 if ($officinaProcess.Name -notin @('python.exe', 'pythonw.exe', 'python3.12.exe')) { throw 'Program not matched' }
-if ($officinaProcess.CommandLine -notmatch '(?:[\\/\s"])(?:avvio_automatico|avvia)\.py(?:["\s]|$)') { throw 'Script not matched' }
+if ($officinaProcess.CommandLine -notmatch '(?:[\\/\s"])(?:avvio_automatico|avvia|aggiorna_quota)\.py(?:["\s]|$)') { throw 'Script not matched' }
 $officinaOwner = Invoke-CimMethod -InputObject $officinaProcess -MethodName GetOwner
 if ($officinaOwner.ReturnValue -ne 0 -or $officinaOwner.User -ne $env:USERNAME) { throw 'Owner not matched' }
 __OFFICINA_STOP__

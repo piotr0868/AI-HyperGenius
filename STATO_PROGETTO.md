@@ -110,6 +110,42 @@ Non richiedere una nuova chiave, non azzerare i contatori e non dichiarare riusc
 la generazione o la correzione separata. I risultati Windows sono log dell'utente,
 non comandi eseguiti dall'assistente nel cloud.
 
+### Rapporto Windows letto e correzione del rifiuto HTTP 400
+
+Il RESULTS.json incollato dall'utente identifica il progetto di generazione
+4e61bd1e66894d04bb1993000a90a634, fermo per HTTP 400 dopo 8 chiamate IA e 6 tool.
+Il precedente codice non conservava il dettaglio del rifiuto: la causa specifica
+non è recuperabile da questo rapporto e non va attribuita con certezza al formato.
+La consultazione documenti risulta ancora 0. L'ultimo run_checks è fallito prima
+dell'esecuzione di unittest: "Start directory is not importable: tests".
+La correzione separata non è stata avviata. Non mostrare Pronto.
+
+Consultata la documentazione Groq attuale su tool calling, errori e quote.
+Aggiunti diagnostica per categorie riconosciute, parametro/codice in lista consentita,
+registro e rapporto della prova. Messaggi grezzi, failed_generation e argomenti
+rifiutati non sono conservati o eseguiti. Solo gli errori di generazione tool
+riconosciuti consentono una rigenerazione, con prompt corretto e temperatura più
+bassa, al massimo una per progetto anche dopo Riprendi. Gli altri 400 fermano il
+lavoro. Ogni richiesta rimane nel budget; nessun passaggio a un altro servizio.
+La ripresa ricorda i documenti mancanti e le istruzioni includono tests/__init__.py
+ed esame del risultato di ogni scrittura prima di presumere il file presente.
+
+Per il prossimo comando Windows: --chiamate-prova 20 imposta un limite esplicito
+COMPLESSIVO per generazione e correzione; conserva le 8 richieste già usate e
+riserva anche quelle già consumate dalla copia separata. Non cambia .env o il
+limite ordinario dell'app (12). I budget di token e tempo restano invariati.
+L'arresto mirato riconosce anche il server avviato da aggiorna_quota.py; il PID
+attuale è 12136, da ricontrollare con porta, script e proprietario prima dell'arresto.
+Il nuovo ramo nativo Windows non è ancora stato eseguito dall'assistente.
+
+Suite finale: **87 test passati su Linux**, zero fallimenti/errori/skipped,
+compresi 16 nuovi controlli del rifiuto/recupero e del limite complessivo della prova.
+SDK ufficiale con trasporto simulato; non convalida capacità del modello reale.
+Nuovo avvio reale, pagina italiana, API, creazione progetto e stop per credenziale
+assente verificati; zero chiamate IA, servizio di prova arrestato.
+La correzione è pronta da applicare sul PC; generazione e correzione con IA
+restano NON COMPLETE fino a risultati effettivi del PC Windows.
+
 ## Architettura e cambiamenti
 
 FastAPI, SQLite/FTS5, interfaccia italiana HTML/CSS/JavaScript e Docker per eseguire
@@ -143,7 +179,7 @@ Docker non ha rete, segreti, cartelle host o socket Docker; niente ripiego sull'
 
 Su Linux, Python 3.12.14, Docker 28.4.0 e Chromium di sistema:
 
-- **65 test passati** nella suite corrente, 0 errori/fallimenti/skipped.
+- **87 test passati** nella suite corrente, 0 errori/fallimenti/skipped.
 - SDK ufficiali Groq e OpenAI con trasporto HTTP simulato e Docker reale: scrittura,
   difetto rilevato, correzione predisposta dal test e nuova verifica passata.
 - Quota Groq, credenziali separate, migrazione cronologie, argomenti non fidati,
@@ -163,7 +199,7 @@ Le risposte simulate esistono solo nei test: non convalidano capacità di un'IA 
 
 Nel **cloud** `GROQ_API_KEY` è ancora assente: zero chiamate live da questo ambiente.
 Sul **PC Windows** la credenziale e il modello sono verificati dal log; la prova
-con IA è tentata e non completata per quota. Generazione/correzione complete e
+con IA è tentata e non completata: primo tentativo per quota, secondo per HTTP 400. Generazione/correzione complete e
 procedure con il modello reale restano da verificare. Non richiedere nuovamente
 una chiave locale già salvata; usare avvio_automatico che carica il file fuori OneDrive.
 
@@ -173,7 +209,8 @@ addebiti se l'account ha già fatturazione attiva. Nessun cambio automatico a Op
 
 Windows 11: setup, casella, SDK/modello, Docker, prova senza IA e avvio server
 confermati da log dell'utente. Correzione della quota applicata e aggiornamento Docker
-riuscito secondo il nuovo log; accettazione IA ancora incompleta, causa da leggere. Le verifiche automatiche dell'assistente restano su Linux.
+riuscito secondo il nuovo log; accettazione IA ancora incompleta per HTTP 400,
+dettaglio originale non registrato. Le verifiche automatiche dell'assistente restano su Linux.
 Pubblicazione dell'ambiente e ripristino in un nuovo task cloud non verificati.
 Questa versione supporta il contratto backend attività Python con libreria standard;
 altri backend e blockchain sono traguardi successivi. Nessuna gestione di denaro,

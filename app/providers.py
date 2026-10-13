@@ -16,11 +16,44 @@ class Reply:
 
 
 class ProviderError(RuntimeError):
-    def __init__(self, status=None, retry_after=None, quota=None):
+    def __init__(self, status=None, retry_after=None, quota=None, diagnostic=None):
         self.status = status
         self.retry_after = retry_after
         self.quota = quota or {}
+        self.diagnostic = diagnostic or {}
         super().__init__('Errore del provider IA')
+
+
+def request_diagnostic(body):
+    """Classifica il rifiuto senza conservare messaggi, prompt o generazioni del server."""
+    if not isinstance(body, dict):
+        return {'category': 'bad_request'}
+    error = body.get('error', body)
+    if not isinstance(error, dict):
+        return {'category': 'bad_request'}
+    code = error.get('code')
+    message = error.get('message')
+    message = message[:4000].lower() if isinstance(message, str) else ''
+    category = 'bad_request'
+    if code == 'tool_use_failed' or ('failed_generation' in error and
+            ('tool call' in message or 'call a function' in message)):
+        category = 'invalid_tool_call'
+    elif code == 'context_length_exceeded' or 'context length' in message:
+        category = 'context_too_large'
+    elif 'tool_call_id' in message or ('messages' in message and 'tool' in message):
+        category = 'invalid_history'
+    elif code == 'unsupported_parameter' or 'parameter' in message:
+        category = 'invalid_parameter'
+    diagnostic = {'category': category}
+    if code in ('tool_use_failed', 'invalid_request_error', 'context_length_exceeded',
+                'json_validate_failed', 'unsupported_parameter'):
+        diagnostic['code'] = code
+    parameter = error.get('param')
+    if parameter in ('messages', 'tools', 'tool_choice', 'parallel_tool_calls',
+                     'max_completion_tokens', 'max_output_tokens', 'reasoning_effort',
+                     'temperature', 'response_format', 'model'):
+        diagnostic['parameter'] = parameter
+    return diagnostic
 
 
 def create_client(settings, timeout=45):
@@ -116,7 +149,7 @@ def groq_messages(history, instructions):
     return messages
 
 
-async def generate(settings, client, history, instructions, tools=None, max_output=None):
+async def generate(settings, client, history, instructions, tools=None, max_output=None, temperature=None):
     maximum = max_output or settings.max_output_tokens
     try:
         if settings.provider == 'openai':
@@ -138,7 +171,8 @@ async def generate(settings, client, history, instructions, tools=None, max_outp
             kwargs['reasoning_effort'] = 'low'
         if tools:
             kwargs.update(tools=[{'type': 'function', 'function': {k: t[k] for k in ('name', 'description', 'parameters')}} for t in tools],
-                          parallel_tool_calls=False, tool_choice='auto')
+                          parallel_tool_calls=False, tool_choice='auto',
+                          temperature=0.4 if temperature is None else temperature)
         response = await client.chat.completions.create(**kwargs)
         if not response.choices:
             raise ProviderError(status=502)
@@ -164,6 +198,7 @@ async def generate(settings, client, history, instructions, tools=None, max_outp
                 value = exc.response.headers.get('x-ratelimit-' + key, '')
                 if re.fullmatch(r'[0-9.dhms]{1,48}', value):
                     quota[key] = value
-        raise ProviderError(exc.status_code, retry, quota) from None
+        diagnostic = request_diagnostic(exc.body) if exc.status_code == 400 else {}
+        raise ProviderError(exc.status_code, retry, quota, diagnostic) from None
     except (groq.APIConnectionError, openai.APIConnectionError):
         raise ProviderError() from None

@@ -1,0 +1,15 @@
+{
+  "date": "2026-10-13",
+  "platform": "Linux",
+  "passed": true,
+  "checks": [
+    "real service startup after provider recovery change",
+    "Italian page",
+    "health response with Groq and Docker",
+    "app default call budget unchanged at 12",
+    "project creation and missing-credential intervention",
+    "zero live model calls"
+  ],
+  "live_ai_verified": false,
+  "windows_verified_by_this_check": false
+}

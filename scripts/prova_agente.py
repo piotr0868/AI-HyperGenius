@@ -48,6 +48,11 @@ def saved_project(store, pid, description):
         return None
 
 
+def provider_events(store, pid):
+    kinds = {'errore_provider', 'recupero_formato_tool', 'quota_api', 'attesa_quota'}
+    return [event for event in reversed(store.events(pid)) if event['kind'] in kinds]
+
+
 async def run_or_recheck(agent, store, sandbox, project):
     pid = project['id']
     if project['state'] == 'Pronto' and project['verified_hash'] == store.digest(pid):
@@ -67,6 +72,17 @@ async def run_or_recheck(agent, store, sandbox, project):
 
 async def main():
     config = load_settings()
+    maximum = None
+    if '--chiamate-prova' in sys.argv:
+        try:
+            maximum = int(sys.argv[sys.argv.index('--chiamate-prova') + 1])
+            if not 1 <= maximum <= 40:
+                raise ValueError
+        except (IndexError, ValueError):
+            print('Limite della prova non valido: --chiamate-prova richiede un numero da 1 a 40. Nessuna chiamata IA.')
+            return 2
+        # Opzione esplicita per questa prova; non modifica .env o i limiti dell'app.
+        config = replace(config, max_model_calls=maximum)
     if not config.api_key:
         print(f'NON ESEGUITA: manca {config.credential_var} nel file locale .env. Nessuna chiamata IA. Fornitore: {config.provider}.')
         return 2
@@ -86,6 +102,12 @@ async def main():
         if '--nuova-prova' in sys.argv:
             checkpoint = {}
             previous = {}
+        old_repair = (previous.get('repair') or {}).get('project') or {}
+        repair_id = checkpoint.get('repair_id') or old_repair.get('id')
+        saved_repair = saved_project(store, repair_id, REPAIR_GOAL)
+        repair_used = saved_repair['model_calls'] if saved_repair else 0
+        generation_limit = settings.max_model_calls if maximum is None else max(0, maximum - repair_used)
+        agent.settings = replace(settings, max_model_calls=generation_limit)
         generation_id = checkpoint.get('generation_id') or previous.get('generation', {}).get('id')
         project = saved_project(store, generation_id, GOAL)
         if project:
@@ -95,16 +117,22 @@ async def main():
             checkpoint = {}
         checkpoint['generation_id'] = project['id']
         save_json(checkpoint_path, checkpoint)
+        print(f'Limite della prova: {maximum} richieste complessive per generazione e correzione, '
+              f'{project["model_calls"] + repair_used} già usate. Tempo e token restano limitati.'
+              if maximum is not None else
+              f'Limite della prova: {settings.max_model_calls} richieste per fase; contatori conservati.', flush=True)
         final = await run_or_recheck(agent, store, sandbox, project)
         evidence = {'generation': {k: v for k, v in final.items() if k != 'history'},
-                    'repair': None, 'ai_used': True, 'limits_preserved_on_resume': True}
+                    'repair': None, 'ai_used': True, 'limits_preserved_on_resume': True,
+                    'provider_events': {'generation': provider_events(store, project['id']), 'repair': []},
+                    'operational_limits': {'model_calls_total': maximum, 'generation_model_calls': generation_limit,
+                        'tokens_per_phase': settings.max_total_tokens, 'seconds_per_phase': settings.task_timeout,
+                        'tool_format_recoveries_per_phase': 1}}
         save_json(result_path, evidence)
         if final['state'] != 'Pronto':
             print('Generazione non completata:', final['summary'])
             outcome = 1
         else:
-            old_repair = (previous.get('repair') or {}).get('project') or {}
-            repair_id = checkpoint.get('repair_id') or old_repair.get('id')
             repair = saved_project(store, repair_id, REPAIR_GOAL)
             if repair:
                 if old_repair.get('id') == repair['id']:
@@ -114,6 +142,9 @@ async def main():
                 repair = store.create_project(REPAIR_GOAL)
                 checkpoint['fault_injected'] = False
             rid = repair['id']
+            repair_limit = settings.max_model_calls if maximum is None else max(0, maximum - final['model_calls'])
+            agent.settings = replace(settings, max_model_calls=repair_limit)
+            evidence['operational_limits']['repair_model_calls'] = repair_limit
             checkpoint['repair_id'] = rid
             save_json(checkpoint_path, checkpoint)
             if not checkpoint.get('fault_injected'):
@@ -131,6 +162,7 @@ async def main():
             evidence['repair'] = {'project': {k: v for k, v in result.items() if k != 'history'},
                 'detected_initial_fault': detected, 'corrected_and_retested': corrected,
                 'original_unchanged': original_unchanged, 'checks': checks}
+            evidence['provider_events']['repair'] = provider_events(store, rid)
             outcome = 0 if detected and corrected and original_unchanged else 1
         save_json(result_path, evidence)
         print('Risultati salvati:', result_path)

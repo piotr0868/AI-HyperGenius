@@ -22,6 +22,9 @@ Input invalido: 400 o 422. Stessa chiave e stessi dati: stesso oggetto, nessuna 
 Stessa chiave e dati diversi: 409. SQLite conserva attività e idempotenza al riavvio.
 Usa HTTPServer/ThreadingHTTPServer, query parametrizzate e gestione degli errori.
 Scrivi test unittest significativi in tests/test_*.py, e istruzioni brevi in README.md.
+Crea la cartella tests e il file tests/__init__.py per la scoperta dei test Python 3.12.
+Richiedi un solo strumento alla volta, con gli argomenti in JSON valido secondo lo schema.
+Controlla ogni risultato: un errore di write_file significa che il file non è stato scritto.
 Le verifiche indipendenti del sistema sono obbligatorie: chiama run_checks e analizza
 stdout/stderr. Se falliscono, correggi e ripetile entro i limiti. Una chiamata di
 esecuzione riuscita non sostituisce run_checks. Usa finish soltanto dopo tutte le prove.
@@ -220,11 +223,15 @@ class Agent:
                 self.client = create_client(self.settings)
             self.store.event(pid, 'fornitore', {'provider': self.settings.provider, 'model': self.settings.model})
             p = self.store.project(pid)
+            format_attempts = self.store.rows("SELECT COUNT(*) AS n FROM events WHERE project_id=? AND kind='recupero_formato_tool'", (pid,))[0]['n']
+            generation_temperature = 0.2 if format_attempts or 'HTTP 400' in p['summary'] else None
             history = repair_history(p['history'] or [])
             if not history:
                 history = [{'role': 'user', 'content': p['description']}]
             else:
                 history.append({'role': 'user', 'content': 'Riprendi il lavoro dai file salvati e dalle prove. Non presumere operazioni riuscite.'})
+                if not p['docs_consulted']:
+                    history.append({'role': 'user', 'content': 'La consultazione della documentazione non è ancora riuscita. Prima di scrivere usa search_knowledge con una query pertinente, ad esempio SQLite HTTPServer unittest. Controlla che restituisca riferimenti; poi ispeziona i file effettivamente salvati.'})
             self.store.update(pid, state='Preparazione', question=None, history=history,
                               summary='Preparo obiettivo, piano e documentazione.', next_step='Definire i criteri di riuscita.')
             while True:
@@ -244,8 +251,26 @@ class Agent:
                 remaining = self.settings.task_timeout - before - (time.monotonic() - started)
                 try:
                     async with asyncio.timeout(max(.1, remaining)):
-                        response = await generate(self.settings, self.client, history, INSTRUCTIONS, tools=TOOLS)
+                        response = await generate(self.settings, self.client, history, INSTRUCTIONS, tools=TOOLS,
+                                                  temperature=generation_temperature)
                 except ProviderError as exc:
+                    self.store.event(pid, 'errore_provider', {'status': exc.status, 'diagnostic': exc.diagnostic})
+                    if (self.settings.provider == 'groq' and exc.status == 400
+                            and exc.diagnostic.get('category') == 'invalid_tool_call'
+                            and format_attempts < 1
+                            and p['model_calls'] + 1 < self.settings.max_model_calls
+                            and self.settings.min_interval < self.settings.task_timeout - before - (time.monotonic() - started)):
+                        # Una sola rigenerazione per progetto; il normale preflight conserva
+                        # limiti di chiamate, token, tempo e costi anche dopo Riprendi.
+                        format_attempts += 1
+                        generation_temperature = 0.2
+                        self.store.event(pid, 'recupero_formato_tool', {'attempt': format_attempts,
+                                                                      'diagnostic': exc.diagnostic})
+                        history.append({'role': 'user', 'content': 'Il servizio ha rifiutato una chiamata di strumento non valida. Nessuna operazione di quella risposta è stata eseguita. Genera una sola chiamata a uno strumento disponibile, con argomenti JSON validi che rispettino esattamente lo schema. Per il contenuto dei file usa una stringa JSON con escape corretti. Consulta i file e correggi gli errori delle prove; non modificare test per nasconderli.'})
+                        self.store.update(pid, history=history, state='Preparazione',
+                            summary='Correggo il formato della richiesta IA. È consentito un solo tentativo automatico.',
+                            next_step='Riprendere il lavoro conservando i limiti operativi.')
+                        continue
                     retries = self.store.rows("SELECT COUNT(*) AS n FROM events WHERE project_id=? AND kind='attesa_quota'", (pid,))[0]['n']
                     delay = exc.retry_after
                     if (exc.status == 429 and delay is not None and 0 <= delay <= 120
@@ -308,6 +333,15 @@ class Agent:
                       f'Il provider ha risposto HTTP {exc.status}. Nessuna riuscita dichiarata.')
             if exc.status is None:
                 detail = f'Connessione API non riuscita. Controlla Internet, accesso a {self.settings.api_host} e configurazione TLS.'
+            if exc.status == 400:
+                reason = {'invalid_tool_call': 'L’IA ha generato una chiamata di strumento non valida.',
+                          'context_too_large': 'La richiesta supera il contesto disponibile del modello.',
+                          'invalid_history': 'Il servizio ha rifiutato la sequenza di messaggi degli strumenti.',
+                          'invalid_parameter': 'Il servizio ha rifiutato un parametro della richiesta.',
+                          'bad_request': 'Il dettaglio non è riconosciuto; occorre consultare il registro.'}
+                detail = 'Richiesta IA rifiutata (HTTP 400). ' + reason.get(exc.diagnostic.get('category'), reason['bad_request'])
+                if exc.diagnostic.get('parameter'):
+                    detail += ' Parametro: ' + exc.diagnostic['parameter'] + '.'
             if exc.retry_after is not None:
                 detail += f' Riprova tra almeno {exc.retry_after} secondi.'
             self.intervention(pid, detail)

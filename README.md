@@ -40,11 +40,12 @@ sotto usa invece il file `.env` del progetto.
 
 Windows può richiedere intervento per Docker, WSL 2, condizioni del fornitore o
 autorizzazioni di sistema. Questi requisiti non vengono aggirati; se Docker Linux
-non è pronto, il codice generato non viene eseguito. La casella grafica e
-l'installazione Windows automatica restano da verificare su Windows. Il log
-dell'utente conferma invece casella grafica, chiave salvata, accesso Groq, Docker
-Linux, immagine a digest e prova senza IA riusciti sul suo PC. La generazione con
-il modello è stata tentata e si è fermata con HTTP 429: **NON COMPLETATA**.
+non è pronto, il codice generato non viene eseguito. Il log dell'utente conferma
+casella grafica, chiave salvata, accesso Groq, Docker Linux, aggiornamento Docker
+tramite winget, immagine a digest e prova senza IA riusciti sul suo PC. La
+generazione con il modello è stata tentata: primo arresto HTTP 429, secondo HTTP
+400 dopo la ripresa; **NON COMPLETATA**. La correzione del rifiuto è verificata
+con SDK e HTTP simulato su Linux, ancora da provare con il modello reale sul PC.
 
 I risultati effettivi sono in `.data/setup/RESULTS.json` e
 `.data/live-acceptance/RESULTS.json`. La prova IA usa i limiti configurati e può
@@ -91,7 +92,8 @@ Per attivare il lavoro autonomo dell’agente:
 Il log condiviso dall'utente conferma su Windows Python 3.12.10, creazione di `.venv`
 e installazione delle dipendenze con `installa.bat`, poi salvataggio della chiave,
 accesso/modello Groq, Docker e prove senza IA. Il server dell'applicazione è partito.
-La prova agente è **non completata per quota**; la correzione con IA non è stata eseguita.
+La prova agente è **non completata**: primo arresto per quota, secondo per HTTP 400;
+la correzione separata con IA non è stata eseguita.
 Le verifiche automatiche registrate nella consegna sono state eseguite su Linux.
 
 ## Cosa puoi provare subito senza chiave
@@ -263,3 +265,15 @@ simulato sono identificati come offline e non convalidano un modello IA reale.
 
 Usa il checkout già presente: ogni task cloud è già isolato; non creare un worktree
 aggiuntivo salvo richiesta esplicita. Consulta `STATO_PROGETTO.md` per riprendere.
+
+### Riprendere la prova con un limite complessivo esplicito
+
+Dalla cartella del progetto,
+`.venv\Scripts\python.exe scripts\avvio_automatico.py --riprova-verifica --chiamate-prova 20`
+riprende la prova
+con massimo 20 richieste IA complessive tra generazione e correzione. Le richieste
+già consumate nelle due fasi rimangono contate. Questa opzione non cambia `.env`,
+i limiti dell'app o i budget di token/tempo. Il rapporto include i limiti effettivi
+e le categorie sicure degli eventuali errori del provider. Un errore 400 di formato
+riconosciuto può essere rigenerato una volta per progetto entro questi limiti;
+gli altri rifiuti fermano il lavoro. Una prova interrotta non certifica l'agente.

@@ -37,3 +37,17 @@ Consultati gli errori ufficiali di winget nel repository Microsoft:
 https://raw.githubusercontent.com/microsoft/winget-cli/master/src/AppInstallerSharedLib/Public/AppInstallerErrors.h
 Un esito "nessun aggiornamento applicabile" non viene dichiarato dal helper come
 aggiornamento effettuato; l'utente può usare il comando Update di Docker.
+
+Consultate il 13 ottobre 2026 anche le pagine attuali:
+
+- https://console.groq.com/docs/tool-use/overview: GPT-OSS supporta tool locali,
+  senza tool paralleli; il risultato deve essere restituito al modello.
+- https://console.groq.com/docs/tool-use/local-tool-calling: errori 400 di tool
+  generation e failed_generation, rigenerazione limitata con temperatura ridotta.
+  Il nostro codice non esegue né registra failed_generation; classifica il rifiuto
+  ed evita tentativi automatici su 400 non riconosciuti come generazione tool.
+- https://console.groq.com/docs/errors: significato distinto di 400, 401 e 429.
+- https://console.groq.com/docs/rate-limits: tabella generale Free per GPT-OSS 20b
+  consultata (30 RPM, 1K RPD, 8K TPM, 200K TPD). I limiti effettivi dell'account
+  dell'utente non sono stati consultati; fare riferimento alla sua console e ai
+  metadati numerici registrati, senza attribuire il precedente 400 alla quota.
