@@ -4,7 +4,7 @@ import time
 from pathlib import Path
 
 from .documentation import consult
-from .providers import create_client, generate, ProviderError
+from .providers import create_client, generate, request_input_reserve, ProviderError
 from .sandbox import SandboxUnavailable
 
 
@@ -73,15 +73,25 @@ def estimate(settings, input_tokens, output_tokens):
     return (input_tokens * settings.input_rate + output_tokens * settings.output_rate) / 1000000
 
 
-def preflight(settings, project, history):
+def token_budget(settings, project, history):
+    used = project['input_tokens'] + project['output_tokens']
+    reserve_in = request_input_reserve(settings, history, INSTRUCTIONS, TOOLS)
+    return {'reported_input_tokens': project['input_tokens'],
+            'reported_output_tokens': project['output_tokens'], 'used_tokens': used,
+            'reserved_input_tokens': reserve_in, 'reserved_output_tokens': settings.max_output_tokens,
+            'required_tokens': used + reserve_in + settings.max_output_tokens,
+            'limit_tokens': settings.max_total_tokens,
+            'basis': 'provider_request_bytes_plus_4096_margin'}
+
+
+def preflight(settings, project, history, budget=None):
     if project['model_calls'] >= settings.max_model_calls:
         raise NeedsIntervention('Limite di chiamate IA raggiunto. Conservati tutti i risultati.')
-    # Un token testuale non può superare il numero di byte della sua codifica;
-    # margine aggiuntivo per messaggi e schema dei tool. È una riserva prudente.
-    reserve_in = len(json.dumps(history, ensure_ascii=False).encode()) + len(INSTRUCTIONS.encode()) + len(json.dumps(TOOLS).encode()) + 4096
-    reserve_out = settings.max_output_tokens
-    if project['input_tokens'] + project['output_tokens'] + reserve_in + reserve_out > settings.max_total_tokens:
-        raise NeedsIntervention('Budget token insufficiente per un’altra chiamata. Aumenta il limite operativo in .env.')
+    budget = budget or token_budget(settings, project, history)
+    reserve_in = budget['reserved_input_tokens']
+    reserve_out = budget['reserved_output_tokens']
+    if budget['required_tokens'] > settings.max_total_tokens:
+        raise NeedsIntervention('Budget token insufficiente per un’altra chiamata. Consumo e riserva sono nel rapporto; file e memoria sono conservati.')
     cost = estimate(settings, reserve_in, reserve_out)
     if settings.max_cost is not None:
         if cost is None:
@@ -241,7 +251,9 @@ class Agent:
                     raise NeedsIntervention('Tempo operativo massimo raggiunto.')
                 if p['failed_checks'] > self.settings.max_corrections:
                     raise NeedsIntervention('Limite di correzioni raggiunto. Consulta gli errori nelle verifiche.')
-                preflight(self.settings, p, history)
+                budget = token_budget(self.settings, p, history)
+                self.store.event(pid, 'controllo_budget_token', budget)
+                preflight(self.settings, p, history, budget)
                 if p['model_calls'] and self.settings.min_interval:
                     if self.settings.min_interval >= self.settings.task_timeout - before - (time.monotonic() - started):
                         raise NeedsIntervention('Tempo operativo insufficiente per un’altra chiamata. File e memoria conservati.')

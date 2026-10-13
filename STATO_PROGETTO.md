@@ -146,6 +146,38 @@ assente verificati; zero chiamate IA, servizio di prova arrestato.
 La correzione è pronta da applicare sul PC; generazione e correzione con IA
 restano NON COMPLETE fino a risultati effettivi del PC Windows.
 
+### Terza prova Windows: stop per riserva token
+
+Il successivo comando completo nel Prompt è riuscito: sorgenti con checksum e
+copie precedenti, credenziale/modello disponibili, riferimento/difetto/ripristino
+nuovamente verificati. La generazione è ripresa con limite complessivo 20,
+partendo da 8 chiamate già usate. Dopo vari cicli si è fermata per il controllo
+locale "Budget token insufficiente per un'altra chiamata". Non è un nuovo errore
+429 dimostrato. Contatori correnti e ultimo test devono ancora essere letti nel
+RESULTS.json del PC. Il server ora riporta PID 23792.
+Il primo comando era incompleto (.venv\Scri); il successivo comando nel Prompt
+è partito. Per evitare comandi lunghi nella finestra Esegui, usare Windows+R,
+scrivere soltanto cmd, poi incollare il comando lungo dentro il Prompt.
+
+Individuato un errore indipendente: il preflight prenotava byte/token di tutta
+la cronologia persistente, anche codice che il messaggio Groq non reinviava.
+La richiesta è ora costruita da un'unica funzione usata dall'SDK e dalla riserva,
+con un margine prudente di 4096 e il massimo output. La memoria rimane integrale;
+consumo effettivamente riportato e limite di 120000 token non vengono azzerati
+o aumentati. OpenAI usa il proprio payload completo; scritture fallite restano
+nel conteggio della richiesta. Un consumo realmente esaurito continua a fermare
+le chiamate prima dell'SDK. Il rapporto distingue consumo, riserva e limite.
+
+**91 test passati su Linux**, zero fallimenti/errori/skipped. Quattro nuovi casi
+coprono vecchia prenotazione eccessiva, conservazione del consumo/cronologia,
+payload specifici e stop su consumo esaurito; SDK con HTTP simulato, non prova IA.
+Resta necessario il rapporto aggiornato del PC prima di decidere una nuova
+esecuzione o un diverso limite. Non modificare .env alla cieca e non chiedere
+nuovamente la chiave già salvata. La correzione è pronta, non ancora provata sul PC.
+Il tentativo di leggere il rapporto ha incollato un percorso incompleto nel Prompt.
+Nella cartella già aperta usare soltanto notepad .data\live-acceptance\RESULTS.json,
+poi copiare il testo dal Blocco note. I nuovi contatori non sono ancora disponibili.
+
 ## Architettura e cambiamenti
 
 FastAPI, SQLite/FTS5, interfaccia italiana HTML/CSS/JavaScript e Docker per eseguire
@@ -179,7 +211,7 @@ Docker non ha rete, segreti, cartelle host o socket Docker; niente ripiego sull'
 
 Su Linux, Python 3.12.14, Docker 28.4.0 e Chromium di sistema:
 
-- **87 test passati** nella suite corrente, 0 errori/fallimenti/skipped.
+- **91 test passati** nella suite corrente, 0 errori/fallimenti/skipped.
 - SDK ufficiali Groq e OpenAI con trasporto HTTP simulato e Docker reale: scrittura,
   difetto rilevato, correzione predisposta dal test e nuova verifica passata.
 - Quota Groq, credenziali separate, migrazione cronologie, argomenti non fidati,
@@ -199,7 +231,8 @@ Le risposte simulate esistono solo nei test: non convalidano capacità di un'IA 
 
 Nel **cloud** `GROQ_API_KEY` è ancora assente: zero chiamate live da questo ambiente.
 Sul **PC Windows** la credenziale e il modello sono verificati dal log; la prova
-con IA è tentata e non completata: primo tentativo per quota, secondo per HTTP 400. Generazione/correzione complete e
+con IA è tentata e non completata: primo tentativo per quota, secondo per HTTP 400,
+terzo per la riserva locale dei token. Generazione/correzione complete e
 procedure con il modello reale restano da verificare. Non richiedere nuovamente
 una chiave locale già salvata; usare avvio_automatico che carica il file fuori OneDrive.
 
@@ -209,8 +242,8 @@ addebiti se l'account ha già fatturazione attiva. Nessun cambio automatico a Op
 
 Windows 11: setup, casella, SDK/modello, Docker, prova senza IA e avvio server
 confermati da log dell'utente. Correzione della quota applicata e aggiornamento Docker
-riuscito secondo il nuovo log; accettazione IA ancora incompleta per HTTP 400,
-dettaglio originale non registrato. Le verifiche automatiche dell'assistente restano su Linux.
+riuscito secondo il nuovo log; accettazione IA ancora incompleta, ultimo
+stop per riserva token. Il dettaglio del precedente 400 non era registrato. Le verifiche automatiche dell'assistente restano su Linux.
 Pubblicazione dell'ambiente e ripristino in un nuovo task cloud non verificati.
 Questa versione supporta il contratto backend attività Python con libreria standard;
 altri backend e blockchain sono traguardi successivi. Nessuna gestione di denaro,

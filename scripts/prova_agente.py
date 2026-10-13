@@ -53,6 +53,11 @@ def provider_events(store, pid):
     return [event for event in reversed(store.events(pid)) if event['kind'] in kinds]
 
 
+def last_token_budget(store, pid):
+    return next((event['detail'] for event in store.events(pid)
+                 if event['kind'] == 'controllo_budget_token'), None)
+
+
 async def run_or_recheck(agent, store, sandbox, project):
     pid = project['id']
     if project['state'] == 'Pronto' and project['verified_hash'] == store.digest(pid):
@@ -125,6 +130,7 @@ async def main():
         evidence = {'generation': {k: v for k, v in final.items() if k != 'history'},
                     'repair': None, 'ai_used': True, 'limits_preserved_on_resume': True,
                     'provider_events': {'generation': provider_events(store, project['id']), 'repair': []},
+                    'last_token_budget': {'generation': last_token_budget(store, project['id']), 'repair': None},
                     'operational_limits': {'model_calls_total': maximum, 'generation_model_calls': generation_limit,
                         'tokens_per_phase': settings.max_total_tokens, 'seconds_per_phase': settings.task_timeout,
                         'tool_format_recoveries_per_phase': 1}}
@@ -163,6 +169,7 @@ async def main():
                 'detected_initial_fault': detected, 'corrected_and_retested': corrected,
                 'original_unchanged': original_unchanged, 'checks': checks}
             evidence['provider_events']['repair'] = provider_events(store, rid)
+            evidence['last_token_budget']['repair'] = last_token_budget(store, rid)
             outcome = 0 if detected and corrected and original_unchanged else 1
         save_json(result_path, evidence)
         print('Risultati salvati:', result_path)

@@ -16,7 +16,7 @@
   },
   "live_ai": {
     "generation": "attempted, not completed",
-    "reason": "Latest resumed attempt: HTTP 400, specific cause not retained by previous code. Initial attempt: HTTP 429, retry after at least 48 seconds.",
+    "reason": "Latest resumed attempt: local token budget preflight blocked another request. Prior attempts: HTTP 429, then HTTP 400.",
     "exact_quota_type": "unknown",
     "separate_ai_repair": "not run"
   },
@@ -26,36 +26,56 @@
     "update": "winget reports installation successful; package Docker.DockerDesktop 4.95.0, installer hash verified"
   },
   "not_verified": [
-    "specific cause of previous HTTP 400",
-    "provider-format recovery on Windows with live model",
+    "latest reported token usage and generated-code check results",
+    "payload-based token reservation on Windows",
+    "specific cause of original HTTP 400",
     "complete AI generation and repair",
     "Officina browser workflow beyond page opening"
   ],
   "latest_attempt": {
     "date": "2026-10-13",
-    "source": "Subsequent user-pasted Windows command output",
+    "source": "User-pasted Windows updater and acceptance log after commit 75f1467",
+    "initial_command": "incomplete .venv\\Scri command failed; full command pasted into CMD then ran",
     "source_update": "checksum verification and backup reported successful",
-    "groq_profile": "60-second interval and limited waits applied by updater; run reported resumed",
-    "docker_update": "installation successful reported by winget, version 4.95.0",
+    "groq_api_and_model_available": "openai/gpt-oss-20b",
     "reference_backend": "passed",
     "deliberate_fault": "detected",
     "deterministic_restore": "passed",
+    "generation_resume": "same saved files, history and counters; 8 model calls used at start",
+    "explicit_total_call_limit": 20,
     "ai_acceptance": "not completed",
-    "failure_reason": "HTTP 400 from Groq; detailed error body was not recorded by previous code",
+    "failure_reason": "local token budget preflight refused another request; latest usage and check results not yet supplied",
     "generation_and_repair_stage": "generation incomplete; separate repair not run",
-    "officina_browser": "page opened reported by user",
-    "server_pid_reported": 12136,
-    "generation_observations": {
-      "project_id": "4e61bd1e66894d04bb1993000a90a634",
-      "model_calls": 8,
-      "tool_calls": 6,
-      "input_tokens": 20283,
-      "output_tokens": 5911,
-      "elapsed_seconds": 276.203,
-      "failed_checks": 1,
-      "docs_consulted": 0,
-      "verified_hash": null,
-      "last_check": "failed before unittest execution: Start directory is not importable: tests"
+    "server_pid_reported": 23792,
+    "officina_browser": "opening reported by launcher"
+  },
+  "attempt_history": [
+    {
+      "date": "2026-10-13",
+      "source": "Subsequent user-pasted Windows command output",
+      "source_update": "checksum verification and backup reported successful",
+      "groq_profile": "60-second interval and limited waits applied by updater; run reported resumed",
+      "docker_update": "installation successful reported by winget, version 4.95.0",
+      "reference_backend": "passed",
+      "deliberate_fault": "detected",
+      "deterministic_restore": "passed",
+      "ai_acceptance": "not completed",
+      "failure_reason": "HTTP 400 from Groq; detailed error body was not recorded by previous code",
+      "generation_and_repair_stage": "generation incomplete; separate repair not run",
+      "officina_browser": "page opened reported by user",
+      "server_pid_reported": 12136,
+      "generation_observations": {
+        "project_id": "4e61bd1e66894d04bb1993000a90a634",
+        "model_calls": 8,
+        "tool_calls": 6,
+        "input_tokens": 20283,
+        "output_tokens": 5911,
+        "elapsed_seconds": 276.203,
+        "failed_checks": 1,
+        "docs_consulted": 0,
+        "verified_hash": null,
+        "last_check": "failed before unittest execution: Start directory is not importable: tests"
+      }
     }
-  }
+  ]
 }

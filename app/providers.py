@@ -149,30 +149,45 @@ def groq_messages(history, instructions):
     return messages
 
 
-async def generate(settings, client, history, instructions, tools=None, max_output=None, temperature=None):
+def generation_payload(settings, history, instructions, tools=None, max_output=None, temperature=None):
+    """Unica costruzione della richiesta per invio e riserva preventiva dei token."""
     maximum = max_output or settings.max_output_tokens
+    if settings.provider == 'openai':
+        kwargs = dict(model=settings.model, instructions=instructions, input=history,
+                      max_output_tokens=maximum, store=False)
+        if tools:
+            kwargs.update(tools=tools, parallel_tool_calls=False)
+        return kwargs
+    if settings.provider != 'groq':
+        raise ValueError('Provider non supportato')
+    kwargs = dict(model=settings.model, messages=groq_messages(history, instructions),
+                  max_completion_tokens=maximum)
+    if settings.model in ('openai/gpt-oss-20b', 'openai/gpt-oss-120b'):
+        kwargs['reasoning_effort'] = 'low'
+    if tools:
+        kwargs.update(tools=[{'type': 'function', 'function': {k: t[k] for k in ('name', 'description', 'parameters')}} for t in tools],
+                      parallel_tool_calls=False, tool_choice='auto',
+                      temperature=0.4 if temperature is None else temperature)
+    return kwargs
+
+
+def request_input_reserve(settings, history, instructions, tools=None):
+    # Limite prudente basato sui byte della richiesta effettivamente costruita,
+    # più margine per l'involucro del modello. Non è un tokenizer del provider.
+    payload = generation_payload(settings, history, instructions, tools=tools)
+    return len(json.dumps(payload, ensure_ascii=False).encode()) + 4096
+
+
+async def generate(settings, client, history, instructions, tools=None, max_output=None, temperature=None):
     try:
+        kwargs = generation_payload(settings, history, instructions, tools, max_output, temperature)
         if settings.provider == 'openai':
-            kwargs = dict(model=settings.model, instructions=instructions, input=history,
-                          max_output_tokens=maximum, store=False)
-            if tools:
-                kwargs.update(tools=tools, parallel_tool_calls=False)
             response = await client.responses.create(**kwargs)
             return Reply(response.id,
                          [item.model_dump(mode='json', by_alias=True, exclude_none=True) for item in response.output],
                          response.output_text,
                          response.usage.input_tokens if response.usage else None,
                          response.usage.output_tokens if response.usage else None)
-        if settings.provider != 'groq':
-            raise ValueError('Provider non supportato')
-        kwargs = dict(model=settings.model, messages=groq_messages(history, instructions),
-                      max_completion_tokens=maximum)
-        if settings.model in ('openai/gpt-oss-20b', 'openai/gpt-oss-120b'):
-            kwargs['reasoning_effort'] = 'low'
-        if tools:
-            kwargs.update(tools=[{'type': 'function', 'function': {k: t[k] for k in ('name', 'description', 'parameters')}} for t in tools],
-                          parallel_tool_calls=False, tool_choice='auto',
-                          temperature=0.4 if temperature is None else temperature)
         response = await client.chat.completions.create(**kwargs)
         if not response.choices:
             raise ProviderError(status=502)

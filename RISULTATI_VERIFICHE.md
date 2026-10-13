@@ -7,7 +7,7 @@ restano quelle del 12 ottobre; il nuovo avvio e la suite sono stati verificati i
 
 | Prova | Esito effettivo |
 | --- | --- |
-| Suite applicazione pytest | **87 passati**, 0 falliti, 0 errori, 0 skipped |
+| Suite applicazione pytest | **91 passati**, 0 falliti, 0 errori, 0 skipped |
 | Nuovo avvio automatico | **12 controlli passati su Linux**, API simulate: protezione chiave, posizione fuori dal progetto, annullamento, blocco su errori, tentativi limitati, prove perse/modificate invalidate |
 | Avvio automatico → applicazione e API locali | **Passato su Linux** dopo annullamento chiave, nessuna chiamata IA; interfaccia italiana e risposta salute effettive |
 | Backend di riferimento in Docker | **8 test passati**, 0 falliti, 0 skipped |
@@ -26,10 +26,11 @@ restano quelle del 12 ottobre; il nuovo avvio e la suite sono stati verificati i
 | Installazione pip separata con `--require-hashes` | **Passata su Linux**, dipendenze Groq incluse; import SDK verificati |
 | Sintassi Python e JavaScript | **Passata**; verifiche supplementari, non sostituiscono le prove funzionali |
 | Generazione e correzione con Groq reale nel cloud | **NON ESEGUITA**, exit code 2: manca `GROQ_API_KEY`; zero chiamate live dal cloud |
-| SDK/modello e prova agente sul PC Windows | **Log dell'utente**: accesso al modello riuscito; generazione tentata e **NON COMPLETATA**, HTTP 429, Retry-After 48 secondi; correzione IA separata non eseguita; seconda prova ripresa interrotta da HTTP 400, 8 chiamate totali, dettaglio originario non registrato |
+| SDK/modello e prova agente sul PC Windows | **Log dell'utente**: accesso al modello riuscito; generazione tentata e **NON COMPLETATA**, HTTP 429, Retry-After 48 secondi; correzione IA separata non eseguita; seconda prova ripresa interrotta da HTTP 400, 8 chiamate totali, dettaglio originario non registrato; terza prova fermata dal budget token locale |
 | Correzione quota e ripresa | **Controlli locali passati**: testo ridotto senza perdere memoria, attesa breve limitata e persistente, nessun nuovo difetto dopo ripresa, progetti pronti ricontrollati in Docker; correzione applicata e prova ripresa secondo il log Windows; accettazione ancora incompleta per HTTP 400, dettaglio originario non registrato |
 | Rifiuto HTTP 400 e rigenerazione tool | **9 nuovi test passati nella suite Linux**, SDK ufficiale con HTTP simulato: diagnostica senza segreti, una sola rigenerazione riconosciuta, altri 400 fermano il lavoro, richieste contate; modello reale sul PC ancora da verificare |
 | Limite complessivo della prova | **7 nuovi controlli passati**: opzione esplicita valida, invalidi rifiutati senza chiamate, contatori/token/tempo conservati, budget condiviso e consumi precedenti della copia riservati |
+| Riserva token basata sulla richiesta SDK | **4 nuovi casi passati su Linux**: memoria originale preservata, storico non reinviato escluso dalla riserva, limiti invariati, consumo esaurito blocca API; risultati Windows ancora da leggere |
 | Avvio dopo correzione HTTP 400 | **Passato su Linux**: pagina italiana, API, Docker disponibile, creazione progetto e credenziale assente dichiarata; limite ordinario app ancora 12, zero chiamate live |
 | Aggiornamento con checksum e copie precedenti | **Passato offline**: rifiuto checksum errato prima di modifiche, chiave conservata, sorgenti precedenti archiviati, app attiva impedisce l'aggiornamento |
 | Prova di procedure con Groq reale | **NON ESEGUITA**, stessa credenziale mancante |

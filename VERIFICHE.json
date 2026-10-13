@@ -6,9 +6,9 @@
     "errors": "0",
     "failures": "0",
     "skipped": "0",
-    "tests": "87",
-    "time": "16.590",
-    "timestamp": "2026-10-13T18:04:48.098874+00:00",
+    "tests": "91",
+    "time": "20.334",
+    "timestamp": "2026-10-13T18:31:15.550879+00:00",
     "hostname": "d679e40bb841"
   },
   "reference_unit_tests": 8,
@@ -89,7 +89,7 @@
     },
     "live_ai": {
       "generation": "attempted, not completed",
-      "reason": "Latest resumed attempt: HTTP 400, specific cause not retained by previous code. Initial attempt: HTTP 429, retry after at least 48 seconds.",
+      "reason": "Latest resumed attempt: local token budget preflight blocked another request. Prior attempts: HTTP 429, then HTTP 400.",
       "exact_quota_type": "unknown",
       "separate_ai_repair": "not run"
     },
@@ -99,38 +99,58 @@
       "update": "winget reports installation successful; package Docker.DockerDesktop 4.95.0, installer hash verified"
     },
     "not_verified": [
-      "specific cause of previous HTTP 400",
-      "provider-format recovery on Windows with live model",
+      "latest reported token usage and generated-code check results",
+      "payload-based token reservation on Windows",
+      "specific cause of original HTTP 400",
       "complete AI generation and repair",
       "Officina browser workflow beyond page opening"
     ],
     "latest_attempt": {
       "date": "2026-10-13",
-      "source": "Subsequent user-pasted Windows command output",
+      "source": "User-pasted Windows updater and acceptance log after commit 75f1467",
+      "initial_command": "incomplete .venv\\Scri command failed; full command pasted into CMD then ran",
       "source_update": "checksum verification and backup reported successful",
-      "groq_profile": "60-second interval and limited waits applied by updater; run reported resumed",
-      "docker_update": "installation successful reported by winget, version 4.95.0",
+      "groq_api_and_model_available": "openai/gpt-oss-20b",
       "reference_backend": "passed",
       "deliberate_fault": "detected",
       "deterministic_restore": "passed",
+      "generation_resume": "same saved files, history and counters; 8 model calls used at start",
+      "explicit_total_call_limit": 20,
       "ai_acceptance": "not completed",
-      "failure_reason": "HTTP 400 from Groq; detailed error body was not recorded by previous code",
+      "failure_reason": "local token budget preflight refused another request; latest usage and check results not yet supplied",
       "generation_and_repair_stage": "generation incomplete; separate repair not run",
-      "officina_browser": "page opened reported by user",
-      "server_pid_reported": 12136,
-      "generation_observations": {
-        "project_id": "4e61bd1e66894d04bb1993000a90a634",
-        "model_calls": 8,
-        "tool_calls": 6,
-        "input_tokens": 20283,
-        "output_tokens": 5911,
-        "elapsed_seconds": 276.203,
-        "failed_checks": 1,
-        "docs_consulted": 0,
-        "verified_hash": null,
-        "last_check": "failed before unittest execution: Start directory is not importable: tests"
+      "server_pid_reported": 23792,
+      "officina_browser": "opening reported by launcher"
+    },
+    "attempt_history": [
+      {
+        "date": "2026-10-13",
+        "source": "Subsequent user-pasted Windows command output",
+        "source_update": "checksum verification and backup reported successful",
+        "groq_profile": "60-second interval and limited waits applied by updater; run reported resumed",
+        "docker_update": "installation successful reported by winget, version 4.95.0",
+        "reference_backend": "passed",
+        "deliberate_fault": "detected",
+        "deterministic_restore": "passed",
+        "ai_acceptance": "not completed",
+        "failure_reason": "HTTP 400 from Groq; detailed error body was not recorded by previous code",
+        "generation_and_repair_stage": "generation incomplete; separate repair not run",
+        "officina_browser": "page opened reported by user",
+        "server_pid_reported": 12136,
+        "generation_observations": {
+          "project_id": "4e61bd1e66894d04bb1993000a90a634",
+          "model_calls": 8,
+          "tool_calls": 6,
+          "input_tokens": 20283,
+          "output_tokens": 5911,
+          "elapsed_seconds": 276.203,
+          "failed_checks": 1,
+          "docs_consulted": 0,
+          "verified_hash": null,
+          "last_check": "failed before unittest execution: Start directory is not importable: tests"
+        }
       }
-    }
+    ]
   },
   "cloud": {
     "draft_saved": true,
@@ -138,8 +158,8 @@
     "fresh_task_verified": false
   },
   "source_sha256": {
-    "app/agent.py": "1fb62dfb8c58d444d45b0449107ba8341b6ae2c0060df1826b76ae4627162c44",
-    "app/providers.py": "f158bd3c71a8e4258845297feb8060f9ca7869bfc0db7f1a7f08d62f9f17cde7",
+    "app/agent.py": "d7e531e59dd8f6e83a1f339a1805090d300f77b3a396518333afd455ecf39153",
+    "app/providers.py": "ca37da85e12de7180e8ee872d9fc012fb1f359ca794c5f795a276b0178451c3e",
     "app/config.py": "3331e58edffb6766931b5d7f3d34561187041bb8742e4212de1cc295f3034daf",
     "app/sandbox.py": "03740c23c4f71a5ce12526de415c8175322cf5346823ae436cfc8cdb8bbaf4b1",
     "app/acceptance_contract.py": "6f6d3dbc0de77adb9b368dcee638cf8ad31f43a1c47af0fbb1be02fae00d5c4c",
@@ -149,10 +169,11 @@
     "requirements.lock": "9add5abb1e6d640f9ac118bdb54ef9b13b5159e511d610a4c42d16bdf793f967",
     "scripts/avvio_automatico.py": "2d7abdc98a7727361e6fad308a4dd9a2e4477b95e55cd221ec0d73dda234f7a0",
     "tests/test_automatic_setup.py": "7da263ee57906f3a8737252b6c3e937c5dff83cd8e7ab596e4b8cfc155c2fed9",
-    "scripts/prova_agente.py": "5824f9eb1f1042e7904e1701ddfc943a729e61da3099aef5f4b7e45d31f92600",
+    "scripts/prova_agente.py": "159efe549b07f5978b999a678c7c83b20ba55134a3cda99d717e16b18609e6d7",
     "scripts/aggiorna_quota.py": "6b6f700e9cd184cf92d631f7c071c10ec5f88a968f360370034664bad404764d",
     "tests/test_provider_recovery.py": "a0507c973c2be24436c8e1f6f03516816f243a753489dfe81d3a53e906f3b1e8",
-    "tests/test_live_acceptance_resume.py": "ad98add01016db8d35fe3ddccd58309d1fcbc367ee0ed814c4ec0c3360d16bce"
+    "tests/test_live_acceptance_resume.py": "ad98add01016db8d35fe3ddccd58309d1fcbc367ee0ed814c4ec0c3360d16bce",
+    "tests/test_token_budget.py": "faeefc114e586651ed4cb7f2a448ca478cf1081381098cd7d20cd9b5ce7064d6"
   },
   "version": "0.2.0",
   "provider": "groq",
@@ -231,5 +252,17 @@
       "live_ai_verified": false,
       "windows_verified_by_this_check": false
     }
+  },
+  "token_budget_correction": {
+    "platform": "Linux",
+    "tests_added": 4,
+    "api_transport": "simulated using official SDK; Docker real in full protocol tests",
+    "basis": "serialized SDK provider request bytes plus 4096 margin, not provider tokenizer",
+    "max_total_tokens_changed": false,
+    "usage_counters_reset": false,
+    "full_history_preserved": true,
+    "budget_diagnostics_in_acceptance_report": true,
+    "windows_live_validation": "not yet run",
+    "latest_windows_report": "requested; counts not yet received"
   }
 }

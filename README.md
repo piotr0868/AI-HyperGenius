@@ -277,3 +277,11 @@ i limiti dell'app o i budget di token/tempo. Il rapporto include i limiti effett
 e le categorie sicure degli eventuali errori del provider. Un errore 400 di formato
 riconosciuto può essere rigenerato una volta per progetto entro questi limiti;
 gli altri rifiuti fermano il lavoro. Una prova interrotta non certifica l'agente.
+
+La riserva dei token usa i byte della richiesta costruita per il fornitore, con
+un margine prudente; non è un tokenizer ufficiale. La cronologia originale resta
+in memoria e il consumo riportato viene sempre sommato alla riserva. Un limite
+raggiunto ferma l'agente prima dell'API: leggere `last_token_budget` nel rapporto
+prima di decidere se cambiare un limite. L'app non aumenta il budget da sola.
+Per comandi Windows lunghi: Windows+R → `cmd` → Invio, poi incollare il comando
+nel Prompt; non incollare l'intero comando lungo nella finestra Esegui.
