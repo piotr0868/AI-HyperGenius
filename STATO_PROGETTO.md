@@ -3,6 +3,20 @@
 Aggiornato il 12 ottobre 2026. Il nuovo obiettivo è usare il piano gratuito Groq,
 con quote operative, senza passaggio automatico a servizi a pagamento.
 
+### Aggiornamento Windows del 13 ottobre 2026
+
+Il log dell'utente conferma Python Install Manager e Python 3.12.10 installati,
+con firma dell'indice ufficiale verificata. Il registro contiene un runtime
+PythonCore\\3.12 preesistente che impedisce la registrazione del nuovo runtime;
+il launcher tradizionale usato dall'installer iniziale non lo rilevava.
+installa.bat ora preferisce pymanager exec -V:3.12 e distingue il mancato avvio
+di Python dagli errori di installazione delle dipendenze. Non modifica il registro
+o elimina installazioni esistenti. Questa modifica è revisionata sul codice;
+l'esecuzione dell'installer corretto e dell'app sul PC Windows resta da confermare.
+Per la copia già scaricata: creare .venv con il manager nella cartella del progetto,
+poi riaprire installa.bat. Le precedenti 44 verifiche Linux riguardano il codice
+dell'app, rimasto invariato; non convalidano questo script Windows.
+
 ## Architettura e cambiamenti
 
 FastAPI, SQLite/FTS5, interfaccia italiana HTML/CSS/JavaScript e Docker per eseguire

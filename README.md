@@ -29,12 +29,20 @@ Credenziali, memoria locale e dipendenze installate sono escluse dal repository.
 Procedi un passo alla volta. Estrai il pacchetto in una cartella del tuo profilo
 personale, per esempio `Documenti\Officina`.
 
-1. Installa **Python 3.12, 64 bit** da <https://www.python.org/downloads/windows/>.
-   Mantieni il launcher `py` selezionato durante l’installazione.
+1. Installa **Python Install Manager** ufficiale da
+   <https://apps.microsoft.com/detail/9NQ7512CXL7T> e il runtime **Python 3.12**.
+   Dal Prompt dei comandi: `pymanager install 3.12`.
 2. Apri **installa.bat**. Installa le dipendenze bloccate con verifica degli hash.
 3. Apri **avvia.bat**. Il browser si apre automaticamente e puoi vedere interfaccia,
    documenti e progetti salvati. La chiusura del browser non ferma l’app: usa Ctrl+C
    nella finestra di avvio per chiuderla.
+
+L'installer preferisce `pymanager exec -V:3.12` per evitare conflitti con vecchi
+launcher o registrazioni Python preesistenti. Mantiene il launcher tradizionale
+come alternativa se il manager manca. Non elimina runtime o voci del registro.
+Se usi una copia precedente di Officina, dalla cartella che contiene `installa.bat`
+puoi creare l'ambiente con `pymanager exec -V:3.12 -m venv .venv`, poi riaprire
+`installa.bat`: le dipendenze vengono installate con gli hash del lockfile.
 
 Per attivare il lavoro autonomo dell’agente:
 
