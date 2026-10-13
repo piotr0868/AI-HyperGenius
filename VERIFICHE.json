@@ -99,44 +99,28 @@
       "update": "winget reports installation successful; package Docker.DockerDesktop 4.95.0, installer hash verified"
     },
     "not_verified": [
-      "actual state and correctness of files generated after previous failed check",
-      "payload-based token reservation on Windows",
-      "automatic saved-file check on Windows",
+      "latest last_token_budget and failing backend check result",
+      "correctness of generated files",
       "specific cause of original HTTP 400",
       "complete AI generation and repair",
       "Officina browser workflow beyond page opening"
     ],
     "latest_attempt": {
       "date": "2026-10-13",
-      "source": "User-pasted Windows updater and acceptance log after commit 75f1467",
-      "initial_command": "incomplete .venv\\Scri command failed; full command pasted into CMD then ran",
-      "source_update": "checksum verification and backup reported successful",
-      "groq_api_and_model_available": "openai/gpt-oss-20b",
+      "source": "User-pasted Windows updater log for commit c6ba62e",
+      "targeted_stop": "Officina stopped, files/key/progress retained according to log",
+      "source_update": "checksums verified and prior version retained",
+      "api_and_model_available": "groq, openai/gpt-oss-20b",
       "reference_backend": "passed",
       "deliberate_fault": "detected",
       "deterministic_restore": "passed",
-      "generation_resume": "same saved files, history and counters; 8 model calls used at start",
-      "explicit_total_call_limit": 20,
+      "call_limit": 20,
+      "calls_used_at_resume": 14,
+      "saved_file_precheck": "failed; exact failing test result not yet supplied",
       "ai_acceptance": "not completed",
-      "failure_reason": "local token budget preflight refused another request; reported usage 69159 below 120000, reservation consumed remaining headroom",
-      "generation_and_repair_stage": "generation incomplete; separate repair not run",
-      "server_pid_reported": 23792,
-      "officina_browser": "opening reported by launcher",
-      "generation_observations": {
-        "project_id": "4e61bd1e66894d04bb1993000a90a634",
-        "model_calls": 14,
-        "tool_calls": 12,
-        "input_tokens": 60306,
-        "output_tokens": 8853,
-        "used_tokens": 69159,
-        "remaining_before_reservation": 50841,
-        "elapsed_seconds": 646.0,
-        "failed_checks": 1,
-        "docs_consulted": 1,
-        "verified_hash": null,
-        "last_check": "failed before unittest execution: Start directory is not importable: tests",
-        "new_provider_events": []
-      }
+      "failure_reason": "token preflight blocked next call after short resumed attempt; current usage and reserve not yet supplied",
+      "separate_ai_repair": "not run",
+      "server_pid_reported": 11016
     },
     "attempt_history": [
       {
@@ -164,6 +148,38 @@
           "docs_consulted": 0,
           "verified_hash": null,
           "last_check": "failed before unittest execution: Start directory is not importable: tests"
+        }
+      },
+      {
+        "date": "2026-10-13",
+        "source": "User-pasted Windows updater and acceptance log after commit 75f1467",
+        "initial_command": "incomplete .venv\\Scri command failed; full command pasted into CMD then ran",
+        "source_update": "checksum verification and backup reported successful",
+        "groq_api_and_model_available": "openai/gpt-oss-20b",
+        "reference_backend": "passed",
+        "deliberate_fault": "detected",
+        "deterministic_restore": "passed",
+        "generation_resume": "same saved files, history and counters; 8 model calls used at start",
+        "explicit_total_call_limit": 20,
+        "ai_acceptance": "not completed",
+        "failure_reason": "local token budget preflight refused another request; reported usage 69159 below 120000, reservation consumed remaining headroom",
+        "generation_and_repair_stage": "generation incomplete; separate repair not run",
+        "server_pid_reported": 23792,
+        "officina_browser": "opening reported by launcher",
+        "generation_observations": {
+          "project_id": "4e61bd1e66894d04bb1993000a90a634",
+          "model_calls": 14,
+          "tool_calls": 12,
+          "input_tokens": 60306,
+          "output_tokens": 8853,
+          "used_tokens": 69159,
+          "remaining_before_reservation": 50841,
+          "elapsed_seconds": 646.0,
+          "failed_checks": 1,
+          "docs_consulted": 1,
+          "verified_hash": null,
+          "last_check": "failed before unittest execution: Start directory is not importable: tests",
+          "new_provider_events": []
         }
       }
     ]
@@ -279,7 +295,7 @@
     "usage_counters_reset": false,
     "full_history_preserved": true,
     "budget_diagnostics_in_acceptance_report": true,
-    "windows_live_validation": "not yet run",
+    "windows_live_validation": "applied according to user log; current preflight still blocks, current reserve and usage need reading",
     "latest_windows_report": "received: 69159 reported tokens used out of 120000, 14 calls, 50841 remaining before reservation"
   },
   "resume_precheck": {
@@ -292,6 +308,6 @@
     "zero_or_failed_tests": "not ready; failure supplied to agent as untrusted data",
     "existing_usage_preserved": true,
     "time_counted": true,
-    "windows_execution": "pending"
+    "windows_execution": "ran and rejected saved files according to user log; exact failure pending updated report"
   }
 }

@@ -197,6 +197,18 @@ nuova generazione IA. Il prossimo comando aggiorna i sorgenti, arresta soltanto
 Officina dopo aver ricontrollato il PID 23792, conserva 14 richieste e 69159 token,
 e mantiene 20 richieste totali/120000 token. Nessuna nuova chiave richiesta.
 
+### Quarta prova Windows: verifica file fallita e nuovo stop token
+
+Il log dopo c6ba62e conferma arresto mirato dell'istanza precedente, sorgenti
+aggiornati con checksum, SDK/modello disponibili e riferimento/difetto/ripristino
+verificati. La generazione riprende da 14 chiamate su 20. Il nuovo controllo in
+Docker dei file salvati NON PASSA: nessuna certificazione automatica o Pronto.
+La ripresa IA termina poi sul controllo token basato sul payload. Consumo, riserva
+e ultimo errore dei file sono nel nuovo RESULTS.json, ancora da ricevere.
+Non attribuire questo stop allo stesso errore di calcolo già corretto senza leggere
+i numeri. Non aumentare limiti o azzerare contatori alla cieca. Server corrente
+PID 11016. Nessuna reinstallazione o nuova chiave necessarie per leggere il rapporto.
+
 ## Architettura e cambiamenti
 
 FastAPI, SQLite/FTS5, interfaccia italiana HTML/CSS/JavaScript e Docker per eseguire
