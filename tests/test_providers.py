@@ -1,5 +1,6 @@
 import pytest
 from app.providers import chat_messages
+from app.providers import groq_messages
 from app.config import load_settings, Settings
 
 
@@ -33,7 +34,7 @@ def test_default_groq_does_not_reuse_openai_credentials(isolated_config):
     isolated_config.setenv('AI_MODEL', 'gpt-5-mini')
     settings = load_settings()
     assert settings.provider == 'groq' and settings.api_key == ''
-    assert settings.model == 'openai/gpt-oss-20b' and settings.min_interval == 6
+    assert settings.model == 'openai/gpt-oss-20b' and settings.min_interval == 60
     assert settings.credential_var == 'GROQ_API_KEY'
 
 
@@ -51,3 +52,38 @@ def test_unknown_provider_rejected(isolated_config):
     isolated_config.setenv('AI_PROVIDER', 'unknown')
     with pytest.raises(ValueError, match='AI_PROVIDER'):
         load_settings()
+
+
+def test_groq_context_slimming_preserves_history_failures_and_document_sources():
+    import copy
+    import json
+    source = 'print("actual_saved_code")\n' * 400
+    history = [
+        {'role': 'user', 'content': 'Backend attività'},
+        {'type': 'function_call', 'call_id': 'saved', 'name': 'write_file',
+         'arguments': json.dumps({'path': 'main.py', 'content': source})},
+        {'type': 'function_call_output', 'call_id': 'saved', 'output': '{"path":"main.py","previous_version":1}'},
+        {'type': 'function_call', 'call_id': 'failed', 'name': 'write_file',
+         'arguments': json.dumps({'path': 'bad.py', 'content': 'must_remain_for_retry'})},
+        {'type': 'function_call_output', 'call_id': 'failed', 'output': '{"error":"not saved"}'},
+        {'type': 'function_call', 'call_id': 'docs', 'name': 'fetch_documentation', 'arguments': '{}'},
+        {'type': 'function_call_output', 'call_id': 'docs', 'output': json.dumps({
+            'source': 'https://docs.python.org/3.12/library/sqlite3.html', 'source_date': '2026-10-13',
+            'content': 'documentation' * 1000, 'trust': 'untrusted data'})},
+        {'type': 'function_call', 'call_id': 'checks', 'name': 'run_checks', 'arguments': '{}'},
+        {'type': 'function_call_output', 'call_id': 'checks', 'output': json.dumps({
+            'passed': False, 'check': {'unit_failures': 2}, 'stderr': 'trace' * 1000 + ' ROOT_CAUSE'})}]
+    original = copy.deepcopy(history)
+    messages = groq_messages(history, 'Rules remain mandatory')
+    assert history == original
+    assert messages[0]['content'] == 'Rules remain mandatory'
+    calls = {c['id']: c['function'] for m in messages for c in m.get('tool_calls', [])}
+    assert source not in calls['saved']['arguments']
+    assert 'must_remain_for_retry' in calls['failed']['arguments']
+    outputs = {m['tool_call_id']: json.loads(m['content']) for m in messages if m['role'] == 'tool'}
+    assert outputs['docs']['source'] == 'https://docs.python.org/3.12/library/sqlite3.html'
+    assert outputs['docs']['source_date'] == '2026-10-13' and outputs['docs']['trust'] == 'untrusted data'
+    assert len(outputs['docs']['content']) == 2000 and outputs['docs']['request_excerpt_limited']
+    assert outputs['checks']['passed'] is False and outputs['checks']['check']['unit_failures'] == 2
+    assert outputs['checks']['stderr'].endswith('ROOT_CAUSE')
+    assert len(json.dumps(messages)) < len(json.dumps(chat_messages(history, 'Rules remain mandatory'))) / 2

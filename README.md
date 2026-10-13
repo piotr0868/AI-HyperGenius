@@ -41,7 +41,10 @@ sotto usa invece il file `.env` del progetto.
 Windows può richiedere intervento per Docker, WSL 2, condizioni del fornitore o
 autorizzazioni di sistema. Questi requisiti non vengono aggirati; se Docker Linux
 non è pronto, il codice generato non viene eseguito. La casella grafica e
-l'installazione Windows automatica restano da verificare su Windows.
+l'installazione Windows automatica restano da verificare su Windows. Il log
+dell'utente conferma invece casella grafica, chiave salvata, accesso Groq, Docker
+Linux, immagine a digest e prova senza IA riusciti sul suo PC. La generazione con
+il modello è stata tentata e si è fermata con HTTP 429: **NON COMPLETATA**.
 
 I risultati effettivi sono in `.data/setup/RESULTS.json` e
 `.data/live-acceptance/RESULTS.json`. La prova IA usa i limiti configurati e può
@@ -86,8 +89,9 @@ Per attivare il lavoro autonomo dell’agente:
    progetto senza credenziale, selezionalo e premi **Riprendi**.
 
 Il log condiviso dall'utente conferma su Windows Python 3.12.10, creazione di `.venv`
-e installazione delle dipendenze con `installa.bat`. API, casella grafica, Docker,
-prova agente e applicazione su Windows **restano da verificare**.
+e installazione delle dipendenze con `installa.bat`, poi salvataggio della chiave,
+accesso/modello Groq, Docker e prove senza IA. Il server dell'applicazione è partito.
+La prova agente è **non completata per quota**; la correzione con IA non è stata eseguita.
 Le verifiche automatiche registrate nella consegna sono state eseguite su Linux.
 
 ## Cosa puoi provare subito senza chiave
@@ -118,6 +122,18 @@ un **secondo progetto**, copia il risultato e introduce un difetto in
 ripeta le prove e conservi il progetto originale. I risultati vengono salvati in
 `.data/live-acceptance/RESULTS.json`. L’assenza della chiave produce exit code 2,
 **NON ESEGUITA**, senza simulazioni o addebiti API. Un risultato fallito produce exit code 1.
+Una nuova esecuzione riprende i progetti e i contatori precedenti; non reintroduce
+un difetto già corretto. `RUN.json` registra gli identificativi anche prima delle
+chiamate al modello. Gli esiti precedenti restano in `runs/`. I progetti già pronti
+vengono ricontrollati in Docker. Per una prova separata esplicita: `--nuova-prova`.
+
+Per aggiornare una copia precedente dopo un errore di quota, il helper
+`scripts/aggiorna_quota.py REVISIONE_GITHUB` scarica soltanto quattro sorgenti
+predefiniti, verifica SHA-256 e sintassi prima di modificarli, conserva copie in
+`.data/updates/`, applica il profilo Groq e riprende la prova. Non sostituisce `.data`
+o credenziali. `--aggiorna-docker` tenta l'aggiornamento ufficiale con winget e
+interrompe l'avvio IA se il gestore non lo completa. Nessuna verifica TLS/firma/checksum
+o autorizzazione Windows viene aggirata.
 
 ## Controllo della chiave e compatibilità
 
@@ -180,8 +196,19 @@ nel README ufficiale dell’SDK Groq 1.7.0 consultato il 12 ottobre 2026. Il pre
 le richieste vanno soltanto a `api.groq.com`, senza richiedere un account OpenAI.
 Disponibilità del modello, quota e piano Free vanno verificati sul tuo account.
 `GROQ_MODEL` seleziona il modello; `AI_MIN_INTERVAL_SECONDS` imposta una pausa tra
-richieste, 6 secondi per impostazione predefinita. Un errore HTTP 429 ferma il lavoro
-e mostra quando riprovare se il provider comunica il tempo di attesa.
+richieste, **60 secondi** per il profilo Groq. Le copie precedenti con valore 6
+devono essere aggiornate esplicitamente. Il profilo riduce `MAX_OUTPUT_TOKENS` a
+3000 preservando limiti inferiori scelti dall'utente. Per GPT-OSS usa il livello
+`reasoning_effort=low`, supportato dall'SDK ufficiale 1.7.0. Le scritture riuscite
+non ripetono tutto il codice nelle richieste successive; gli estratti di documenti
+e log sono ridotti, con fonti/date ed errori conservati. La memoria originale resta intatta.
+
+Con HTTP 429 e `Retry-After` fino a 120 secondi, l'agente può aspettare e riprendere
+automaticamente, al massimo `MAX_RATE_LIMIT_RETRIES=2` volte per progetto. Ogni
+richiesta conta comunque in `MAX_MODEL_CALLS`; attese e tentativi restano persistenti
+e non si azzerano con Riprendi. Quota lunga, attesa non comunicata o budget esaurito
+producono **Serve il tuo intervento**. I limiti effettivi del tuo account possono
+ancora impedire la prova; il profilo non li aumenta.
 
 Il registro conserva token effettivi quando il provider li restituisce. Il costo è
 una **stima** soltanto se imposti entrambi i prezzi per milione di token. Il limite

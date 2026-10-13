@@ -7,7 +7,7 @@ restano quelle del 12 ottobre; il nuovo avvio e la suite sono stati verificati i
 
 | Prova | Esito effettivo |
 | --- | --- |
-| Suite applicazione pytest | **56 passati**, 0 falliti, 0 errori, 0 skipped |
+| Suite applicazione pytest | **65 passati**, 0 falliti, 0 errori, 0 skipped |
 | Nuovo avvio automatico | **12 controlli passati su Linux**, API simulate: protezione chiave, posizione fuori dal progetto, annullamento, blocco su errori, tentativi limitati, prove perse/modificate invalidate |
 | Avvio automatico → applicazione e API locali | **Passato su Linux** dopo annullamento chiave, nessuna chiamata IA; interfaccia italiana e risposta salute effettive |
 | Backend di riferimento in Docker | **8 test passati**, 0 falliti, 0 skipped |
@@ -25,14 +25,18 @@ restano quelle del 12 ottobre; il nuovo avvio e la suite sono stati verificati i
 | Installazione uv bloccata | **Passata e ripetibile** tramite `scripts/install_cloud.sh` |
 | Installazione pip separata con `--require-hashes` | **Passata su Linux**, dipendenze Groq incluse; import SDK verificati |
 | Sintassi Python e JavaScript | **Passata**; verifiche supplementari, non sostituiscono le prove funzionali |
-| Generazione e correzione con Groq reale | **NON ESEGUITA**, exit code 2: manca `GROQ_API_KEY`; zero chiamate live |
+| Generazione e correzione con Groq reale nel cloud | **NON ESEGUITA**, exit code 2: manca `GROQ_API_KEY`; zero chiamate live dal cloud |
+| SDK/modello e prova agente sul PC Windows | **Log dell'utente**: accesso al modello riuscito; generazione tentata e **NON COMPLETATA**, HTTP 429, Retry-After 48 secondi; correzione IA separata non eseguita |
+| Correzione quota e ripresa | **Controlli locali passati**: testo ridotto senza perdere memoria, attesa breve limitata e persistente, nessun nuovo difetto dopo ripresa, progetti pronti ricontrollati in Docker; applicazione della correzione sul PC ancora da verificare |
+| Aggiornamento con checksum e copie precedenti | **Passato offline**: rifiuto checksum errato prima di modifiche, chiave conservata, sorgenti precedenti archiviati, app attiva impedisce l'aggiornamento |
 | Prova di procedure con Groq reale | **NON ESEGUITA**, stessa credenziale mancante |
 | Quota Groq HTTP 429 | **Passato offline**: stop, indicazione Retry-After, nessuna chiamata a OpenAI |
 | Credenziali separate e cronologia preesistente | **Passato**: la chiave OpenAI non viene usata per Groq; chiamate e risultati preservati |
 | Configurazione locale della chiave | **Passata su Linux con chiave fittizia**: input non stampato, chiave precedente preservata, permessi 0600 |
-| Accesso/modello e piano Free Groq | **NON VERIFICATI**: manca la chiave; quote da controllare nella console dell’account |
+| Accesso/modello e piano Free Groq | **Accesso/modello confermati dal log Windows**. Piano Free e fatturazione non rilevabili dal controllo: quote da consultare nell'account |
 | Windows: Python e dipendenze | **Confermati dal log dell'utente**: Python 3.12.10, venv e installazione completata; non eseguiti dall'assistente |
-| Windows: casella grafica, Docker Desktop, API e applicazione | **NON VERIFICATI**: predisposti, da provare sul PC Windows |
+| Windows: casella grafica, salvataggio chiave, Docker Linux, API e server | **Confermati dal log dell'utente**, inclusa prova senza IA e avvio server; interfaccia Officina nel browser non ancora confermata |
+| Aggiornamento Docker Desktop sul PC | **PENDENTE**: screenshot con avviso di versione non supportata; installazione/aggiornamento winget non eseguiti dall'assistente |
 | Nuovo task cloud e pubblicazione | **NON VERIFICATI**: bozza salvata, pubblicazione a cura dell’utente |
 
 Le risposte simulate compaiono soltanto nei test del protocollo. L’applicazione usa

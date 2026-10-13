@@ -18,6 +18,7 @@ class Settings:
     max_model_calls: int = 12
     max_tool_calls: int = 40
     max_corrections: int = 3
+    max_quota_retries: int = 0
     max_output_tokens: int = 4000
     max_total_tokens: int = 120000
     command_timeout: int = 35
@@ -57,11 +58,12 @@ def load_settings() -> Settings:
         api_key=os.getenv('GROQ_API_KEY' if provider == 'groq' else 'AI_PROVIDER_KEY', ''),
         provider=provider,
         model=os.getenv('GROQ_MODEL', 'openai/gpt-oss-20b') if provider == 'groq' else os.getenv('AI_MODEL', 'gpt-5-mini'),
-        min_interval=number('AI_MIN_INTERVAL_SECONDS', 6 if provider == 'groq' else 0, 0, 60),
+        min_interval=number('AI_MIN_INTERVAL_SECONDS', 60 if provider == 'groq' else 0, 0, 60),
         port=number("APP_PORT", 8765, 1024, 65535),
         max_model_calls=number("MAX_MODEL_CALLS", 12, 1, 40),
         max_tool_calls=number("MAX_TOOL_CALLS", 40, 1, 100),
         max_corrections=number("MAX_CORRECTIONS", 3, 0, 5),
+        max_quota_retries=number("MAX_RATE_LIMIT_RETRIES", 2 if provider == 'groq' else 0, 0, 2),
         max_output_tokens=number("MAX_OUTPUT_TOKENS", 4000, 500, 12000),
         max_total_tokens=number("MAX_TOTAL_TOKENS", 120000, 1000, 500000),
         command_timeout=number("COMMAND_TIMEOUT_SECONDS", 35, 5, 90),

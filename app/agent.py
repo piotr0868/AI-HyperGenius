@@ -236,12 +236,29 @@ class Agent:
                     raise NeedsIntervention('Limite di correzioni raggiunto. Consulta gli errori nelle verifiche.')
                 preflight(self.settings, p, history)
                 if p['model_calls'] and self.settings.min_interval:
+                    if self.settings.min_interval >= self.settings.task_timeout - before - (time.monotonic() - started):
+                        raise NeedsIntervention('Tempo operativo insufficiente per un’altra chiamata. File e memoria conservati.')
                     await asyncio.sleep(self.settings.min_interval)
                     started += await self.checkpoint(pid)
                 self.store.update(pid, model_calls=p['model_calls'] + 1)
                 remaining = self.settings.task_timeout - before - (time.monotonic() - started)
-                async with asyncio.timeout(max(.1, remaining)):
-                    response = await generate(self.settings, self.client, history, INSTRUCTIONS, tools=TOOLS)
+                try:
+                    async with asyncio.timeout(max(.1, remaining)):
+                        response = await generate(self.settings, self.client, history, INSTRUCTIONS, tools=TOOLS)
+                except ProviderError as exc:
+                    retries = self.store.rows("SELECT COUNT(*) AS n FROM events WHERE project_id=? AND kind='attesa_quota'", (pid,))[0]['n']
+                    delay = exc.retry_after
+                    if (exc.status == 429 and delay is not None and 0 <= delay <= 120
+                            and retries < self.settings.max_quota_retries
+                            and delay + 1 < self.settings.task_timeout - before - (time.monotonic() - started)):
+                        self.store.event(pid, 'attesa_quota', {'seconds': delay + 1,
+                            'attempt': retries + 1, 'limits': exc.quota})
+                        self.store.update(pid, state='Preparazione',
+                            summary=f'Il servizio IA richiede una pausa. Attendo {delay + 1} secondi e riprendo automaticamente.',
+                            next_step='Attendere il rinnovo della quota; file e progressi sono conservati.')
+                        await asyncio.sleep(delay + 1)
+                        continue
+                    raise
                 if response.input_tokens is not None and response.output_tokens is not None:
                     cost = estimate(self.settings, response.input_tokens, response.output_tokens)
                     self.store.update(pid, input_tokens=p['input_tokens'] + response.input_tokens,
@@ -281,6 +298,9 @@ class Agent:
         except (NeedsIntervention, SandboxUnavailable) as exc:
             self.intervention(pid, str(exc))
         except ProviderError as exc:
+            if exc.status == 429:
+                self.store.event(pid, 'quota_api', {'provider': self.settings.provider,
+                    'retry_after_seconds': exc.retry_after, 'limits': exc.quota})
             detail = {401: 'Chiave API non accettata. Controlla la configurazione locale.',
                       403: 'Accesso API negato. Controlla permessi e regole di rete.',
                       404: 'Modello non disponibile. Controlla GROQ_MODEL o AI_MODEL per il fornitore scelto.',

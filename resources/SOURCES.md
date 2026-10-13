@@ -23,3 +23,17 @@ con URL e data nel file `official_docs.json`; non sostituiscono aggiornamenti fu
 L’SDK e le altre dipendenze sono installati dal registro PyPI tramite i lockfile.
 Docker ha verificato le somme degli strati dell’immagine scaricata; l’esecuzione usa
 il digest fissato in `.env`, senza disabilitare TLS, firme o checksum.
+
+## Aggiornamento 13 ottobre 2026
+
+Consultata anche la documentazione contenuta nel SDK ufficiale `groq==1.7.0`,
+modulo `groq.resources.chat.completions.AsyncCompletions.create`: per
+`openai/gpt-oss-20b` e `openai/gpt-oss-120b`, reasoning_effort supporta low/medium/high,
+con medium predefinito. Sorgente ufficiale:
+https://github.com/groq/groq-python/blob/main/src/groq/resources/chat/completions.py
+Lettura installata da lockfile con hash; nessuna nuova dipendenza aggiunta.
+
+Consultati gli errori ufficiali di winget nel repository Microsoft:
+https://raw.githubusercontent.com/microsoft/winget-cli/master/src/AppInstallerSharedLib/Public/AppInstallerErrors.h
+Un esito "nessun aggiornamento applicabile" non viene dichiarato dal helper come
+aggiornamento effettuato; l'utente può usare il comando Update di Docker.

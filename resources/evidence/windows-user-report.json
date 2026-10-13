@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-13",
+  "platform": "Windows 11, build reported 10.0.26300.9550",
+  "source": "Logs pasted by the user and Docker Desktop screenshot; not run by the cloud assistant",
+  "verified_from_log": {
+    "python_312_and_dependencies": true,
+    "local_masked_key_dialog": true,
+    "key_saved_reported": true,
+    "groq_api_and_model_available": "openai/gpt-oss-20b",
+    "docker_linux_started": true,
+    "image_digest": "python@sha256:a6e34c598f2467ed0e9a8d349809fcd8b5c603269512df273a0bb1784edc11b1",
+    "reference_backend": "passed",
+    "deliberate_fault": "detected",
+    "deterministic_restore": "passed",
+    "assistant_server_startup": "reported successful"
+  },
+  "live_ai": {
+    "generation": "attempted, not completed",
+    "reason": "HTTP 429, retry after at least 48 seconds",
+    "exact_quota_type": "unknown",
+    "separate_ai_repair": "not run"
+  },
+  "docker_desktop": {
+    "engine_running": "visible in screenshot",
+    "unsupported_version_warning": "visible in screenshot",
+    "update": "pending"
+  },
+  "not_verified": ["quota correction on Windows", "Docker Desktop update", "complete AI generation and repair", "Officina browser workflow on Windows"]
+}

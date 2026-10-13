@@ -1,0 +1,14 @@
+{
+  "platform": "Linux",
+  "passed": true,
+  "checks": [
+    "startup with quota correction",
+    "health response",
+    "Italian page",
+    "60 second interval configured",
+    "missing credential explicitly reported",
+    "Docker sandbox available"
+  ],
+  "live_ai_verified": false,
+  "windows_verified_by_this_check": false
+}

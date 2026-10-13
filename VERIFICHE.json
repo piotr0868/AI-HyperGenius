@@ -6,9 +6,9 @@
     "errors": "0",
     "failures": "0",
     "skipped": "0",
-    "tests": "56",
-    "time": "21.080",
-    "timestamp": "2026-10-13T15:08:26.240899+00:00",
+    "tests": "65",
+    "time": "20.654",
+    "timestamp": "2026-10-13T16:29:37.205027+00:00",
     "hostname": "d679e40bb841"
   },
   "reference_unit_tests": 8,
@@ -68,24 +68,41 @@
     "provider": "groq",
     "status": "not_run",
     "exit_code": 2,
-    "reason": "GROQ_API_KEY absent"
+    "reason": "GROQ_API_KEY absent",
+    "scope": "cloud"
   },
   "windows": {
-    "status": "partially_user_reported",
-    "confirmed_from_user_log": [
-      "Python Install Manager",
-      "Python 3.12.10",
-      "venv created",
-      "dependencies installed",
-      "local key prompt reached"
-    ],
+    "date": "2026-10-13",
+    "platform": "Windows 11, build reported 10.0.26300.9550",
+    "source": "Logs pasted by the user and Docker Desktop screenshot; not run by the cloud assistant",
+    "verified_from_log": {
+      "python_312_and_dependencies": true,
+      "local_masked_key_dialog": true,
+      "key_saved_reported": true,
+      "groq_api_and_model_available": "openai/gpt-oss-20b",
+      "docker_linux_started": true,
+      "image_digest": "python@sha256:a6e34c598f2467ed0e9a8d349809fcd8b5c603269512df273a0bb1784edc11b1",
+      "reference_backend": "passed",
+      "deliberate_fault": "detected",
+      "deterministic_restore": "passed",
+      "assistant_server_startup": "reported successful"
+    },
+    "live_ai": {
+      "generation": "attempted, not completed",
+      "reason": "HTTP 429, retry after at least 48 seconds",
+      "exact_quota_type": "unknown",
+      "separate_ai_repair": "not run"
+    },
+    "docker_desktop": {
+      "engine_running": "visible in screenshot",
+      "unsupported_version_warning": "visible in screenshot",
+      "update": "pending"
+    },
     "not_verified": [
-      "API key saved",
-      "Groq authentication and model",
-      "Tkinter key dialog",
-      "Docker Desktop installation and WSL",
-      "generated backend and AI repair",
-      "browser application"
+      "quota correction on Windows",
+      "Docker Desktop update",
+      "complete AI generation and repair",
+      "Officina browser workflow on Windows"
     ]
   },
   "cloud": {
@@ -94,9 +111,9 @@
     "fresh_task_verified": false
   },
   "source_sha256": {
-    "app/agent.py": "50cc48f6b67c82101bcbbd933f9a878674d5ef3644095849e4a3f30d69580462",
-    "app/providers.py": "bd2e8c738f3e6035f3db36955a31c04deb1b575c8438219f4f16a66faf8accce",
-    "app/config.py": "60400df06eb837fe033109bc0ee454fcc43aede75b8efefe5e7077c1168e0404",
+    "app/agent.py": "745dee3757ea7109741c3ddfc50c91ce1c74c2c2f4e69631f167a4838136fac7",
+    "app/providers.py": "1c5906ebe1a07226fc0cb659b52a5658c3e20f61b42d9ffffe7d4a328a244980",
+    "app/config.py": "3331e58edffb6766931b5d7f3d34561187041bb8742e4212de1cc295f3034daf",
     "app/sandbox.py": "03740c23c4f71a5ce12526de415c8175322cf5346823ae436cfc8cdb8bbaf4b1",
     "app/acceptance_contract.py": "6f6d3dbc0de77adb9b368dcee638cf8ad31f43a1c47af0fbb1be02fae00d5c4c",
     "app/main.py": "03bd0b56df0b1005396df76403c6d00a53c50310a2c0f29b2436513533616d48",
@@ -104,7 +121,9 @@
     "uv.lock": "835d81d203c90b40bf836cbfddbea6ed45374cef0a2c4f939e91547213e10e1f",
     "requirements.lock": "9add5abb1e6d640f9ac118bdb54ef9b13b5159e511d610a4c42d16bdf793f967",
     "scripts/avvio_automatico.py": "2d7abdc98a7727361e6fad308a4dd9a2e4477b95e55cd221ec0d73dda234f7a0",
-    "tests/test_automatic_setup.py": "7da263ee57906f3a8737252b6c3e937c5dff83cd8e7ab596e4b8cfc155c2fed9"
+    "tests/test_automatic_setup.py": "7da263ee57906f3a8737252b6c3e937c5dff83cd8e7ab596e4b8cfc155c2fed9",
+    "scripts/prova_agente.py": "ce0dcafae6856e81215ae1b71f2d5b11a95c570a0729b4bf9484a60d7114836f",
+    "scripts/aggiorna_quota.py": "0f889265a100742a3ad0e9437ae5510f032529e3192773f53dea4043753c11cb"
   },
   "version": "0.2.0",
   "provider": "groq",
@@ -127,5 +146,26 @@
     "api": "simulated in tests",
     "windows_gui": "not_run"
   },
-  "prior_evidence_date": "2026-10-12"
+  "prior_evidence_date": "2026-10-12",
+  "quota_correction": {
+    "tests": 9,
+    "passed": true,
+    "api_transport": "simulated in tests",
+    "docker": "real in full SDK protocol checks",
+    "new_profile_on_windows": "not_run",
+    "startup": {
+      "platform": "Linux",
+      "passed": true,
+      "checks": [
+        "startup with quota correction",
+        "health response",
+        "Italian page",
+        "60 second interval configured",
+        "missing credential explicitly reported",
+        "Docker sandbox available"
+      ],
+      "live_ai_verified": false,
+      "windows_verified_by_this_check": false
+    }
+  }
 }

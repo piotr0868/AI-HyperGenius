@@ -21,8 +21,9 @@ dell'app, rimasto invariato; non convalidano questo script Windows.
 
 Un successivo log dell'utente conferma la creazione di .venv tramite pymanager,
 l'installazione delle dipendenze e "Installazione completata" sul PC Windows.
-Il prompt locale per la chiave Groq è stato raggiunto; non è arrivata conferma
-del salvataggio o dell'autenticazione. Nessuna chiave è stata fornita alla chat.
+Il prompt locale per la chiave Groq è stato raggiunto. Un successivo log conferma
+casella grafica, chiave salvata e autenticazione/modello riusciti. Nessuna chiave
+è stata fornita alla chat.
 
 L'utente ha chiesto di automatizzare tutti i passaggi successivi. Aggiunti
 scripts/avvio_automatico.py e avvio_automatico.bat: casella mascherata su Windows,
@@ -47,9 +48,40 @@ Avviato realmente anche il nuovo flusso dopo annullamento della chiave: richiest
 alla pagina italiana e all'API salute passate, credenziale assente dichiarata,
 Docker Linux disponibile rilevato. Nessuna chiamata IA. Esito in
 resources/evidence/automatic-start.json. Il servizio di prova è stato arrestato.
-La casella Windows, winget, Docker Desktop e l'accesso Groq reale restano da provare
-sul PC. I risultati in .data/setup/RESULTS.json appartengono alla macchina che li
+Casella Windows, salvataggio credenziale, SDK/modello Groq, Docker Linux e verifica
+senza IA sono confermati dal log del PC. Installazione/aggiornamento winget restano
+da provare. I risultati in .data/setup/RESULTS.json appartengono alla macchina che li
 ha eseguiti: non trasferire esiti Linux come se fossero verifiche Windows.
+
+### Quota Groq osservata sul PC Windows
+
+Il log dell'utente conferma immagine verificata al digest
+python@sha256:a6e34c598f2467ed0e9a8d349809fcd8b5c603269512df273a0bb1784edc11b1,
+backend di riferimento VERIFICATO, difetto RILEVATO e ripristino VERIFICATO.
+La generazione con IA è stata tentata ma interrotta da HTTP 429 con Retry-After
+48 secondi. Il tipo esatto di quota non era registrato: non attribuirlo con certezza
+a RPM/TPM o alla fatturazione. La correzione IA separata non è stata eseguita.
+Il server dell'app è partito; una screenshot mostra invece Docker con motore attivo
+e avviso di versione non supportata. L'aggiornamento Docker è quindi necessario.
+
+Correzione predisposta: intervallo Groq 60 secondi, output del profilo massimo
+3000 token, reasoning low per GPT-OSS secondo la documentazione del SDK installato,
+meno duplicati nella richiesta conservando tutta la memoria originale. Su attese
+429 brevi fino a 120 secondi sono possibili due riprese automatiche, conteggiate
+nel limite totale delle chiamate e persistenti via registro eventi; nessun reset
+dei budget e nessun cambio a servizi a pagamento.
+
+La prova di accettazione riprende i progetti già salvati, importa la documentazione
+ufficiale nello Store dedicato, conserva esiti precedenti, non reintroduce il
+difetto dopo correzione e ricontrolla in Docker i progetti già pronti. Il helper
+aggiorna_quota scarica quattro sorgenti da un commit esplicito, con checksum prima
+di ogni modifica e copie ripristinabili. Mantiene chiave e memoria; configura il
+profilo e può tentare l'aggiornamento Docker con winget prima di riprendere.
+La correzione deve ancora essere applicata e verificata sul PC Windows; non
+dichiarare completata la generazione finché non arrivano esiti effettivi positivi.
+Suite corrente: **65 verifiche passate su Linux**, zero fallimenti/skipped.
+I nuovi controlli coprono ripresa della vecchia prova senza reset, correzione
+già eseguita conservata, ricontrollo dei pronti, quota breve/lunga e copie con checksum.
 
 ## Architettura e cambiamenti
 
@@ -69,9 +101,10 @@ sono convertite in messaggi Chat Completions, mantenendo chiamate e risultati de
 tool. Le istruzioni restano prioritarie rispetto a documenti e output non fidati.
 Gli argomenti dei tool sono validati sull'host oltre ai vincoli del filesystem.
 
-Pausa predefinita di 6 secondi tra le chiamate Groq, contatori persistenti e retry SDK
-automatici disabilitati. HTTP 429 ferma il progetto e mostra Retry-After quando
-presente. Riprendi non azzera i budget. Le procedure su esempi usano il fornitore scelto.
+Pausa predefinita di 60 secondi tra le chiamate Groq, contatori persistenti e retry SDK
+automatici disabilitati. Le attese brevi 429 sono gestite dall'agente al massimo
+due volte; le altre fermano il progetto. Riprendi non azzera i budget. Le procedure
+su esempi usano il fornitore scelto.
 
 Restano: obiettivo, piano/criteri prima del codice, Avvia/Pausa/Riprendi/Ferma,
 chiarimenti, documenti con fonte/data, ricerca FTS5, procedure versionate e adottabili
@@ -83,7 +116,7 @@ Docker non ha rete, segreti, cartelle host o socket Docker; niente ripiego sull'
 
 Su Linux, Python 3.12.14, Docker 28.4.0 e Chromium di sistema:
 
-- **44 test passati**, 0 errori/fallimenti/skipped.
+- **65 test passati** nella suite corrente, 0 errori/fallimenti/skipped.
 - SDK ufficiali Groq e OpenAI con trasporto HTTP simulato e Docker reale: scrittura,
   difetto rilevato, correzione predisposta dal test e nuova verifica passata.
 - Quota Groq, credenziali separate, migrazione cronologie, argomenti non fidati,
@@ -101,16 +134,19 @@ Le risposte simulate esistono solo nei test: non convalidano capacità di un'IA 
 
 ## Requisiti esterni ancora mancanti
 
-`GROQ_API_KEY` assente. scripts/controlla_ia.py e scripts/prova_agente.py hanno
-restituito exit 2, NON ESEGUITI: zero chiamate live. Autenticazione, disponibilità
-per l'account del modello, generazione/correzione autonome e procedure con il modello
-reale restano da verificare. La creazione dell'account e della chiave spetta all'utente.
+Nel **cloud** `GROQ_API_KEY` è ancora assente: zero chiamate live da questo ambiente.
+Sul **PC Windows** la credenziale e il modello sono verificati dal log; la prova
+con IA è tentata e non completata per quota. Generazione/correzione complete e
+procedure con il modello reale restano da verificare. Non richiedere nuovamente
+una chiave locale già salvata; usare avvio_automatico che carica il file fuori OneDrive.
 
 Il piano Free e le quote non sono rilevabili affidabilmente dall'app. L'utente deve
 controllarli nella console Groq; non è garantito accesso illimitato o assenza di
 addebiti se l'account ha già fatturazione attiva. Nessun cambio automatico a OpenAI.
 
-Windows 11, Docker Desktop/WSL 2 e i .bat sono predisposti ma non eseguiti su Windows.
+Windows 11: setup, casella, SDK/modello, Docker, prova senza IA e avvio server
+confermati da log dell'utente. Nuova correzione della quota e aggiornamento Docker
+ancora da verificare. Le verifiche automatiche dell'assistente restano su Linux.
 Pubblicazione dell'ambiente e ripristino in un nuovo task cloud non verificati.
 Questa versione supporta il contratto backend attività Python con libreria standard;
 altri backend e blockchain sono traguardi successivi. Nessuna gestione di denaro,

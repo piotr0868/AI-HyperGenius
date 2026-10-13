@@ -1,5 +1,7 @@
 """SDK ufficiali e protocollo persistente comune: nessun provider simulato in produzione."""
 from dataclasses import dataclass
+import copy
+import json
 import groq
 import openai
 
@@ -14,9 +16,10 @@ class Reply:
 
 
 class ProviderError(RuntimeError):
-    def __init__(self, status=None, retry_after=None):
+    def __init__(self, status=None, retry_after=None, quota=None):
         self.status = status
         self.retry_after = retry_after
+        self.quota = quota or {}
         super().__init__('Errore del provider IA')
 
 
@@ -58,6 +61,61 @@ def chat_messages(history, instructions):
     return messages
 
 
+def groq_messages(history, instructions):
+    """Riduce duplicati solo nella richiesta; la memoria originale resta intatta."""
+    messages = copy.deepcopy(chat_messages(history, instructions))
+    completed = set()
+    for message in messages:
+        if message['role'] == 'tool':
+            try:
+                result = json.loads(message['content'])
+                if isinstance(result, dict) and 'previous_version' in result and 'path' in result and 'error' not in result:
+                    completed.add(message.get('tool_call_id'))
+            except (ValueError, TypeError):
+                pass
+    names = {}
+    for message in messages:
+        for call in message.get('tool_calls', []):
+            function = call['function']
+            names[call['id']] = function['name']
+            if function['name'] == 'write_file' and call['id'] in completed:
+                try:
+                    args = json.loads(function['arguments'])
+                    if isinstance(args, dict) and isinstance(args.get('content'), str):
+                        args['content'] = '[Contenuto della scrittura riuscita non ripetuto. Usa read_file per controllare il file corrente.]'
+                        function['arguments'] = json.dumps(args, ensure_ascii=False)
+                except (ValueError, TypeError):
+                    pass
+    for message in messages:
+        if message['role'] != 'tool':
+            continue
+        name = names.get(message.get('tool_call_id'))
+        try:
+            result = json.loads(message['content'])
+        except (ValueError, TypeError):
+            continue
+        if not isinstance(result, dict):
+            continue
+        changed = False
+        if name == 'fetch_documentation' and isinstance(result.get('content'), str):
+            changed = len(result['content']) > 2000
+            result['content'] = result['content'][:2000]
+        if name == 'search_knowledge':
+            for document in result.get('untrusted_references', []):
+                if isinstance(document, dict) and isinstance(document.get('content'), str):
+                    changed = changed or len(document['content']) > 1200
+                    document['content'] = document['content'][:1200]
+        if name == 'run_checks':
+            for key in ('stdout', 'stderr'):
+                if isinstance(result.get(key), str) and len(result[key]) > 1800:
+                    result[key] = result[key][-1800:]
+                    changed = True
+        if changed:
+            result['request_excerpt_limited'] = True
+            message['content'] = json.dumps(result, ensure_ascii=False)
+    return messages
+
+
 async def generate(settings, client, history, instructions, tools=None, max_output=None):
     maximum = max_output or settings.max_output_tokens
     try:
@@ -74,8 +132,10 @@ async def generate(settings, client, history, instructions, tools=None, max_outp
                          response.usage.output_tokens if response.usage else None)
         if settings.provider != 'groq':
             raise ValueError('Provider non supportato')
-        kwargs = dict(model=settings.model, messages=chat_messages(history, instructions),
+        kwargs = dict(model=settings.model, messages=groq_messages(history, instructions),
                       max_completion_tokens=maximum)
+        if settings.model in ('openai/gpt-oss-20b', 'openai/gpt-oss-120b'):
+            kwargs['reasoning_effort'] = 'low'
         if tools:
             kwargs.update(tools=[{'type': 'function', 'function': {k: t[k] for k in ('name', 'description', 'parameters')}} for t in tools],
                           parallel_tool_calls=False, tool_choice='auto')
@@ -96,6 +156,14 @@ async def generate(settings, client, history, instructions, tools=None, max_outp
     except (groq.APIStatusError, openai.APIStatusError) as exc:
         raw = exc.response.headers.get('retry-after', '')
         retry = int(raw) if raw.isdigit() and int(raw) <= 86400 else None
-        raise ProviderError(exc.status_code, retry) from None
+        quota = {}
+        if exc.status_code == 429:
+            import re
+            for key in ('limit-requests', 'remaining-requests', 'reset-requests',
+                        'limit-tokens', 'remaining-tokens', 'reset-tokens'):
+                value = exc.response.headers.get('x-ratelimit-' + key, '')
+                if re.fullmatch(r'[0-9.dhms]{1,48}', value):
+                    quota[key] = value
+        raise ProviderError(exc.status_code, retry, quota) from None
     except (groq.APIConnectionError, openai.APIConnectionError):
         raise ProviderError() from None

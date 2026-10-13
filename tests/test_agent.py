@@ -189,6 +189,66 @@ async def test_groq_rate_limit_stops_without_paid_fallback(tmp_path):
     store.close()
 
 
+async def test_short_quota_wait_is_bounded_and_persists_across_resume(tmp_path, monkeypatch):
+    from groq import AsyncGroq
+    import app.agent as module
+    requests, sleeps = [], []
+
+    async def no_delay(seconds):
+        sleeps.append(seconds)
+
+    monkeypatch.setattr(module.asyncio, 'sleep', no_delay)
+
+    def respond(request):
+        requests.append(json.loads(request.content))
+        if len(requests) != 2:
+            return httpx.Response(429, headers={'Retry-After': '0', 'x-ratelimit-limit-tokens': '8000',
+                'x-ratelimit-secret': 'never-log-this'}, json={'error': {'message': 'Quota reached'}})
+        return httpx.Response(200, json={'id': 'chat_resume', 'object': 'chat.completion', 'created': 1,
+            'model': 'openai/gpt-oss-20b', 'choices': [{'index': 0, 'finish_reason': 'tool_calls',
+            'message': {'role': 'assistant', 'content': None, 'tool_calls': [{'id': 'ask', 'type': 'function',
+            'function': {'name': 'ask_user', 'arguments': '{"question":"Test concluso?"}'}}]}}],
+            'usage': {'prompt_tokens': 10, 'completion_tokens': 10, 'total_tokens': 20}})
+
+    client = AsyncGroq(api_key='offline-test-only', max_retries=0,
+        http_client=httpx.AsyncClient(transport=httpx.MockTransport(respond)))
+    store = Store(tmp_path)
+    agent = Agent(Settings(data_dir=tmp_path, max_quota_retries=1), store, OfflineSandbox(), client=client)
+    project = store.create_project('Test quota temporanea')
+    await agent.run(project['id'])
+    assert sleeps == [1] and store.project(project['id'])['model_calls'] == 2
+    assert requests[0]['reasoning_effort'] == 'low'
+    await agent.run(project['id'])
+    assert len(requests) == 3 and sleeps == [1]
+    assert store.project(project['id'])['state'] == 'Serve il tuo intervento'
+    waits = store.rows("SELECT detail FROM events WHERE project_id=? AND kind='attesa_quota'", (project['id'],))
+    assert len(waits) == 1
+    assert json.loads(waits[0]['detail'])['limits'] == {'limit-tokens': '8000'}
+    assert 'never-log-this' not in json.dumps(store.events(project['id']))
+    await agent.shutdown()
+    store.close()
+
+
+async def test_long_quota_wait_does_not_auto_retry(tmp_path):
+    from groq import AsyncGroq
+    requests = []
+
+    def respond(request):
+        requests.append(request)
+        return httpx.Response(429, headers={'Retry-After': '3600'}, json={'error': {'message': 'Quota'}})
+
+    client = AsyncGroq(api_key='offline-test-only', max_retries=0,
+        http_client=httpx.AsyncClient(transport=httpx.MockTransport(respond)))
+    store = Store(tmp_path)
+    agent = Agent(Settings(data_dir=tmp_path, max_quota_retries=2), store, OfflineSandbox(), client=client)
+    project = store.create_project('Test quota lunga')
+    await agent.run(project['id'])
+    assert len(requests) == 1 and store.project(project['id'])['state'] == 'Serve il tuo intervento'
+    assert not store.rows("SELECT id FROM events WHERE project_id=? AND kind='attesa_quota'", (project['id'],))
+    await agent.shutdown()
+    store.close()
+
+
 async def test_tool_arguments_are_validated_on_host(agent):
     p = agent.store.create_project('Test argomenti non fidati')
     for name, args in [('execute_python', {'argv': 'python -c evil'}),
