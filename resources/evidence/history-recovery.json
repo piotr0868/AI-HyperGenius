@@ -1,0 +1,20 @@
+{
+  "source": "Extracted from executed 104-test full suite; not a separate test run",
+  "platform": "Linux",
+  "passed": 10,
+  "failures": 0,
+  "api": "simulated with official SDK; reference code is test fixture",
+  "docker": "real in recovery acceptance test",
+  "tests": [
+    "test_recovery_only_replays_known_prerequisite_failure_for_missing_unversioned_main[existing]",
+    "test_recovery_only_replays_known_prerequisite_failure_for_missing_unversioned_main[deleted]",
+    "test_recovery_only_replays_known_prerequisite_failure_for_missing_unversioned_main[no_docs]",
+    "test_recovery_only_replays_known_prerequisite_failure_for_missing_unversioned_main[other_error]",
+    "test_recovery_only_replays_known_prerequisite_failure_for_missing_unversioned_main[unknown_result]",
+    "test_recovery_only_replays_known_prerequisite_failure_for_missing_unversioned_main[too_large]",
+    "test_recovery_only_replays_known_prerequisite_failure_for_missing_unversioned_main[correction_limit]",
+    "test_exact_prior_main_is_recovered_then_verified_in_real_docker_without_new_model_call",
+    "test_recovered_or_superseded_code_is_slimmed_but_newer_failed_changes_remain",
+    "test_unmatched_recovery_hash_does_not_suppress_unsaved_code"
+  ]
+}

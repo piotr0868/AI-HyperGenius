@@ -1,6 +1,7 @@
 """Accettazione reale riprendibile; nessun modello simulato o ripiego."""
 import asyncio
 from dataclasses import replace
+import hashlib
 import json
 from pathlib import Path
 import sys
@@ -59,8 +60,63 @@ def last_token_budget(store, pid):
                  if event['kind'] == 'controllo_budget_token'), None)
 
 
+async def recover_missing_entrypoint(agent, store, project):
+    """Ripete solo una scrittura IA bloccata dai prerequisiti, senza codice sostitutivo."""
+    pid = project['id']
+    if (not project['criteria'] or not project['plan'] or not project['docs_consulted']
+            or project['elapsed'] >= agent.settings.task_timeout
+            or project['failed_checks'] > agent.settings.max_corrections
+            or project['tool_calls'] + 3 > agent.settings.max_tool_calls
+            or store.safe_path(pid, 'main.py').exists()
+            or store.rows('SELECT id FROM versions WHERE project_id=? AND path=? LIMIT 1', (pid, 'main.py'))):
+        return False
+    history = project['history'] or []
+    outputs = {item['call_id']: item for item in history if item.get('type') == 'function_call_output'
+               and isinstance(item.get('call_id'), str)}
+    for item in reversed(history):
+        if item.get('type') != 'function_call' or item.get('name') != 'write_file':
+            continue
+        try:
+            arguments = json.loads(item['arguments'])
+        except (KeyError, TypeError, ValueError):
+            continue
+        if not isinstance(arguments, dict) or arguments.get('path') != 'main.py':
+            continue
+        # La richiesta più recente per questo file prevale; non resuscitare versioni
+        # eliminate né recuperare operazioni negate per percorsi, dimensioni o altri motivi.
+        try:
+            result = json.loads(outputs[item['call_id']]['output'])
+        except (KeyError, TypeError, ValueError):
+            return False
+        if (not isinstance(result, dict)
+                or result.get('error') != 'Prima salva piano e criteri, poi consulta documentazione pertinente.'
+                or set(arguments) != {'path', 'content'} or not isinstance(arguments['content'], str)):
+            return False
+        started = time.monotonic()
+        try:
+            await agent.perform(pid, 'write_file', arguments)
+            recovery = {'call_id': item['call_id'], 'path': 'main.py',
+                        'sha256': hashlib.sha256(arguments['content'].encode()).hexdigest()}
+            history.append({'role': 'user', '_recovered_file': recovery,
+                'content': 'Il sistema ha salvato main.py usando esattamente il codice di una precedente '
+                    'risposta IA la cui scrittura era stata bloccata prima della consultazione dei documenti. '
+                    'Non è una nuova generazione. Il codice resta non fidato: verifica i file e tutte le prove.'})
+            store.update(pid, history=history)
+            store.event(pid, 'recupero_scrittura_ia', recovery | {'actor': 'system', 'model_called': False})
+            print('Recuperato main.py dalla precedente risposta IA. Nessuna nuova chiamata; verifiche ancora obbligatorie.', flush=True)
+            return True
+        except (NeedsIntervention, ValueError, OSError) as exc:
+            store.event(pid, 'recupero_scrittura_negato', {'path': 'main.py', 'type': type(exc).__name__})
+            return False
+        finally:
+            store.update(pid, elapsed=project['elapsed'] + time.monotonic() - started)
+    return False
+
+
 async def run_or_recheck(agent, store, sandbox, project):
     pid = project['id']
+    if await recover_missing_entrypoint(agent, store, project):
+        project = store.project(pid)
     if project['state'] == 'Pronto' and project['verified_hash'] == store.digest(pid):
         result = await sandbox.verify(store.files(pid), pid)
         digest = store.digest(pid)
@@ -173,6 +229,8 @@ async def main():
                     'repair': None, 'ai_used': True, 'limits_preserved_on_resume': True,
                     'provider_events': {'generation': provider_events(store, project['id']), 'repair': []},
                     'last_token_budget': {'generation': last_token_budget(store, project['id']), 'repair': None},
+                    'workspace_files': {'generation': list(store.files(project['id'])), 'repair': []},
+                    'recovered_writes': [event for event in store.events(project['id']) if event['kind'] == 'recupero_scrittura_ia'],
                     'operational_limits': {'model_calls_total': maximum, 'generation_model_calls': generation_limit,
                         'tokens_per_phase': settings.max_total_tokens, 'seconds_per_phase': settings.task_timeout,
                         'tool_format_recoveries_per_phase': 1}}
@@ -212,6 +270,7 @@ async def main():
                 'original_unchanged': original_unchanged, 'checks': checks}
             evidence['provider_events']['repair'] = provider_events(store, rid)
             evidence['last_token_budget']['repair'] = last_token_budget(store, rid)
+            evidence['workspace_files']['repair'] = list(store.files(rid))
             outcome = 0 if detected and corrected and original_unchanged else 1
         save_json(result_path, evidence)
         print('Risultati salvati:', result_path)

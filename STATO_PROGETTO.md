@@ -209,6 +209,38 @@ Non attribuire questo stop allo stesso errore di calcolo già corretto senza leg
 i numeri. Non aumentare limiti o azzerare contatori alla cieca. Server corrente
 PID 11016. Nessuna reinstallazione o nuova chiave necessarie per leggere il rapporto.
 
+### Errore concreto letto: main.py mancante
+
+L'estratto nuovo del rapporto Windows mostra test_backend.py che importa main,
+ma il file /work/main.py manca. Il contratto esterno non riesce ad avviare il
+backend. Uso 78422 token; riserva input 40544 più output 3000: totale prudente
+121966 contro 120000, eccedenza 1966. Tempo già usato 711.188 secondi, documenti
+consultati 1. Numero corrente di chiamate non incluso nell'estratto: non inventarlo.
+
+Aggiunto un recupero limitato della scrittura IA: solo main.py assente, mai
+versionato, con piano/criteri/documenti presenti e limiti rispettati. Usa soltanto
+l'ultima richiesta write_file per main.py con argomenti validi, il cui risultato
+precedente era ESATTAMENTE il blocco sui prerequisiti. Non recupera negazioni di
+sicurezza/dimensioni, esiti ignoti o file eliminati; non sovrascrive file esistenti.
+Passa attraverso l'ordinario tool write_file e registra provenienza, hash e versione
+ripristinabile. Il codice è quello della risposta archiviata, non un backend di
+riferimento sostitutivo. L'originale risultato fallito resta nella cronologia.
+La verifica successiva rimane in Docker, con test e contratto obbligatori.
+
+La richiesta Groq non ripete corpi di scritture precedenti se una scrittura più
+recente o un recupero documentato ha salvato quel file. Hash e ordine sono controllati;
+le modifiche fallite più recenti restano nel contesto. OpenAI non riceve il campo
+interno di provenienza. Il budget rimane 120000 token/20 richieste complessive.
+Il rapporto ora include nomi dei file e scritture recuperate, senza contenuti o chiavi.
+
+**104 test passati su Linux**, zero fallimenti/errori/skipped. Dieci nuovi casi:
+recupero del riferimento dichiarato e 8 test/5 controlli in Docker reale senza nuova
+API, rollback disponibile, rifiuti di ripristini indebiti, memoria preservata e
+corpi superati omessi soltanto con provenienza verificata. Trasporto SDK simulato;
+non convalida nuove capacità del modello reale. Il recupero sul PC deve ancora
+essere tentato; se non esiste una richiesta archiviata idonea, non inventare main.py.
+PID Windows corrente 11016, da ricontrollare prima del prossimo aggiornamento.
+
 ## Architettura e cambiamenti
 
 FastAPI, SQLite/FTS5, interfaccia italiana HTML/CSS/JavaScript e Docker per eseguire
@@ -242,7 +274,7 @@ Docker non ha rete, segreti, cartelle host o socket Docker; niente ripiego sull'
 
 Su Linux, Python 3.12.14, Docker 28.4.0 e Chromium di sistema:
 
-- **94 test passati** nella suite corrente, 0 errori/fallimenti/skipped.
+- **104 test passati** nella suite corrente, 0 errori/fallimenti/skipped.
 - SDK ufficiali Groq e OpenAI con trasporto HTTP simulato e Docker reale: scrittura,
   difetto rilevato, correzione predisposta dal test e nuova verifica passata.
 - Quota Groq, credenziali separate, migrazione cronologie, argomenti non fidati,

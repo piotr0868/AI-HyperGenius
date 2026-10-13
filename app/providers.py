@@ -1,6 +1,7 @@
 """SDK ufficiali e protocollo persistente comune: nessun provider simulato in produzione."""
 from dataclasses import dataclass
 import copy
+import hashlib
 import json
 import groq
 import openai
@@ -107,15 +108,41 @@ def groq_messages(history, instructions):
             except (ValueError, TypeError):
                 pass
     names = {}
+    saved_after = {}
+    call_positions = {item['call_id']: index for index, item in enumerate(history)
+                      if item.get('type') == 'function_call' and isinstance(item.get('call_id'), str)}
+    recovered = {item['_recovered_file']['call_id']: (index, item['_recovered_file'])
+                 for index, item in enumerate(history) if isinstance(item.get('_recovered_file'), dict)
+                 and isinstance(item['_recovered_file'].get('call_id'), str)}
+    for message in messages:
+        for call in message.get('tool_calls', []):
+            if call['function']['name'] != 'write_file':
+                continue
+            try:
+                args = json.loads(call['function']['arguments'])
+                if not isinstance(args, dict) or not isinstance(args.get('path'), str) or not isinstance(args.get('content'), str):
+                    continue
+                position = call_positions.get(call['id'], -1)
+                if call['id'] in completed:
+                    saved_after[args['path']] = max(position, saved_after.get(args['path'], -1))
+                if call['id'] in recovered:
+                    index, marker = recovered[call['id']]
+                    if (marker.get('path') == args['path'] and index > position
+                            and marker.get('sha256') == hashlib.sha256(args['content'].encode()).hexdigest()):
+                        saved_after[args['path']] = max(index, saved_after.get(args['path'], -1))
+            except (TypeError, ValueError):
+                continue
     for message in messages:
         for call in message.get('tool_calls', []):
             function = call['function']
             names[call['id']] = function['name']
-            if function['name'] == 'write_file' and call['id'] in completed:
+            if function['name'] == 'write_file':
                 try:
                     args = json.loads(function['arguments'])
-                    if isinstance(args, dict) and isinstance(args.get('content'), str):
-                        args['content'] = '[Contenuto della scrittura riuscita non ripetuto. Usa read_file per controllare il file corrente.]'
+                    if (isinstance(args, dict) and isinstance(args.get('content'), str)
+                            and isinstance(args.get('path'), str)
+                            and saved_after.get(args['path'], -1) >= call_positions.get(call['id'], 0)):
+                        args['content'] = '[Contenuto archiviato: il file è stato salvato o recuperato successivamente. Usa read_file per controllare la versione corrente.]'
                         function['arguments'] = json.dumps(args, ensure_ascii=False)
                 except (ValueError, TypeError):
                     pass
@@ -153,7 +180,8 @@ def generation_payload(settings, history, instructions, tools=None, max_output=N
     """Unica costruzione della richiesta per invio e riserva preventiva dei token."""
     maximum = max_output or settings.max_output_tokens
     if settings.provider == 'openai':
-        kwargs = dict(model=settings.model, instructions=instructions, input=history,
+        inputs = [{k: v for k, v in item.items() if k != '_recovered_file'} for item in history]
+        kwargs = dict(model=settings.model, instructions=instructions, input=inputs,
                       max_output_tokens=maximum, store=False)
         if tools:
             kwargs.update(tools=tools, parallel_tool_calls=False)

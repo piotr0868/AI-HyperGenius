@@ -6,9 +6,9 @@
     "errors": "0",
     "failures": "0",
     "skipped": "0",
-    "tests": "94",
-    "time": "31.287",
-    "timestamp": "2026-10-13T18:44:04.366598+00:00",
+    "tests": "104",
+    "time": "30.420",
+    "timestamp": "2026-10-13T19:22:21.587476+00:00",
     "hostname": "d679e40bb841"
   },
   "reference_unit_tests": 8,
@@ -99,10 +99,10 @@
       "update": "winget reports installation successful; package Docker.DockerDesktop 4.95.0, installer hash verified"
     },
     "not_verified": [
-      "latest last_token_budget and failing backend check result",
-      "correctness of generated files",
-      "specific cause of original HTTP 400",
+      "whether eligible main.py code is retained in Windows history",
+      "history replay and contract checks on Windows",
       "complete AI generation and repair",
+      "specific cause of original HTTP 400",
       "Officina browser workflow beyond page opening"
     ],
     "latest_attempt": {
@@ -116,11 +116,24 @@
       "deterministic_restore": "passed",
       "call_limit": 20,
       "calls_used_at_resume": 14,
-      "saved_file_precheck": "failed; exact failing test result not yet supplied",
+      "saved_file_precheck": "failed: main.py missing; unittest test_backend.py import main raised ModuleNotFoundError and contract server could not open /work/main.py",
       "ai_acceptance": "not completed",
-      "failure_reason": "token preflight blocked next call after short resumed attempt; current usage and reserve not yet supplied",
+      "failure_reason": "local preflight: 78422 reported tokens used plus 40544 input reserve and 3000 output reserve = 121966, exceeding 120000 by 1966",
       "separate_ai_repair": "not run",
-      "server_pid_reported": 11016
+      "server_pid_reported": 11016,
+      "excerpt_observations": {
+        "input_tokens": 67974,
+        "output_tokens": 10448,
+        "used_tokens": 78422,
+        "reserved_input_tokens": 40544,
+        "reserved_output_tokens": 3000,
+        "required_tokens": 121966,
+        "limit_tokens": 120000,
+        "elapsed_seconds": 711.188,
+        "docs_consulted": 1,
+        "model_calls": "not included in excerpt; prior attempt started from 14",
+        "provider_events": []
+      }
     },
     "attempt_history": [
       {
@@ -191,7 +204,7 @@
   },
   "source_sha256": {
     "app/agent.py": "d7e531e59dd8f6e83a1f339a1805090d300f77b3a396518333afd455ecf39153",
-    "app/providers.py": "ca37da85e12de7180e8ee872d9fc012fb1f359ca794c5f795a276b0178451c3e",
+    "app/providers.py": "7ebc0bdc5682f9fda4130c850a24398ff1a89d3f654565204e6aa598196054c6",
     "app/config.py": "3331e58edffb6766931b5d7f3d34561187041bb8742e4212de1cc295f3034daf",
     "app/sandbox.py": "03740c23c4f71a5ce12526de415c8175322cf5346823ae436cfc8cdb8bbaf4b1",
     "app/acceptance_contract.py": "6f6d3dbc0de77adb9b368dcee638cf8ad31f43a1c47af0fbb1be02fae00d5c4c",
@@ -201,12 +214,13 @@
     "requirements.lock": "9add5abb1e6d640f9ac118bdb54ef9b13b5159e511d610a4c42d16bdf793f967",
     "scripts/avvio_automatico.py": "2d7abdc98a7727361e6fad308a4dd9a2e4477b95e55cd221ec0d73dda234f7a0",
     "tests/test_automatic_setup.py": "7da263ee57906f3a8737252b6c3e937c5dff83cd8e7ab596e4b8cfc155c2fed9",
-    "scripts/prova_agente.py": "fd177ace034a13cb31a497665240bdebeb5fabd296cf57706cab2fec6566ad6e",
+    "scripts/prova_agente.py": "77c04152df8542c84414e17f7fb11ceadf50a4bd3e21eb16aaf21fdc7cc0661b",
     "scripts/aggiorna_quota.py": "6b6f700e9cd184cf92d631f7c071c10ec5f88a968f360370034664bad404764d",
     "tests/test_provider_recovery.py": "a0507c973c2be24436c8e1f6f03516816f243a753489dfe81d3a53e906f3b1e8",
     "tests/test_live_acceptance_resume.py": "ad98add01016db8d35fe3ddccd58309d1fcbc367ee0ed814c4ec0c3360d16bce",
     "tests/test_token_budget.py": "faeefc114e586651ed4cb7f2a448ca478cf1081381098cd7d20cd9b5ce7064d6",
-    "tests/test_resume_precheck.py": "50f145d966ce44438454e387dce85e023d965aee171448c59f04492c53338dba"
+    "tests/test_resume_precheck.py": "50f145d966ce44438454e387dce85e023d965aee171448c59f04492c53338dba",
+    "tests/test_history_recovery.py": "7687cffe1b19cc90f13458cf4ac5d89121beb744f7f59d49112ecf6099d05b00"
   },
   "version": "0.2.0",
   "provider": "groq",
@@ -309,5 +323,19 @@
     "existing_usage_preserved": true,
     "time_counted": true,
     "windows_execution": "ran and rejected saved files according to user log; exact failure pending updated report"
+  },
+  "history_write_recovery": {
+    "tests_added": 10,
+    "platform": "Linux",
+    "real_docker_verification": true,
+    "model_transport": "simulated; does not validate model ability",
+    "scope": "missing unversioned main.py from last write_file blocked solely on planning/documentation prerequisites",
+    "existing_or_deleted_files_overwritten": false,
+    "new_code_fallback": false,
+    "model_tokens_or_calls_reset": false,
+    "historical_failure_preserved": true,
+    "code_hash_recorded": true,
+    "verification_mandatory": true,
+    "windows_run": "pending"
   }
 }

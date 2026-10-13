@@ -292,3 +292,11 @@ certificarli automaticamente soltanto dopo test non vuoti e contratto indipenden
 passati sui file correnti. Il registro distingue questa verifica del sistema da
 una chiamata IA. Un controllo fallito viene consegnato al modello per la correzione
 entro i limiti; non viene presentato come riuscito.
+
+Se `main.py` manca durante la ripresa e non è mai stato versionato, la prova può
+recuperare il codice esatto di una precedente risposta IA la cui scrittura era
+stata bloccata soltanto dai prerequisiti di piano/documentazione. Richiede che
+questi siano ora soddisfatti, registra origine e hash, conserva il risultato
+fallito storico e permette rollback. Non recupera file eliminati o esiti ignoti
+e non inserisce codice di riferimento al posto del modello. I file recuperati
+devono comunque superare le verifiche in Docker. Nessun budget viene azzerato.
