@@ -1,6 +1,6 @@
 {
   "date": "2026-10-14",
-  "platform": "Windows 11, build reported 10.0.26300.9550",
+  "platform": "Windows 11, reported 10.0.26300.9711",
   "source": "Logs pasted by the user and Docker Desktop screenshot; not run by the cloud assistant",
   "verified_from_log": {
     "python_312_and_dependencies": true,
@@ -12,13 +12,16 @@
     "reference_backend": "passed",
     "deliberate_fault": "detected",
     "deterministic_restore": "passed",
-    "assistant_server_startup": "reported successful"
+    "assistant_server_startup": "reported successful",
+    "ai_acceptance": "passed",
+    "agent_verification": "passed"
   },
   "live_ai": {
     "generation": "Verified on user PC after system/Codex listener-lifecycle correction; not an autonomous Groq repair",
-    "reason": "Actual model fix and tests passed; final reply was plain text without finish. Formal completion pending.",
+    "reason": "Final saved-file recheck and formal completion passed on Windows; 20 model calls preserved, no new model generations.",
     "exact_quota_type": "unknown",
-    "separate_ai_repair": "Defect detected, real Groq write applied, 7 unittests passed; final message lacked finish, so formal status still intervention."
+    "separate_ai_repair": "passed: real model fixed injected regression in separate copy; system certified after recheck",
+    "status": "passed according to final user log"
   },
   "docker_desktop": {
     "engine_running": "visible in screenshot",
@@ -26,38 +29,41 @@
     "update": "winget reports installation successful; package Docker.DockerDesktop 4.95.0, installer hash verified"
   },
   "not_verified": [
-    "formal completion on PC after controller fix",
-    "Officina browser workflow beyond page opening"
+    "Officina browser workflow beyond page opening",
+    "reusable procedure adoption with real model"
   ],
   "latest_attempt": {
     "date": "2026-10-14",
-    "source": "User-pasted Windows update log and beginning of RESULTS.json",
-    "commit": "405a9e1e3f154bfe4c49080c713bc0e3c7f51ecf",
-    "source_update": "checksum and backup confirmed",
-    "api_and_model_available": "groq, openai/gpt-oss-20b",
-    "reference_backend": "passed",
-    "deliberate_fault": "detected",
-    "deterministic_restore": "passed",
-    "generation_checks": "passed after system listener fix, 6 unittest, 0 failures/errors/skipped",
-    "generation_model_calls": 16,
-    "generation_input_tokens": 74968,
-    "generation_output_tokens": 10486,
-    "separate_repair": {
-      "state": "Serve il tuo intervento",
-      "checks_passed": true,
-      "unit_tests": 7,
-      "unit_errors": 0,
-      "model_calls": 4,
-      "input_tokens": 18917,
-      "output_tokens": 422,
-      "original_unchanged": true,
-      "tests_unchanged": true,
-      "ai_write_recorded": true,
-      "reason": "plain final text without finish"
+    "platform": "Windows 11, reported 10.0.26300.9711",
+    "source": "Final terminal output pasted by user; not executed by cloud assistant",
+    "tested_commit": "899e0cb2319912ac211d869175aca00273c1b541",
+    "source_checksums": "verified according to log",
+    "previous_sources": "backup preserved according to log",
+    "provider": "groq",
+    "model": "openai/gpt-oss-20b",
+    "reference_backend": "verified",
+    "reference_deliberate_fault": "detected",
+    "reference_restore": "verified",
+    "saved_generation": "resumed",
+    "saved_repair": "resumed without reinjecting fault",
+    "saved_files": "verified in Docker without new model request",
+    "calls_used_at_resume": 20,
+    "call_limit": 20,
+    "new_model_generations": 0,
+    "ai_acceptance": "PASSATA",
+    "agent_verification": "PASSATA",
+    "assistant_server": "started successfully",
+    "reported_server_pid": 3668,
+    "attribution": {
+      "initial_listener_fix": "system/Codex procedure",
+      "separate_regression_fix": "real Groq model, previously recorded write and passing tests",
+      "formal_completion": "system after current file checks"
     },
-    "ai_acceptance": "not completed",
-    "server_pid_reported": 18028,
-    "formal_closure_after_update": "not_run"
+    "unit_counts_from_prior_detailed_report": {
+      "generation": 6,
+      "repair": 7
+    },
+    "current_log_unit_counts": "not repeated in final terminal log"
   },
   "attempt_history": [
     {
@@ -167,9 +173,39 @@
       "server_pid_reported": 21380,
       "calls_used": 16,
       "last_agent_message": "I’m sorry, but I can’t continue with this task."
+    },
+    {
+      "date": "2026-10-14",
+      "source": "User-pasted Windows update log and beginning of RESULTS.json",
+      "commit": "405a9e1e3f154bfe4c49080c713bc0e3c7f51ecf",
+      "source_update": "checksum and backup confirmed",
+      "api_and_model_available": "groq, openai/gpt-oss-20b",
+      "reference_backend": "passed",
+      "deliberate_fault": "detected",
+      "deterministic_restore": "passed",
+      "generation_checks": "passed after system listener fix, 6 unittest, 0 failures/errors/skipped",
+      "generation_model_calls": 16,
+      "generation_input_tokens": 74968,
+      "generation_output_tokens": 10486,
+      "separate_repair": {
+        "state": "Serve il tuo intervento",
+        "checks_passed": true,
+        "unit_tests": 7,
+        "unit_errors": 0,
+        "model_calls": 4,
+        "input_tokens": 18917,
+        "output_tokens": 422,
+        "original_unchanged": true,
+        "tests_unchanged": true,
+        "ai_write_recorded": true,
+        "reason": "plain final text without finish"
+      },
+      "ai_acceptance": "not completed",
+      "server_pid_reported": 18028,
+      "formal_closure_after_update": "not_run"
     }
   ],
-  "latest_diagnostic": {
+  "pre_fix_diagnostic": {
     "files": [
       "main.py",
       "tests/__init__.py",
@@ -186,6 +222,7 @@
     "unit_errors": 1,
     "contract_passed": 5,
     "error": "OSError: [Errno 98] Address already in use in test_persistence_across_restart",
-    "new_fix_on_windows": "not_run"
+    "new_fix_on_windows": "not_run",
+    "date": "2026-10-13"
   }
 }

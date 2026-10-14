@@ -92,9 +92,12 @@ Per attivare il lavoro autonomo dell’agente:
 Il log condiviso dall'utente conferma su Windows Python 3.12.10, creazione di `.venv`
 e installazione delle dipendenze con `installa.bat`, poi salvataggio della chiave,
 accesso/modello Groq, Docker e prove senza IA. Il server dell'applicazione è partito.
-La prova agente è **non completata**: primo arresto per quota, secondo per HTTP 400;
-la correzione separata con IA non è stata eseguita.
-Le verifiche automatiche registrate nella consegna sono state eseguite su Linux.
+Il log finale del **14 ottobre 2026** conferma **ACCETTAZIONE IA: PASSATA** e
+**Verifica agente: PASSATA**, inclusa correzione del difetto nella copia separata
+con il modello reale. La correzione precedente della porta e la certificazione
+conclusiva sono interventi del sistema esplicitamente registrati. La ripresa
+finale ha conservato le 20 richieste già usate senza altre generazioni.
+Le verifiche eseguite direttamente dall'assistente restano su Linux: 129 passate.
 
 ## Cosa puoi provare subito senza chiave
 

@@ -5,6 +5,13 @@ Chromium di sistema. I risultati completi sono in `resources/evidence/`.
 Le prove precedenti di browser, riavvio, installazione e riferimento con difetto
 restano quelle del 12 ottobre; il nuovo avvio è stato verificato il 13, la suite il 14.
 
+**Windows, 14 ottobre: ACCETTAZIONE IA PASSATA e Verifica agente PASSATA**, secondo
+il log finale dell'utente sulla revisione 899e0cb. Conclusione dopo ricontrollo
+dei file salvati, senza nuove generazioni e con le 20 richieste conservate.
+La correzione della porta e la certificazione sono del sistema; il modello reale
+ha corretto il difetto nella copia separata. Non è una prova interamente autonoma
+né una verifica di ogni futuro programma; l'esito riguarda il contratto attività.
+
 | Prova | Esito effettivo |
 | --- | --- |
 | Suite applicazione pytest | **129 passati**, 0 falliti, 0 errori, 0 skipped |
@@ -26,7 +33,7 @@ restano quelle del 12 ottobre; il nuovo avvio è stato verificato il 13, la suit
 | Installazione pip separata con `--require-hashes` | **Passata su Linux**, dipendenze Groq incluse; import SDK verificati |
 | Sintassi Python e JavaScript | **Passata**; verifiche supplementari, non sostituiscono le prove funzionali |
 | Generazione e correzione con Groq reale nel cloud | **NON ESEGUITA**, exit code 2: manca `GROQ_API_KEY`; zero chiamate live dal cloud |
-| SDK/modello e prova agente sul PC Windows | **Log dell'utente**: accesso al modello riuscito; generazione tentata e **NON COMPLETATA**, HTTP 429, Retry-After 48 secondi; correzione IA separata non eseguita; seconda prova ripresa interrotta da HTTP 400, 8 chiamate totali, dettaglio originario non registrato; terza prova fermata dalla riserva token locale: 69159 usati su 120000, 14 richieste, ultimo test ancora fallito |
+| Primi tentativi sul PC Windows, prima del successo finale | **Log storici dell'utente**: accesso al modello riuscito; prima generazione interrotta da HTTP 429, poi HTTP 400, poi riserva token locale. Errori conservati nella cronologia; prova successivamente conclusa e passata |
 | Correzione quota e ripresa | **Controlli locali passati**: testo ridotto senza perdere memoria, attesa breve limitata e persistente, nessun nuovo difetto dopo ripresa, progetti pronti ricontrollati in Docker; correzione applicata e prova ripresa secondo il log Windows; accettazione ancora incompleta per HTTP 400, dettaglio originario non registrato |
 | Rifiuto HTTP 400 e rigenerazione tool | **9 nuovi test passati nella suite Linux**, SDK ufficiale con HTTP simulato: diagnostica senza segreti, una sola rigenerazione riconosciuta, altri 400 fermano il lavoro, richieste contate; modello reale sul PC ancora da verificare |
 | Limite complessivo della prova | **7 nuovi controlli passati**: opzione esplicita valida, invalidi rifiutati senza chiamate, contatori/token/tempo conservati, budget condiviso e consumi precedenti della copia riservati |
@@ -35,13 +42,13 @@ restano quelle del 12 ottobre; il nuovo avvio è stato verificato il 13, la suit
 | Recupero scrittura IA bloccata | **10 nuovi casi passati su Linux**: solo main.py assente e mai versionato da richiesta bloccata sui prerequisiti; codice esatto, versione/rollback, verifiche in Docker e nessuna nuova API nel caso valido; Windows ancora da provare |
 | Diagnosi del progetto senza IA | **4 controlli passati nella suite Linux**: database e file invariati, codice analizzato senza import/exec, riferimenti esterni rifiutati, mascheramento chiavi, invocazione Notepad simulata |
 | Diagnosi breve della copia, 14 ottobre | **8 controlli passati su Linux**, inclusi nella suite: selezione della copia, contatori/motivo/operazioni pertinenti, database e file invariati, nessuna importazione/esecuzione del codice generato, chiavi mascherate, copia non avviata e riferimenti invalidi gestiti, apertura Notepad simulata. Rapporto ricevuto dal PC |
-| Nuovo rapporto Windows, 14 ottobre | **Backend verificato sul PC dopo la procedura del sistema**: 6 unittest, 0 fallimenti/errori/skipped e verifiche API superate; 16 chiamate conservate. Nella copia l'IA ha corretto il difetto: 7 unittest e verifiche passati, originale e test invariati. 4 chiamate, poi testo finale senza finish: stato formale ancora NON COMPLETATA, PID comunicato 18028 |
+| Rapporto finale Windows, 14 ottobre | **ACCETTAZIONE IA PASSATA, Verifica agente PASSATA** dal log dell'utente. Backend verificato dopo la procedura del sistema; copia corretta dal modello e ricontrollata. Rapporti dettagliati precedenti: 6 unittest originali e 7 nella copia, nessun errore. Tutte le 20 chiamate conservate, zero nuove generazioni per concludere; PID comunicato 3668 |
 | Diagnosi reale Windows del 13 ottobre | **5 controlli API passati**, **5 di 6 unittest passati**; errore di riavvio `Address already in use`. main.py presente. 16 chiamate IA, 85454 token usati; ultima risposta del modello: rifiuto testuale, causa sconosciuta. Accettazione completa ancora incompleta |
 | Procedura di chiusura server del sistema | **9 nuovi controlli passati su Linux**: difetto della porta riprodotto in Docker, implementazione corretta senza modificare test, 9 unittest e 5 API passati, rollback, nessuna esecuzione del codice sull'host, strutture non riconosciute rifiutate |
-| Prova separata dopo correzione del sistema | **Passata offline**: SDK Groq reale con risposte HTTP simulate e Docker reale; 10 unittest e 5 API passati dopo difetto rilevato e scrittura prevista dal test, originale e test invariati; sia finish esplicito (19 chiamate complessive) sia testo finale (20) gestiti. Windows: correzione reale osservata, nuova chiusura formale ancora da verificare |
+| Prova separata dopo correzione del sistema | **Passata offline**: SDK Groq reale con risposte HTTP simulate e Docker reale; 10 unittest e 5 API passati, originale e test invariati; sia finish esplicito sia testo finale gestiti. **Passata anche sul PC con modello reale**, confermata dal log dell'utente, con interventi del sistema attribuiti |
 | Conclusione dopo messaggio finale | **6 nuovi casi passati nella suite Linux**: successo registrato solo con piano, fonti, prove e hash valido; messaggi di successo con prove mancanti/fallite o file modificati non certificano. SDK simulato e Docker reale riproducono scrittura → lettura → verifiche → testo finale |
 | Pausa e Ferma alla conclusione | **2 ulteriori casi passati nella suite Linux**: pausa richiesta durante la risposta finale impedisce di registrare Pronto; Riprendi permette la conclusione e Ferma la impedisce, senza nuove chiamate al modello |
-| Ripresa con tutte le 20 chiamate usate | **Passata con Docker reale** nella prova integrata: generazione 16 e copia 4 conservate, token 18917/422 della copia preservati, nuove prove e conclusione senza alcuna chiamata al modello. Chiusura sul PC dopo aggiornamento **ancora da eseguire** |
+| Ripresa con tutte le 20 chiamate usate | **Passata con Docker reale** nella prova integrata: consumi conservati, nuove prove e conclusione senza chiamate al modello. **Confermata dal log Windows** dopo aggiornamento alla revisione 899e0cb |
 | Avvio dopo correzione HTTP 400 | **Passato su Linux**: pagina italiana, API, Docker disponibile, creazione progetto e credenziale assente dichiarata; limite ordinario app ancora 12, zero chiamate live |
 | Aggiornamento con checksum e copie precedenti | **Passato offline**: rifiuto checksum errato prima di modifiche, chiave conservata, sorgenti precedenti archiviati, app attiva impedisce l'aggiornamento |
 | Prova di procedure con Groq reale | **NON ESEGUITA**, stessa credenziale mancante |

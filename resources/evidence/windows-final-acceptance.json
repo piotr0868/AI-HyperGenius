@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-14",
+  "platform": "Windows 11, reported 10.0.26300.9711",
+  "source": "Final terminal output pasted by user; not executed by cloud assistant",
+  "tested_commit": "899e0cb2319912ac211d869175aca00273c1b541",
+  "source_checksums": "verified according to log",
+  "previous_sources": "backup preserved according to log",
+  "provider": "groq",
+  "model": "openai/gpt-oss-20b",
+  "reference_backend": "verified",
+  "reference_deliberate_fault": "detected",
+  "reference_restore": "verified",
+  "saved_generation": "resumed",
+  "saved_repair": "resumed without reinjecting fault",
+  "saved_files": "verified in Docker without new model request",
+  "calls_used_at_resume": 20,
+  "call_limit": 20,
+  "new_model_generations": 0,
+  "ai_acceptance": "PASSATA",
+  "agent_verification": "PASSATA",
+  "assistant_server": "started successfully",
+  "reported_server_pid": 3668,
+  "attribution": {
+    "initial_listener_fix": "system/Codex procedure",
+    "separate_regression_fix": "real Groq model, previously recorded write and passing tests",
+    "formal_completion": "system after current file checks"
+  },
+  "unit_counts_from_prior_detailed_report": {
+    "generation": 6,
+    "repair": 7
+  },
+  "current_log_unit_counts": "not repeated in final terminal log"
+}

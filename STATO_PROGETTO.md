@@ -5,6 +5,31 @@ con quote operative, senza passaggio automatico a servizi a pagamento.
 
 ### Ultimo esito Windows: 14 ottobre 2026
 
+**ACCETTAZIONE IA: PASSATA — Verifica agente: PASSATA.**
+
+Il nuovo log dell'utente dopo l'aggiornamento alla revisione
+899e0cb2319912ac211d869175aca00273c1b541 conferma la conclusione della prova
+sul suo PC Windows, build 10.0.26300.9711. Sorgenti aggiornati con checksum e
+backup, accesso Groq/modello verificato, prova senza IA superata, copia ripresa
+senza reintrodurre il difetto e file ricontrollati in Docker. Le **20 richieste
+già usate sono conservate**: nessuna nuova generazione per la conclusione.
+L'IA aveva corretto il difetto della copia; la precedente correzione della porta
+e la registrazione conclusiva sono interventi del sistema dichiarati nel registro.
+I precedenti rapporti dettagliati mostrano 6 unittest nel backend e 7 nella copia.
+L'ultimo log conferma l'esito complessivo, senza ripetere i conteggi dei test.
+
+Officina è stata avviata; PID comunicato **3668**. Lasciare aperto il terminale
+durante l'uso. **Non chiedere ulteriori rapporti né ripetere la prova già passata**
+senza nuove modifiche o errori. Prossimo passo dell'utente: aprire la finestra di
+Officina nel browser e iniziare un progetto. Percorso ordinario di avvio successivo:
+`.venv\Scripts\python.exe scripts\avvio_automatico.py` dalla cartella del progetto,
+che carica la chiave salvata e conserva dati e prove. Il pacchetto attuale include
+anche avvio_automatico.bat; non presumere che sia presente nella vecchia copia
+Windows aggiornata in precedenza scaricando soltanto il sorgente Python.
+Nessun nuovo aggiornamento dell'app è richiesto per queste sole note di consegna.
+
+### Cronologia precedente alla conclusione della prova
+
 **Ultimo rapporto breve ricevuto:** la copia `f00000d61e0f4b019025cc9f62a0aaea`
 ha rilevato il difetto, ricevuto una scrittura IA riuscita su regression_target.py
 e superato **7 unittest, zero errori/fallimenti**, con `checks_passed=true`.
@@ -404,13 +429,13 @@ Le risposte simulate esistono solo nei test: non convalidano capacità di un'IA 
 ## Requisiti esterni ancora mancanti
 
 Nel **cloud** `GROQ_API_KEY` è ancora assente: zero chiamate live da questo ambiente.
-Sul **PC Windows** la credenziale e il modello sono verificati dal log; la prova
-con IA è tentata e non completata: primo tentativo per quota, secondo per HTTP 400,
-terzo per la riserva locale dei token; ultimo rapporto: cinque controlli API
-passati e un unittest di riavvio fallito, poi rifiuto testuale del modello.
-Generazione/correzione complete e
-procedure con il modello reale restano da verificare. Non richiedere nuovamente
-una chiave locale già salvata; usare avvio_automatico che carica il file fuori OneDrive.
+Sul **PC Windows** accesso, modello e accettazione generazione/correzione sono
+confermati dai rapporti e dal log finale PASSATA del 14 ottobre. Conservare
+l'attribuzione della correzione della porta al sistema e del difetto separato
+al modello. Le procedure riutilizzabili con il modello reale restano da provare.
+Non richiedere nuovamente una chiave locale già salvata; usare avvio_automatico
+che carica il file fuori OneDrive. Il flusso completo del browser su Windows
+resta distinto dalla prova automatica passata; non è stato verificato da remoto.
 
 Il piano Free e le quote non sono rilevabili affidabilmente dall'app. L'utente deve
 controllarli nella console Groq; non è garantito accesso illimitato o assenza di
@@ -418,11 +443,9 @@ addebiti se l'account ha già fatturazione attiva. Nessun cambio automatico a Op
 
 Windows 11: setup, casella, SDK/modello, Docker, prova senza IA e avvio server
 confermati da log dell'utente. Correzione della quota applicata e aggiornamento Docker
-riuscito secondo il nuovo log; accettazione IA ancora incompleta, ultimo
-stop dopo il test di riavvio e risposta senza strumenti. Il dettaglio del precedente
-400 non era registrato. La nuova correzione della chiusura del server e la prova
-separata restano da verificare sul PC. Le verifiche automatiche dell'assistente
-restano su Linux.
+riuscito secondo il log; chiusura del server corretta, difetto separato corretto
+con IA e accettazione finale **PASSATA** secondo il log Windows del 14 ottobre.
+Le verifiche eseguite direttamente dall'assistente restano su Linux, 129 passate.
 Pubblicazione dell'ambiente e ripristino in un nuovo task cloud non verificati.
 Questa versione supporta il contratto backend attività Python con libreria standard;
 altri backend e blockchain sono traguardi successivi. Nessuna gestione di denaro,
@@ -435,9 +458,10 @@ portafogli, pubblicazione automatica o uso di repository/test Nodveta.
 2. `uv sync --frozen`, poi prepara l'immagine con scripts/prepara_isolamento.py.
 3. Avvia `.venv/bin/python avvia.py --no-browser`; verifica / e /api/health tramite
    richieste locali, separando disponibilità del servizio, chiave e Docker.
-4. L'utente crea la chiave nel proprio account Free su https://console.groq.com/keys.
-   Su Windows: configura_ia.bat (input nascosto). Nel cloud: impostazioni sicure
-   dell'ambiente per GROQ_API_KEY, mai valori in chat. Riavvia dopo la configurazione.
+4. Sul PC Windows la chiave è già salvata: usare avvio_automatico per caricarla.
+   Soltanto se manca, configurarla localmente; mai chiedere valori in chat.
+   Nel cloud la chiave resta assente: impostazioni sicure dell'ambiente per
+   GROQ_API_KEY soltanto se si richiede una prova live anche in quell'ambiente.
 5. `scripts/controlla_ia.py` verifica accesso/modello; `scripts/prova_agente.py`
    verifica generazione e correzione nella copia separata. Conserva gli esiti
    negativi e aggiorna questo file con risultati effettivi.
