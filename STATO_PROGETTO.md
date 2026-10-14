@@ -3,7 +3,28 @@
 Aggiornato il 14 ottobre 2026. Il nuovo obiettivo è usare il piano gratuito Groq,
 con quote operative, senza passaggio automatico a servizi a pagamento.
 
-### Ciclo di main.py senza test: prova Windows fallita e recupero dell'avanzamento
+### Nuova prova reale Windows riuscita
+
+Il nuovo rapporto del Codex locale, incollato dall'utente il 14 ottobre 2026,
+conferma aggiornamento applicato con checksum e backup e **82 test Windows
+passati**. La nuova prova con Groq e' **Pronto**: il modello ha corretto il
+backend dopo gli errori, superando **cinque test e il contratto indipendente
+in Docker, con 8 chiamate su 12**. I test di base sono attribuiti al sistema.
+La generazione e la correzione del backend sono attribuite al modello.
+
+Si tratta dell'esito di questa prova reale del backend attivita', distinto
+dai test Linux con HTTP simulato. La fonte e' il rapporto del Codex sul PC:
+la sessione cloud non ha eseguito questi controlli Windows. ID, hash dei file,
+token e rapporti completi non sono inclusi nel riepilogo ricevuto; restano
+nello stato e nella memoria locali e non vanno inventati.
+
+Dati, credenziali, limiti e progetti precedenti sono conservati secondo il
+rapporto, compresa la prova negativa a 12 chiamate. Stato e istruzioni locali
+sono stati aggiornati. Officina e' stata riaperta: il collegamento da usare
+resta **Apri Officina**. Non ripetere aggiornamento o prove per il semplice
+avvio. Il prossimo uso e' un nuovo obiettivo descritto dall'utente.
+
+### Cronologia: ciclo di main.py senza test e recupero dell'avanzamento
 
 Il rapporto locale ricevuto dall'utente conferma applicazione della revisione
 2d18bd2 con checksum/backup e **55 test Windows passati con Docker reale**.
@@ -35,9 +56,10 @@ restituendo fallimento esplicito, per mantenere le asserzioni di non riuscita.
 
 resources/RISOLVI_CICLO_SCRITTURE_PC.md prepara l'applicazione mirata sul PC e
 la ripresa della stessa prova fallita, con contatori e hash del backend invariati,
-poi una sola nuova regressione reale entro il normale budget. Applicazione e
-risultati di questa versione su Windows ancora da confermare: non attribuirvi
-le prove Linux. La preparazione dei test e' un intervento deterministico del
+poi una sola nuova regressione reale entro il normale budget. Al momento di
+quella pubblicazione la prova Windows era ancora da eseguire; l'esito locale
+successivamente ricevuto e' registrato sopra, distinto dalle prove Linux.
+La preparazione dei test e' un intervento deterministico del
 sistema, non una dimostrazione che il modello li abbia generati autonomamente.
 
 ### Lavoro autonomo: completamento delle prove senza Riprendi manuale

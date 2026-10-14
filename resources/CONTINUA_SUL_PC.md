@@ -57,7 +57,25 @@ incerta dell'URL anche dopo il permesso all'app. Rispettarlo e distinguere
 visione automatica non eseguita, foto fornita dall'utente e prove HTTP/HTML.
 Non eludere il blocco o chiedere altre foto per controlli che non sono visivi.
 
-## Ultima prova reale e modifica pronta sul repository
+## Ultima prova reale: riuscita su Windows
+
+Il successivo rapporto del Codex locale, incollato dall'utente il 14 ottobre
+2026, conferma aggiornamento applicato con checksum e backup e **82 test Windows
+passati**. La nuova prova reale con Groq e' **Pronto**, con **8 chiamate su 12**:
+il modello ha corretto il backend dopo gli errori; cinque test e contratto
+indipendente superati in Docker. I test di base sono attribuiti al sistema,
+l'implementazione e le correzioni al modello.
+
+Dati, credenziali, limiti e progetti precedenti, inclusa la prova negativa,
+sono conservati secondo il rapporto. Il Codex locale ha aggiornato stato e
+istruzioni e riaperto Officina. Usare **Apri Officina**: non ripetere installazione
+o prove di regressione per il semplice avvio. Leggere prima lo stato locale per
+gli ID, i contatori e gli hash effettivi: il riepilogo trasmesso alla chat cloud
+non li contiene. Non confondere questa prova reale con le fixture Linux e non
+considerarla una garanzia per altri programmi. Procedere dal prossimo obiettivo
+dell'utente senza rimettergli la gestione tecnica.
+
+## Cronologia della correzione delle scritture ripetute
 
 Il Codex locale ha applicato 2d18bd2 con backup/checksum e riportato 55 test
 Windows passati con Docker reale. La nuova prova Groq si e' fermata a 12
@@ -85,14 +103,12 @@ scritture ripetute, protezione dei file e controlli. SDK HTTP simulato, Docker r
 nessuna nuova inferenza reale sul cloud. Non attribuire questi esiti a una nuova
 prova con il modello sul PC.
 
-L'applicazione del nuovo recupero e la prova Windows non sono ancora confermate.
-Seguire resources/RISOLVI_CICLO_SCRITTURE_PC.md da una revisione
-fissata: solo i file previsti con checksum e backup, integrazione delle modifiche
-locali, test su Windows, riavvio identificato del solo Officina, ripresa della
-stessa prova fallita senza cambiare backend/contatori e una sola nuova prova
-di regressione reale con Groq nei budget ordinari, senza sostituire codice generato
-facendolo passare per lavoro autonomo. Aggiornare poi lo stato e questo contesto
-locale con gli esiti effettivi. Un blocco di quota resta un esito non completato.
+resources/RISOLVI_CICLO_SCRITTURE_PC.md documenta l'applicazione mirata e la
+singola nuova prova reale richieste dopo la precedente prova negativa. Il
+rapporto Windows successivo ne conferma l'esito riportato sopra: non rilanciare
+quelle istruzioni come se l'aggiornamento fosse ancora da applicare. Conservare
+entrambi gli esiti e l'attribuzione dei file. Un eventuale futuro blocco di quota
+resta un esito non completato, senza reset o aumento automatico dei budget.
 
 La sessione locale e' distinta dalla chat cloud che ha preparato questo file.
 Il documento trasferisce contesto, non concede accesso remoto al PC alla chat

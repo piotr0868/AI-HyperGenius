@@ -310,6 +310,32 @@
       "failed_project_id": "not supplied in the user report",
       "backend_source": "not transmitted",
       "data_and_old_ready_project": "preserved according to report"
+    },
+    "autonomy_143abc2": {
+      "date": "2026-10-14",
+      "source": "Local Codex summary pasted by user; not executed or independently inspected by cloud assistant",
+      "requested_revision": "143abc2b44e28912ea672021183d5186a266f3bc",
+      "installed_revision": "not specified in pasted summary",
+      "installed_with_checksums_and_backup": true,
+      "tests_passed": 82,
+      "real_regression": {
+        "provider": "groq",
+        "state": "Pronto",
+        "model_calls": 8,
+        "model_call_limit": 12,
+        "backend_correction": "real model corrected backend after errors, according to report",
+        "unit_tests_passed": 5,
+        "independent_contract": "passed according to report",
+        "execution": "Docker on Windows according to report",
+        "base_tests_author": "Officina system",
+        "project_id": "not supplied in pasted summary",
+        "backend_hash": "not supplied in pasted summary",
+        "scope": "this activity backend trial; not a general guarantee"
+      },
+      "data_credentials_limits_and_prior_projects": "preserved according to report",
+      "previous_negative_trial": "preserved according to report",
+      "local_state_and_continuation": "updated according to report",
+      "officina": "reopened; use Apri Officina according to report"
     }
   },
   "cloud": {
@@ -346,7 +372,7 @@
     "AGENTS.md": "29c6eda020d0ddcbc8cf1d374867307cc58ae1839c660db9767173d001341d4a",
     "tests/test_autonomous_completion.py": "919e85c7120f1c8ffa0f7b9cf3be6a62150d1b962665ba27e03b07919e7d1f16",
     "resources/ATTIVA_AUTONOMIA_PC.md": "7d9c27f4f2ea1d474b01bb6cf0860ed156ebf7866b982fa64f83e530b8cc3176",
-    "resources/CONTINUA_SUL_PC.md": "29ea2a4997e66a0f4937799a1a179dd38fcc5738aa49707e765b4efcf60a8ec3",
+    "resources/CONTINUA_SUL_PC.md": "ab402c359ec342d120b9aaa485b30bf1e5d8cc7d962f08e56847f2ab684ec150",
     "app/progress.py": "f153ab38ea4a203f44309fed176ab353a45fe232f18700a4c65b2c832b5f388e",
     "app/templates/test_activity_api.py.txt": "00ac28423aa4015928dd20d74682b5fe3139de114c87993af9ea265cf12c52cf",
     "tests/test_progress.py": "46c0b1261eb97e4a19d29c0882d723af2bf35821ce6f33d4bd68b48fc979e903",
@@ -787,7 +813,7 @@
       "essential user question",
       "model, tool, correction, token and time limits preserved"
     ],
-    "windows_new_controller": "2d18bd2 applied with 55 Windows tests passed according to user; real probe stopped at 12 calls without tests",
+    "windows_new_controller": "Earlier 2d18bd2 trial failed at 12 calls (retained); subsequent corrected trial Pronto at 8 of 12 calls with 5 tests and independent Docker contract, according to user-pasted report",
     "local_instructions": "resources/ATTIVA_AUTONOMIA_PC.md",
     "files_to_apply": [
       "app/agent.py",
@@ -830,7 +856,8 @@
       "AGENTS.md"
     ],
     "local_instructions": "resources/RISOLVI_CICLO_SCRITTURE_PC.md",
-    "windows_new_code": "not yet applied or verified",
-    "report": "resources/evidence/pytest.xml"
+    "windows_new_code": "Applied with checksum and backup; 82 Windows tests passed; real Groq backend trial Pronto at 8 of 12 calls, according to user-pasted local Codex report",
+    "report": "resources/evidence/pytest.xml",
+    "windows_evidence": "windows.autonomy_143abc2"
   }
 }
