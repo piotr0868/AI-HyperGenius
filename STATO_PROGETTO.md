@@ -3,6 +3,44 @@
 Aggiornato il 14 ottobre 2026. Il nuovo obiettivo è usare il piano gratuito Groq,
 con quote operative, senza passaggio automatico a servizi a pagamento.
 
+### Primo progetto dall'interfaccia Windows: limite richieste raggiunto
+
+Il nuovo screenshot dell'utente mostra **Serve il tuo intervento — Limite di
+chiamate IA raggiunto. Conservati tutti i risultati**, con file scaricabili.
+È un progetto ordinario dell'interfaccia, distinto dalla prova di accettazione
+già PASSATA. Tre progetti sono visibili nella lista; non crearne altri per riprovare.
+Conteggi esatti e ultima verifica del progetto selezionato non ancora ricevuti.
+Il limite predefinito ordinario è 12; non attribuirlo alla quota del provider
+e non aumentarlo automaticamente. Ultimo PID del servizio comunicato: 3668.
+
+Corretto Agent.run: a limite modello raggiunto, conclude da prove già valide
+oppure controlla i file esistenti in Docker, entro tempo/operazioni/correzioni,
+senza altre richieste IA. Pronto richiede prove passate e hash corrente. Registra
+il digest delle prove e non ripete automaticamente un fallimento sugli stessi
+file; nessun reset di consumi o modifica dei test. Il messaggio «Prossimo passo»
+durante il lavoro usa ora istruzioni italiane per l'utente; il piano tecnico
+originale rimane nei dettagli. Evita che «Definire schema DB» sembri un compito
+che l'utente deve svolgere.
+
+**135 test passati su Linux**, zero errori/fallimenti/skipped. Sei nuovi casi
+con Docker reale e SDK simulato che rifiuta qualsiasi richiesta: file validi
+senza prove, prove già valide, file cambiati, input invalido, zero test e
+fallimento invariato. Aggiornamento sul PC **ancora da applicare**; dopo
+l'aggiornamento, Riprendi attiva il controllo del progetto selezionato.
+
+### Osservazioni precedenti dell'interfaccia
+
+Dopo l'accettazione passata l'utente ha aperto Officina e premuto Avvia:
+riferisce un lampeggio senza un cambiamento visibile. Nessun errore o stato
+della pagina ancora fornito: la causa sul PC **non è confermata**. Non ripetere
+alla cieca l'avvio e non creare altri progetti o nuove prove di accettazione.
+Verificato su Linux con Chromium reale: una sessione precedente viene rifiutata
+con messaggio visibile; ricaricando la pagina si ottiene una sessione valida e
+Avvia crea un solo progetto, zero errori JavaScript, zero chiamate IA (chiave
+volutamente assente). Servizio di prova temporaneo arrestato, dati eliminati.
+Esito locale in `.data/verification/ui-start-session.json`. Prossima azione sul
+PC: ricarica con Ctrl+R e osserva la pagina; conserva il terminale aperto.
+
 ### Ultimo esito Windows: 14 ottobre 2026
 
 **ACCETTAZIONE IA: PASSATA — Verifica agente: PASSATA.**
@@ -410,7 +448,7 @@ Docker non ha rete, segreti, cartelle host o socket Docker; niente ripiego sull'
 
 Su Linux, Python 3.12.14, Docker 28.4.0 e Chromium di sistema:
 
-- **129 test passati** nella suite corrente, 0 errori/fallimenti/skipped.
+- **135 test passati** nella suite corrente, 0 errori/fallimenti/skipped.
 - SDK ufficiali Groq e OpenAI con trasporto HTTP simulato e Docker reale: scrittura,
   difetto rilevato, correzione predisposta dal test e nuova verifica passata.
 - Quota Groq, credenziali separate, migrazione cronologie, argomenti non fidati,

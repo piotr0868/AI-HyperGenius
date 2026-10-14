@@ -6,9 +6,9 @@
     "errors": "0",
     "failures": "0",
     "skipped": "0",
-    "tests": "129",
-    "time": "74.955",
-    "timestamp": "2026-10-14T09:25:54.678757+00:00",
+    "tests": "135",
+    "time": "90.109",
+    "timestamp": "2026-10-14T10:34:37.339062+00:00",
     "hostname": "f5cf448d5661"
   },
   "reference_unit_tests": 8,
@@ -305,7 +305,7 @@
     "fresh_task_verified": false
   },
   "source_sha256": {
-    "app/agent.py": "9b0fcb83287edc379a6bb16497c63cd41c7a5d54d7e0d1356be82995abfc9fbb",
+    "app/agent.py": "a7218c332cc17f93106f50733ba6b0f4bc9693a91f63fbc9aae0eeb270ea12d1",
     "app/providers.py": "7ebc0bdc5682f9fda4130c850a24398ff1a89d3f654565204e6aa598196054c6",
     "app/config.py": "3331e58edffb6766931b5d7f3d34561187041bb8742e4212de1cc295f3034daf",
     "app/sandbox.py": "03740c23c4f71a5ce12526de415c8175322cf5346823ae436cfc8cdb8bbaf4b1",
@@ -326,7 +326,8 @@
     "scripts/leggi_diagnosi.py": "38462440bedb1391fb4082bdb8d75311fc5938173ed5864867ff58f40e3f5c59",
     "tests/test_read_diagnostics.py": "4300f679f71a1be4fa5cb4778773dbf646c61b8e13d1e0918c415e8c08deff53",
     "tests/test_server_lifecycle.py": "1848316cc144ea625bd4c28560e6db83c4161ec09409ff2afb75ff51be97ef8e",
-    "tests/test_agent.py": "6096e9fdce49a25865c7c08a5545e504ceb409310ac1819a45a48406e9b586a5"
+    "tests/test_agent.py": "6096e9fdce49a25865c7c08a5545e504ceb409310ac1819a45a48406e9b586a5",
+    "tests/test_completion_budget.py": "0c432f898f64704ab3f1359ebc9862924cee9b77d8303a5ad50bd4bce2305751"
   },
   "version": "0.2.0",
   "provider": "groq",
@@ -580,5 +581,22 @@
       "repair": 7
     },
     "current_log_unit_counts": "not repeated in final terminal log"
+  },
+  "ordinary_ui_budget_completion": {
+    "date": "2026-10-14",
+    "platform": "Linux",
+    "new_cases": 6,
+    "docker": "real",
+    "sdk_transport": "mock; rejects any request",
+    "model_call_limit_in_tests": 12,
+    "new_model_calls": 0,
+    "existing_usage_preserved": true,
+    "invalid_or_zero_tests_never_ready": true,
+    "unchanged_failure_not_repeated": true,
+    "file_digest_verified": true,
+    "windows_before_update": "User screenshot: ordinary UI project stopped on call limit; last verification not yet supplied",
+    "windows_after_update": "not_run",
+    "separate_acceptance_status": "previous CLI acceptance remains passed according to native user log",
+    "test_evidence": "resources/evidence/ui-budget-completion.xml"
   }
 }

@@ -14,7 +14,7 @@ né una verifica di ogni futuro programma; l'esito riguarda il contratto attivit
 
 | Prova | Esito effettivo |
 | --- | --- |
-| Suite applicazione pytest | **129 passati**, 0 falliti, 0 errori, 0 skipped |
+| Suite applicazione pytest | **135 passati**, 0 falliti, 0 errori, 0 skipped |
 | Nuovo avvio automatico | **12 controlli passati su Linux**, API simulate: protezione chiave, posizione fuori dal progetto, annullamento, blocco su errori, tentativi limitati, prove perse/modificate invalidate |
 | Avvio automatico → applicazione e API locali | **Passato su Linux** dopo annullamento chiave, nessuna chiamata IA; interfaccia italiana e risposta salute effettive |
 | Backend di riferimento in Docker | **8 test passati**, 0 falliti, 0 skipped |
@@ -49,6 +49,7 @@ né una verifica di ogni futuro programma; l'esito riguarda il contratto attivit
 | Conclusione dopo messaggio finale | **6 nuovi casi passati nella suite Linux**: successo registrato solo con piano, fonti, prove e hash valido; messaggi di successo con prove mancanti/fallite o file modificati non certificano. SDK simulato e Docker reale riproducono scrittura → lettura → verifiche → testo finale |
 | Pausa e Ferma alla conclusione | **2 ulteriori casi passati nella suite Linux**: pausa richiesta durante la risposta finale impedisce di registrare Pronto; Riprendi permette la conclusione e Ferma la impedisce, senza nuove chiamate al modello |
 | Ripresa con tutte le 20 chiamate usate | **Passata con Docker reale** nella prova integrata: consumi conservati, nuove prove e conclusione senza chiamate al modello. **Confermata dal log Windows** dopo aggiornamento alla revisione 899e0cb |
+| Progetto ordinario UI a limite richieste | **6 nuovi casi passati con Docker reale**, SDK simulato che rifiuta qualsiasi richiesta: verifica senza IA di file validi, prove già valide e file cambiati; input invalido e zero test respinti; fallimento invariato non ripetuto. Limiti e consumi preservati. Windows: screenshot conferma il blocco del progetto ordinario; nuova correzione ancora da applicare |
 | Avvio dopo correzione HTTP 400 | **Passato su Linux**: pagina italiana, API, Docker disponibile, creazione progetto e credenziale assente dichiarata; limite ordinario app ancora 12, zero chiamate live |
 | Aggiornamento con checksum e copie precedenti | **Passato offline**: rifiuto checksum errato prima di modifiche, chiave conservata, sorgenti precedenti archiviati, app attiva impedisce l'aggiornamento |
 | Prova di procedure con Groq reale | **NON ESEGUITA**, stessa credenziale mancante |

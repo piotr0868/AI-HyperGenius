@@ -171,7 +171,8 @@ class Agent:
             if any(len(x) > 1500 for x in [args['outcome'], *args['criteria'], *args['steps']]) or len(args['steps']) > 12:
                 raise ValueError('Piano troppo lungo')
             self.store.update(pid, outcome=args['outcome'], criteria=args['criteria'], plan=args['steps'],
-                              summary=args['outcome'][:400], next_step=args['steps'][0], state='Lavoro')
+                              summary='Ho preparato il piano. Continuo il lavoro sul progetto.',
+                              next_step='Attendi: organizzo i file e le verifiche.', state='Lavoro')
             return {'saved': True, 'mandatory_contract': 'activities API, input validation, idempotency, restart persistence, nonempty unittest'}
         if name == 'search_knowledge':
             docs = self.store.search(args['query'])
@@ -197,14 +198,15 @@ class Agent:
         if name == 'write_file':
             if not p['criteria'] or not p['plan'] or not p['docs_consulted']:
                 raise ValueError('Prima salva piano e criteri, poi consulta documentazione pertinente.')
-            self.store.update(pid, state='Lavoro', summary='Sto costruendo e correggendo il progetto.', next_step='Eseguire le verifiche obbligatorie.')
+            self.store.update(pid, state='Lavoro', summary='Sto costruendo e correggendo il progetto.', next_step='Attendi il completamento del lavoro.')
             return self.store.write_file(pid, args['path'], args['content'])
         if name == 'execute_python':
             return await self.sandbox.execute(self.store.files(pid), args['argv'], pid)
         if name == 'run_checks':
-            self.store.update(pid, state='Verifica', summary='Verifico test, API e conservazione dei dati.', next_step='Analizzare i risultati delle prove.')
+            self.store.update(pid, state='Verifica', summary='Verifico test, API e conservazione dei dati.', next_step='Attendi l’esito dei controlli.')
             digest = self.store.digest(pid)
             result = await self.sandbox.verify(self.store.files(pid), pid)
+            result['files_sha256'] = digest
             ok = result['passed'] and digest == self.store.digest(pid)
             self.store.update(pid, last_check=result, verified_hash=digest if ok else None,
                               failed_checks=p['failed_checks'] + (not ok))
@@ -219,6 +221,21 @@ class Agent:
             self.store.update(pid, state='Pronto', summary=args['summary'][:700], next_step=args['next_step'][:500])
             return {'ready': True, 'evidence': current['last_check']['check']}
         raise ValueError('Strumento non consentito')
+
+    async def finish_verified_result(self, pid, trigger):
+        """Conclude soltanto da prove valide sui file correnti; nessuna richiesta IA."""
+        current = self.store.project(pid)
+        if (not current['criteria'] or not current['plan'] or not current['docs_consulted']
+                or not current['last_check'] or not current['last_check'].get('passed')
+                or current['verified_hash'] != self.store.digest(pid)):
+            return False
+        await self.perform(pid, 'finish', {
+            'summary': 'Progetto verificato: test, API e persistenza superati.',
+            'next_step': 'Prova le API del progetto verificato.'})
+        self.store.event(pid, 'certificazione_automatica', {
+            'actor': 'system', 'model_called': False, 'trigger': trigger,
+            'basis': 'current_files_nonempty_unittest_and_independent_contract'})
+        return True
 
     async def run(self, pid):
         started = time.monotonic()
@@ -243,7 +260,7 @@ class Agent:
                 if not p['docs_consulted']:
                     history.append({'role': 'user', 'content': 'La consultazione della documentazione non è ancora riuscita. Prima di scrivere usa search_knowledge con una query pertinente, ad esempio SQLite HTTPServer unittest. Controlla che restituisca riferimenti; poi ispeziona i file effettivamente salvati.'})
             self.store.update(pid, state='Preparazione', question=None, history=history,
-                              summary='Preparo obiettivo, piano e documentazione.', next_step='Definire i criteri di riuscita.')
+                              summary='Preparo obiettivo, piano e documentazione.', next_step='Attendi: preparo il piano e i criteri di riuscita.')
             while True:
                 started += await self.checkpoint(pid)
                 p = self.store.project(pid)
@@ -251,6 +268,23 @@ class Agent:
                     raise NeedsIntervention('Tempo operativo massimo raggiunto.')
                 if p['failed_checks'] > self.settings.max_corrections:
                     raise NeedsIntervention('Limite di correzioni raggiunto. Consulta gli errori nelle verifiche.')
+                if p['model_calls'] >= self.settings.max_model_calls:
+                    if await self.finish_verified_result(pid, 'model_limit_with_verified_checks'):
+                        return
+                    previous = p['last_check'] or {}
+                    unchanged_failure = (previous.get('passed') is False
+                                         and bool(previous.get('check')) and not previous.get('timeout')
+                                         and previous.get('files_sha256') == self.store.digest(pid))
+                    if (p['criteria'] and p['plan'] and p['docs_consulted'] and self.store.files(pid)
+                            and p['tool_calls'] + 2 <= self.settings.max_tool_calls and not unchanged_failure):
+                        self.store.event(pid, 'verifica_senza_richiesta_ia', {
+                            'actor': 'system', 'reason': 'model_call_limit', 'model_called': False})
+                        remaining = self.settings.task_timeout - before - (time.monotonic() - started)
+                        async with asyncio.timeout(max(.1, remaining)):
+                            await self.perform(pid, 'run_checks', {})
+                        started += await self.checkpoint(pid)
+                        if await self.finish_verified_result(pid, 'model_limit_after_file_checks'):
+                            return
                 budget = token_budget(self.settings, p, history)
                 self.store.event(pid, 'controllo_budget_token', budget)
                 preflight(self.settings, p, history, budget)
@@ -313,18 +347,8 @@ class Agent:
                         self.store.event(pid, 'messaggio_ia', {'text': response.output_text[:6000]})
                     # Alcuni modelli concludono in testo dopo run_checks. La riuscita
                     # dipende dalle prove del sistema sui file correnti, non dal testo.
-                    current = self.store.project(pid)
-                    if (current['criteria'] and current['plan'] and current['docs_consulted']
-                            and current['last_check'] and current['last_check'].get('passed')
-                            and current['verified_hash'] == self.store.digest(pid)):
-                        started += await self.checkpoint(pid)
-                        await self.perform(pid, 'finish', {
-                            'summary': 'Progetto verificato: test, API e persistenza superati.',
-                            'next_step': 'Prova le API del progetto verificato.'})
-                        self.store.event(pid, 'certificazione_automatica', {
-                            'actor': 'system', 'model_called': False,
-                            'trigger': 'model_returned_without_finish',
-                            'basis': 'current_files_nonempty_unittest_and_independent_contract'})
+                    started += await self.checkpoint(pid)
+                    if await self.finish_verified_result(pid, 'model_returned_without_finish'):
                         return
                     raise NeedsIntervention('L’agente ha concluso senza certificare le verifiche. Riprendi per completarle.')
                 for call in calls:
@@ -381,6 +405,9 @@ class Agent:
             self.store.update(pid, elapsed=before + time.monotonic() - started)
 
     def intervention(self, pid, message):
+        next_step = ('Apri «Dettagli del lavoro e verifiche» per vedere l’ultima prova e i file conservati.'
+                     if message.startswith('Limite di chiamate IA') else
+                     'Completa il requisito indicato, poi premi Riprendi.')
         self.store.update(pid, state='Serve il tuo intervento', summary=message,
-                          next_step='Completa il requisito indicato, poi premi Riprendi.')
+                          next_step=next_step)
         self.store.event(pid, 'intervento', {'message': message})

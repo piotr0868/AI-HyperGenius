@@ -304,6 +304,13 @@ non certifica il risultato. Una prova già corretta può essere ricontrollata e
 conclusa alla ripresa anche quando le chiamate IA disponibili sono esaurite.
 La conclusione automatica rispetta Pausa e Ferma prima di registrare Pronto.
 
+Nel progetto ordinario dell'interfaccia, il limite di chiamate IA non impedisce
+il controllo dei file già creati: se piano, criteri e fonti sono presenti, il
+sistema può eseguire run_checks e concludere senza altre risposte del modello,
+entro gli altri limiti. Riprendi applica lo stesso controllo ai progetti fermi
+sul limite. Prove fallite o assenti impediscono Pronto; un fallimento invariato
+non viene rieseguito automaticamente più volte. I contatori restano conservati.
+
 Se `main.py` manca durante la ripresa e non è mai stato versionato, la prova può
 recuperare il codice esatto di una precedente risposta IA la cui scrittura era
 stata bloccata soltanto dai prerequisiti di piano/documentazione. Richiede che
