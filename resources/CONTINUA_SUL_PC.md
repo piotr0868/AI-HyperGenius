@@ -1,92 +1,84 @@
-# Ripresa di Officina sul PC dell'utente
+# Ripresa di Officina sul PC
 
-Nella sessione precedente l'utente ha chiesto lavoro autonomo sui file e sui
-processi necessari al progetto, istruzioni italiane e una sola decisione alla volta.
-Ridurre i comandi da copiare. Questo documento trasferisce il contesto: la nuova
-sessione deve avere l'incarico dell'utente e le proprie autorizzazioni effettive.
-Ispezionare il progetto prima di agire.
+Aggiornato il 14 ottobre 2026. L'utente vuole lavoro autonomo: descrivere il
+risultato in italiano e lasciare all'agente pianificazione, decisioni tecniche,
+file, prove e correzioni. Ha gia' autorizzato le operazioni necessarie al progetto.
+Leggere AGENTS.md e lo STATO_PROGETTO.md locale prima di agire. Ridurre le
+richieste all'utente alle sole informazioni o autorizzazioni indispensabili
+realmente mancanti. Non chiedere riconferme per il lavoro ordinario autorizzato.
 
-Codex CLI 0.161.0 è già installato sul PC Windows tramite il pacchetto
-OpenAI.Codex di WinGet, ambito utente. Il log dell'utente conferma hash verificato,
-installazione riuscita e alias codex aggiunto. Usare questa sessione locale per il
-lavoro; il contesto precedente nella chat rimaneva su una macchina cloud distinta.
+## Ambiente e dati
 
-## Ambito e dati
+- Repository: https://github.com/piotr0868/AI-HyperGenius, branch main.
+- Cartella Windows: `%USERPROFILE%\OneDrive\Desktop\OFFICINA\AI-HyperGenius-main`.
+  Puo' provenire da uno ZIP senza Git: ispezionarla e preservare modifiche locali.
+- Python 3.12 e .venv installati; Docker Desktop con container Linux gia' usato
+  con successo. Codex CLI 0.161.0 installato tramite OpenAI.Codex/WinGet, accesso
+  ChatGPT riuscito e lavoro locale avviato. Il flag verificato della versione
+  e' --approve-for-me (revisione automatica con sandbox), non --full-auto.
+- La chiave Groq e' gia' configurata fuori da OneDrive, in
+  `%LOCALAPPDATA%\Officina\credentials.env`. Riutilizzare il caricamento locale
+  di scripts/avvio_automatico.py; non leggerla con gli strumenti del modello,
+  non stamparla e non richiederla in chat. Conservare .env, .data e cronologia.
+- Non enumerare dati personali estranei, non disattivare sandbox/TLS/firme e
+  non usare Nodveta, denaro, portafogli, invii a clienti o pubblicazioni automatiche.
+- Eseguire il codice generato soltanto nel sandbox Docker di Officina, senza
+  rete, cartelle personali, segreti o socket Docker. Il codice dell'assistente
+  e i relativi controlli di sviluppo possono essere eseguiti nell'ambiente host.
 
-Lavorare nella cartella Windows
-`%USERPROFILE%\OneDrive\Desktop\OFFICINA\AI-HyperGenius-main`.
-Conservare codice, `.data`, `.env`, cronologia e progetti esistenti. Non enumerare
-file personali estranei né riportare chiavi o credenziali nei messaggi o nei log.
-La chiave Groq è già configurata sul PC: avvio_automatico.py la carica localmente
-da `%LOCALAPPDATA%\Officina\credentials.env`. Non richiederla di nuovo e non
-leggerla con gli strumenti del modello; avviare gli script già predisposti.
-Usare il sandbox dell'agente locale e limitare gli accessi alla cartella progetto.
-Non disattivare verifiche TLS, checksum o controlli di sicurezza per procedere.
-Non accedere a denaro/portafogli, inviare messaggi, pubblicare il prodotto o usare
-repository di Nodveta. GitHub conserva il codice, non è il runtime Windows.
+## Stato effettivo gia' riportato dal PC
 
-## Stato verificato
+Il progetto UI **e32ae57b463c406381faa8efec493542**, in `.data/memory.sqlite3`,
+e' **Pronto**: 5 test e controlli API/validazione/idempotenza/persistenza passati.
+La foto dell'utente mostra questo esito nell'interfaccia. Il Codex locale ha
+confermato l'hash corrente uguale al rapporto salvato. Il precedente main.py
+mancante e' stato recuperato: non trattarlo ancora come assente e non ricreare
+quel progetto. Contatori e file vanno conservati.
 
-Repository remoto: https://github.com/piotr0868/AI-HyperGenius, branch main.
-Ultima modifica del controller pronta sul cloud:
-`f91612f60773c836926419a6282b4331b8a9e55c`.
-148 test passati su Linux, zero errori/fallimenti/skipped. SDK ufficiale nei test,
-HTTP simulato e Docker reale: nessuna inferenza reale fatta dal cloud.
-L'applicazione di questa revisione al PC non è ancora confermata.
+La prova CLI separata e' gia' **PASSATA**: generazione e correzione nella copia,
+20 richieste complessive conservate. Non ricrearla o reintrodurre il difetto.
 
-Il progetto dell'interfaccia da riprendere è
-`e32ae57b463c406381faa8efec493542`, nella memoria principale `.data/memory.sqlite3`.
-12 chiamate modello e 12 operazioni consumate; 34765 token input e 7394 output,
-677.437 secondi, 1 fonte consultata. main.py manca: la richiesta originale di
-scrittura (4485 caratteri, SHA256
-601af0b8f715094a50decf7cd208ae3bb2c51988cd66edd400e54dd5769a800e)
-fu respinta perché la documentazione non era ancora stata consultata. La
-consultazione riuscì dopo, ma l'agente consumò le richieste riscrivendo i test.
-Quel codice esiste nella storia locale; non è stato trasmesso al cloud.
+Esistono backend distinti da conservare:
+- Porta 8766: consegna scritta da Codex, container officina-attivita-e32ae57b,
+  volume officina-attivita-e32ae57b-dati. L'utente ha provato salvataggio e
+  permanenza di "Prova di salvataggio" dopo docker restart e ricarica.
+- Porta 8767: progetto verificato con AVVIA_PROGETTO_VERIFICATO.bat, avvio/riuso
+  e HTTP 200 verificati dal Codex locale. /activities puo' mostrare JSON `[]`:
+  e' una lista vuota, non l'interfaccia dell'assistente.
 
-La modifica f91612f porta nella UI il recupero protetto già usato dalla prova CLI:
-ripete esattamente quella scrittura, con versione/rollback e attribuzione al
-sistema, soltanto se piano/criteri/documentazione sono presenti e il file non è
-mai stato salvato/eliminato intenzionalmente. Conserva limiti e contatori e
-controlla in Docker. Nessuna nuova generazione per la ripresa a 12 chiamate.
-Pronto dipende dalle prove reali sui file correnti, non da una risposta del modello.
-Il codice originale sul PC potrebbe avere difetti: va realmente verificato.
+Il collegamento principale corretto e' **Apri Officina** sul Desktop, verso
+APRI_OFFICINA.bat nella cartella progetto. Il Codex locale l'ha gia' applicato
+e ha verificato HTTP/HTML e riuso del server su 8765. La finestra del server
+deve restare aperta durante l'uso. Non far scaricare nuovamente ZIP o ricopiare
+comandi tecnici all'utente per passaggi che l'agente puo' completare.
 
-La prova di accettazione CLI separata è già PASSATA su Windows, con 20 richieste
-complessive conservate. Non confonderla col progetto UI. Non ricreare la prova,
-non reintrodurre il difetto della copia e non azzerare/aumentare i budget.
+Il controllo computer-use di Chrome ha avuto un blocco per identificazione
+incerta dell'URL anche dopo il permesso all'app. Rispettarlo e distinguere
+visione automatica non eseguita, foto fornita dall'utente e prove HTTP/HTML.
+Non eludere il blocco o chiedere altre foto per controlli che non sono visivi.
 
-Esiste anche un backend separato completato da Codex, non dal modello Groq:
-container `officina-attivita-e32ae57b`, porta locale 8766, volume
-`officina-attivita-e32ae57b-dati`. L'utente ha verificato pagina, salvataggio di
-«Prova di salvataggio» e permanenza dopo docker restart e ricarica. Conservarlo.
-I vecchi AVVIA.bat/FERMA.bat di questa consegna avevano un difetto; le versioni
-corrette sul repository non sono ancora confermate sul PC. Non dichiararle provate.
+## Modifica di autonomia pronta sul repository
 
-## Lavoro da completare autonomamente
+app/agent.py ora verifica e prosegue automaticamente quando il modello conclude
+in testo senza file o prove completi. Conclude soltanto da prove passate e hash
+corrente; evita prove fallite duplicate sui file invariati; rispetta domande
+indispensabili, Pausa/Ferma e tutti i budget, senza reset o aumenti.
+AGENTS.md conserva il mandato di autonomia per Codex. La prima versione
+dell'agente resta specializzata nel backend attivita' Python del contratto.
 
-1. Ispezionare il progetto e le istruzioni AGENTS.md disponibili, senza sovrascrivere
-   modifiche dell'utente. Il progetto Windows potrebbe essere uno ZIP senza .git.
-2. Controllare se la revisione f91612f è applicata. Lo script esistente
-   scripts/aggiorna_quota.py aggiorna quattro file da una revisione fissata,
-   verifica checksum/sintassi e salva copie precedenti. Non tocca chiavi o memoria.
-   Il limite --chiamate-prova 20 riguarda la sola prova CLI già passata; la UI
-   conserva il limite ordinario di 12. Evitare nuove generazioni a pagamento.
-3. Gestire solo il processo Officina identificato (porta 8765 e relativo percorso),
-   senza arrestare genericamente Python o Docker. Il backend sulla 8766 è distinto.
-   Avviare scripts/avvio_automatico.py, così carica la credenziale già presente.
-4. Riprendere lo stesso progetto UI e verificare recupero e prove in Docker. Non
-   creare un altro obiettivo e non sostituire il main recuperato con la fixture di
-   riferimento. Controllare il rapporto effettivo, i contatori e i test eseguiti.
-5. Se il sorgente reale non passa, leggere gli errori e correggere l'implementazione
-   in modo versionato, attribuendo gli interventi all'agente locale/Codex. Conservare
-   i test e usare il contratto API indipendente; nessuna esecuzione del codice
-   generato sull'host. Non dichiarare successo senza prove passate e hash corrente.
-6. Completare istruzioni e avvio semplice, verificare le modifiche necessarie sul
-   vero Windows, aggiornare STATO_PROGETTO.md e riferire risultato/problemi/prossimo
-   passo in italiano. Chiedere soltanto credenziali/autorizzazioni indispensabili
-   realmente mancanti, attraverso l'interfaccia locale, mai segreti nella chat.
+**165 test passati su Linux**, zero errori/fallimenti/skipped, con 11 nuovi casi
+per la continuazione automatica. SDK ufficiali con HTTP simulato e Docker reale:
+nessuna nuova inferenza reale sul cloud. Non attribuire questi esiti a una nuova
+prova con il modello sul PC.
 
-La nuova sessione locale è distinta dalla precedente chat cloud. Questo documento
-trasferisce il contesto; non attribuisce alla chat cloud accesso remoto al PC e
-non garantisce assenza di elaborazione del contesto da parte del servizio IA.
+L'applicazione del nuovo controller e la nuova prova reale Windows non sono
+ancora confermate. Seguire resources/ATTIVA_AUTONOMIA_PC.md da una revisione
+fissata: solo i file previsti con checksum e backup, integrazione delle modifiche
+locali, test su Windows, riavvio identificato del solo Officina e una singola
+prova reale con Groq entro i budget ordinari, senza sostituire codice generato
+facendolo passare per lavoro autonomo. Aggiornare poi lo stato e questo contesto
+locale con gli esiti effettivi. Un blocco di quota resta un esito non completato.
+
+La sessione locale e' distinta dalla chat cloud che ha preparato questo file.
+Il documento trasferisce contesto, non concede accesso remoto al PC alla chat
+cloud e non garantisce assenza di elaborazione dei dati da parte del servizio IA.

@@ -11,6 +11,15 @@ L’applicazione si avvia anche senza credenziale, ma non inventa risposte IA: m
 Le quote gratuite non sono illimitate: controlla il piano e i limiti nella console Groq.
 L’app non attiva la fatturazione e non passa automaticamente a un altro fornitore.
 
+Il lavoro prosegue automaticamente entro i limiti operativi: se il modello si
+ferma con un messaggio senza le prove, il sistema verifica i file salvati. Se le
+prove falliscono o mancano file, restituisce il rapporto al modello e continua
+la correzione nello stesso progetto. Le prove fallite sui file invariati non
+vengono ripetute inutilmente. Pausa, Ferma e le domande indispensabili restano
+disponibili. I limiti di richieste, operazioni, token, tempo e costo fermano il
+lavoro; il solo testo del modello non puo' produrre lo stato **Pronto**.
+Il mandato di lavoro per Codex e' conservato in **AGENTS.md**.
+
 ## Codice su GitHub
 
 Il repository di destinazione è <https://github.com/piotr0868/AI-HyperGenius>,
@@ -105,7 +114,10 @@ Il log finale del **14 ottobre 2026** conferma **ACCETTAZIONE IA: PASSATA** e
 con il modello reale. La correzione precedente della porta e la certificazione
 conclusiva sono interventi del sistema esplicitamente registrati. La ripresa
 finale ha conservato le 20 richieste già usate senza altre generazioni.
-Le verifiche eseguite direttamente dall'assistente restano su Linux: 129 passate.
+La suite attuale eseguita dall'assistente su Linux comprende **165 test passati**,
+senza errori o skipped. I nuovi test della continuazione automatica usano SDK
+ufficiali con HTTP simulato e Docker reale: la nuova prova con il modello reale
+sul PC deve essere registrata separatamente.
 
 ## Cosa puoi provare subito senza chiave
 

@@ -6,9 +6,9 @@
     "errors": "0",
     "failures": "0",
     "skipped": "0",
-    "tests": "148",
-    "time": "94.834",
-    "timestamp": "2026-10-14T13:38:14.511962+00:00",
+    "tests": "165",
+    "time": "125.223",
+    "timestamp": "2026-10-14T18:09:23.852785+00:00",
     "hostname": "f5cf448d5661"
   },
   "reference_unit_tests": 8,
@@ -305,7 +305,7 @@
     "fresh_task_verified": false
   },
   "source_sha256": {
-    "app/agent.py": "4a94539c707fcfeaf930cf9429bef874c376d7290fb5587c534af5f06edb5b67",
+    "app/agent.py": "ed629f9a135759de3fa3cb00d5a47ebaa9a3a70451e62071f7fed69a5e7ce5c2",
     "app/providers.py": "7ebc0bdc5682f9fda4130c850a24398ff1a89d3f654565204e6aa598196054c6",
     "app/config.py": "3331e58edffb6766931b5d7f3d34561187041bb8742e4212de1cc295f3034daf",
     "app/sandbox.py": "03740c23c4f71a5ce12526de415c8175322cf5346823ae436cfc8cdb8bbaf4b1",
@@ -329,7 +329,11 @@
     "tests/test_agent.py": "6096e9fdce49a25865c7c08a5545e504ceb409310ac1819a45a48406e9b586a5",
     "tests/test_completion_budget.py": "0c432f898f64704ab3f1359ebc9862924cee9b77d8303a5ad50bd4bce2305751",
     "APRI_OFFICINA.bat": "8ac0bc60b8d384dda70677aed47e5f368584dab1c7d03c0e8a4ce594ed8d271d",
-    "scripts/apri_officina.py": "cfcb19a875eb8e1a9fbe0c85e594758dafe980a9e0f63f6f33533d651280bae3"
+    "scripts/apri_officina.py": "cfcb19a875eb8e1a9fbe0c85e594758dafe980a9e0f63f6f33533d651280bae3",
+    "AGENTS.md": "827d7f69302d508f60d23968b278cb685a2dfbb44c9963745210b1d664327a8b",
+    "tests/test_autonomous_completion.py": "919e85c7120f1c8ffa0f7b9cf3be6a62150d1b962665ba27e03b07919e7d1f16",
+    "resources/ATTIVA_AUTONOMIA_PC.md": "7d9c27f4f2ea1d474b01bb6cf0860ed156ebf7866b982fa64f83e530b8cc3176",
+    "resources/CONTINUA_SUL_PC.md": "2cf278a082948d3b05d278790975da047b85aecfa40e531af74e6d2a7a8cb128"
   },
   "version": "0.2.0",
   "provider": "groq",
@@ -744,8 +748,36 @@
       "platform": "Linux",
       "tests_passed": 6,
       "model_calls": 0,
-      "windows": "not yet verified; requires the local session",
+      "windows": "HTTP/HTML and existing-server reuse passed according to local Codex report pasted by user; computer-use visual check blocked by uncertain URL identity",
       "report": "resources/evidence/open-officina.xml"
     }
+  },
+  "autonomous_completion": {
+    "platform": "Linux",
+    "new_test_cases_in_full_suite": 11,
+    "sdk": [
+      "Groq official SDK",
+      "OpenAI official SDK"
+    ],
+    "provider_http": "simulated",
+    "generated_code_execution": "real isolated Docker; never host",
+    "live_model_inference": "not performed in cloud",
+    "checks": [
+      "automatic checks after premature plain completion",
+      "failure, repair and retest without manual resume",
+      "unchanged failed files not retested",
+      "pause and stop",
+      "essential user question",
+      "model, tool, correction, token and time limits preserved"
+    ],
+    "windows_new_controller": "not yet applied or verified; local Codex instructions prepared",
+    "local_instructions": "resources/ATTIVA_AUTONOMIA_PC.md",
+    "files_to_apply": [
+      "app/agent.py",
+      "AGENTS.md",
+      "tests/test_autonomous_completion.py"
+    ],
+    "baseline_commit": "da935ebb9731711e1ed90ee202bad389dce34a4b",
+    "report": "resources/evidence/pytest.xml"
   }
 }

@@ -3,7 +3,49 @@
 Aggiornato il 14 ottobre 2026. Il nuovo obiettivo è usare il piano gratuito Groq,
 con quote operative, senza passaggio automatico a servizi a pagamento.
 
-### Avvio principale dell'assistente: correzione del collegamento
+### Lavoro autonomo: completamento delle prove senza Riprendi manuale
+
+L'utente ha chiesto esplicitamente che l'agente sia capace di lavorare in
+autonomia. Aggiunto AGENTS.md con mandato persistente per Codex: decisioni
+tecniche normali autonome, prove prima della riuscita, conservazione dei dati e
+richieste all'utente soltanto per requisiti realmente mancanti. I blocchi di
+computer-use sull'identificazione dell'URL restano rispettati; non devono
+fermare controlli API/HTML o lavori indipendenti. La prova visiva automatica di
+Chrome e' ancora non eseguita; la foto dell'utente documenta l'interfaccia.
+
+app/agent.py ora gestisce anche una conclusione del modello in testo senza
+file/prove completi: esegue le prove sui file salvati quando possibile, conclude
+solo dall'hash verificato oppure prosegue nello stesso progetto con un rapporto
+dei problemi. Non richiede Riprendi per questo caso recuperabile. Una prova
+strutturata fallita sui file invariati non viene ripetuta inutilmente. Pausa,
+Ferma, domande indispensabili e limiti restano attivi; nessun azzeramento o aumento
+dei budget. Il limite di operazioni ferma le richieste IA successive.
+
+**165 test passati su Linux**, zero fallimenti, errori o skipped, in 125.22 s.
+Gli 11 nuovi casi coprono SDK ufficiali Groq/OpenAI con HTTP simulato e Docker
+reale: messaggio prematuro seguito da verifica, errore rilevato e corretto senza
+Riprendi manuale, niente prove duplicate sui file invariati, pausa/stop, domanda
+indispensabile e rispetto dei limiti. Il codice della fixture e' il riferimento
+dichiarato, non una generazione del modello. Nessuna inferenza reale sul cloud.
+Report completo: resources/evidence/pytest.xml. Le prove non certificano una
+capacita' generale del modello o backend diversi dal contratto attivita'.
+
+resources/ATTIVA_AUTONOMIA_PC.md prepara il lavoro del Codex gia' attivo sul PC:
+integrazione mirata di app/agent.py, AGENTS.md e nuovo test con checksum/backup,
+prova Windows, riavvio del solo Officina identificato e una singola prova reale
+con Groq nel normale budget, in un nuovo progetto "Verifica autonomia". Nessuna
+nuova prova CLI, nessuna modifica ai contatori e al backend gia' verificato.
+Applicazione e nuova prova reale Windows ancora da confermare: non dichiararle
+riuscite prima del rapporto locale.
+
+L'avvio principale APRI_OFFICINA.bat e il collegamento Desktop **Apri Officina**
+sono invece gia' applicati sul PC: il rapporto locale incollato dall'utente
+conferma controlli HTTP/HTML e riuso del server riusciti, con dati conservati e
+backend 8766/8767 ancora HTTP 200. Il successivo tentativo di osservazione della
+finestra Chrome e' stato interrotto per identificazione incerta dell'URL anche
+dopo il permesso all'app. Non e' una mancata autorizzazione generale da aggirare.
+
+### Cronologia: preparazione dell'avvio principale dell'assistente
 
 Aggiornamento del 14 ottobre 2026: il Codex locale e' stato avviato con successo.
 Il suo rapporto, incollato dall'utente, conferma per il progetto UI e32ae57b
@@ -29,7 +71,7 @@ le modifiche locali e creare/provare il collegamento Desktop **Apri Officina**.
 L'installazione locale e' ancora da confermare. Non sostituire lo stato Windows
 locale con questo documento cloud durante l'applicazione.
 
-### Preferenza attuale: proseguire con un agente sul PC
+### Cronologia: installazione dell'agente sul PC
 
 **Codex CLI ora installato realmente sul PC**, secondo il log dell'utente:
 OpenAI.Codex rust-v0.161.0, archivio Windows x64 da release ufficiale OpenAI,
