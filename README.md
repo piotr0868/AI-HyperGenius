@@ -344,3 +344,13 @@ Per leggere lo stato del progetto originale senza chiamate IA o esecuzione di
 codice generato, usare `scripts/leggi_diagnosi.py --progetto ID`. Questo modo
 seleziona la memoria principale dell'interfaccia; senza l'opzione il diagnostico
 legge la prova di generazione CLI, mentre `--correzione` legge la relativa copia.
+
+L'agente dell'interfaccia recupera anche un main.py mai salvato la cui precedente
+scrittura era stata respinta soltanto per piano o documentazione mancanti, quando
+questi prerequisiti sono ora presenti. Usa esattamente il codice nella cronologia,
+conserva una versione annullabile e tutti i consumi, e lo verifica nel container.
+File esistenti o eliminati intenzionalmente ed errori diversi non vengono ripetuti.
+Il recupero non consuma nuove richieste al modello e non basta a mostrare Pronto:
+servono test non vuoti, contratto API e hash corrente verificati. Prova Linux
+passata anche usando i 5 test del ZIP ricevuto; applicazione al progetto reale
+Windows ancora da verificare.

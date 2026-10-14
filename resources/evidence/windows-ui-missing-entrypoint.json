@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-14",
+  "source": "User pasted fresh --progetto diagnostic from the native Windows PC",
+  "project_id": "e32ae57b463c406381faa8efec493542",
+  "state": "Serve il tuo intervento",
+  "model_calls": 12,
+  "tool_calls": 12,
+  "input_tokens": 34765,
+  "output_tokens": 7394,
+  "failed_checks": 0,
+  "docs_consulted": 1,
+  "elapsed": 677.4369999999981,
+  "main_py": {
+    "present": false,
+    "prior_attempt_characters": 4485,
+    "prior_content_sha256": "601af0b8f715094a50decf7cd208ae3bb2c51988cd66edd400e54dd5769a800e",
+    "receipt_error": "Prima salva piano e criteri, poi consulta documentazione pertinente.",
+    "actual_source_received": false
+  },
+  "last_check": null,
+  "token_budget": {
+    "used_tokens": 42159,
+    "required_tokens": 68948,
+    "limit_tokens": 120000
+  },
+  "diagnosis": "Main write rejected before documentation; documentation later consulted; remaining model calls repeatedly wrote tests; recoverable from exact saved model response",
+  "windows_recovery_after_patch": "not yet executed"
+}

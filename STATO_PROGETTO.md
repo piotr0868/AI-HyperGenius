@@ -3,6 +3,46 @@
 Aggiornato il 14 ottobre 2026. Il nuovo obiettivo è usare il piano gratuito Groq,
 con quote operative, senza passaggio automatico a servizi a pagamento.
 
+### Recupero del programma originale nell'interfaccia, 14 ottobre
+
+Ricevuto il rapporto reale `--progetto e32ae57b463c406381faa8efec493542`:
+main.py era stato generato, ma write_file era stato respinto prima della
+consultazione dei documenti. **4485 caratteri**, SHA256
+601af0b8f715094a50decf7cd208ae3bb2c51988cd66edd400e54dd5769a800e,
+ricevuta «Prima salva piano e criteri, poi consulta documentazione pertinente.».
+Poi fetch_documentation è riuscito, ma l'agente ha consumato le altre richieste
+riscrivendo i test. 12 chiamate, 12 operazioni, 34765+7394 token, 677.437 secondi,
+1 fonte, zero verifiche; riserva 68948 inferiore al limite 120000. Non è un
+arresto per budget token o una nuova quota Groq. Il codice originale non è
+stato trasmesso nel rapporto: sul cloud conosciamo hash e ricevuta, non il sorgente.
+
+Il recupero già usato nella prova CLI ora è condiviso con Agent.run della UI:
+appena piano/criteri/documentazione sono presenti, ripete la scrittura esatta
+della memoria con versione/rollback, prima di qualsiasi altra richiesta al modello.
+Vale anche quando tutte le 12 richieste sono già consumate. Nessun aumento o reset
+di chiamate/token/tempo/correzioni; riserva operazioni per scrittura, prova e finish.
+Nessuna riscrittura dei test e nessun programma sostitutivo inserito nel progetto.
+Eventi e marcatore attribuiscono la ripetizione al sistema, non a una nuova IA.
+File presenti, eliminati intenzionalmente, scritture dall'esito ignoto o negate per
+altre ragioni non vengono recuperati. Pausa/Ferma e limiti restano rispettati.
+
+**148 test passati su Linux**, zero fallimenti/errori/skipped; Docker reale e SDK
+ufficiale con HTTP simulato, nessuna chiamata reale al modello. Nuova regressione:
+stessi 5 test del ZIP originale, codice di riferimento dichiarato usato solo nella
+fixture, 12 chiamate conservate, recupero esatto e 5 controlli API passati; variante
+difettosa rifiutata, prove/test invariati, rollback e ripresa senza duplicazioni.
+Il sorgente originale di 4485 caratteri sul PC resta da verificare: non attribuire
+gli esiti della fixture Linux a quel codice né al progetto reale ancora bloccato.
+
+Prossima azione: aggiornamento mirato con scripts/aggiorna_quota.py e revisione
+fissata di questa modifica, --chiamate-prova 20 soltanto per conservare il limite
+complessivo della prova CLI già passata. Lasciare il terminale aperto per Officina.
+Quando l'app si apre, **Riprendi sul progetto corrente e32ae57b**, senza nuovo
+obiettivo: recupero e test avvengono senza altre generazioni. Pronto solo se tutte
+le prove reali passano. Se l'aggiornatore rileva Officina aperta senza PID sicuro,
+si ferma prima delle modifiche: usare Ctrl+C soltanto nella sua finestra Uvicorn.
+Non toccare il container del backend separato (porta 8766), già provato dall'utente.
+
 ### ZIP del progetto ordinario ricevuto: backend mancante, consegna separata
 
 **Esito attuale sul PC: il backend separato funziona per creazione, consultazione
@@ -26,9 +66,8 @@ main.py e motivi degli errori senza riportare il codice della storia. Chiavi
 mascherate e rapporto nuovo in Blocco note, distinto dai rapporti CLI già passati.
 **14 controlli diagnostici passati su Linux**, incluso DB principale distinto
 dall'accettazione, DB invariati, ID invalidi respinti e apertura Notepad simulata.
-Prossima azione: leggere il rapporto del progetto e32ae57b463c406381faa8efec493542
-sul PC con questo nuovo helper; il vecchio helper Windows va prima scaricato
-dalla revisione fissata. Aprire solo CMD con Win+R, poi incollare il lungo comando
+Rapporto del progetto e32ae57b463c406381faa8efec493542 ora ricevuto: vedere
+la sezione iniziale con la causa accertata. Aprire solo CMD con Win+R, poi incollare il lungo comando
 nella finestra nera: NON incollare comandi lunghi nella casella Esegui.
 
 Cronologia del problema iniziale di avvio della consegna:
@@ -55,8 +94,8 @@ L'utente ha caricato `progetto-e32ae57b.zip`. Il rapporto identifica il progetto
 34765 token input, 7394 output, 677.437 secondi, 1 fonte consultata.
 Contiene soltanto `tests/__init__.py`, `tests/test_api.py` e il rapporto;
 **main.py manca**, `last_check=null`, `verified_hash=null`, zero verifiche
-registrate. Non attribuire la causa della scrittura mancante al modello o al
-controller senza leggere la storia. L'aggiornamento eecd1d6 sul PC non è ancora
+registrate. La storia ora letta conferma il blocco sui prerequisiti (sezione
+iniziale). L'aggiornamento eecd1d6 sul PC non è ancora
 confermato. Il suo controllo dei file non può far passare un programma mancante.
 
 Completata una **consegna separata da Codex**, `examples/attivita_consegna`, dal

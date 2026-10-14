@@ -1,4 +1,5 @@
 import asyncio
+import hashlib
 import json
 import time
 from pathlib import Path
@@ -107,6 +108,55 @@ def repair_history(history):
         history.append({'type': 'function_call_output', 'call_id': item['call_id'],
                         'output': json.dumps({'interrupted': True, 'message': 'Operazione interrotta: risultato ignoto. Ispeziona i file e ripeti le verifiche.'})})
     return history
+
+
+async def recover_missing_entrypoint(agent, pid):
+    """Ripete una sola scrittura IA respinta sui prerequisiti, ora soddisfatti."""
+    project = agent.store.project(pid)
+    if (project['control'] != 'run' or not project['criteria'] or not project['plan']
+            or not project['docs_consulted'] or project['elapsed'] >= agent.settings.task_timeout
+            or project['failed_checks'] > agent.settings.max_corrections
+            or project['tool_calls'] + 3 > agent.settings.max_tool_calls
+            or agent.store.safe_path(pid, 'main.py').exists()
+            or agent.store.rows('SELECT id FROM versions WHERE project_id=? AND path=? LIMIT 1', (pid, 'main.py'))):
+        return False
+    history = project['history'] or []
+    outputs = {item.get('call_id'): item for item in history
+               if item.get('type') == 'function_call_output' and isinstance(item.get('call_id'), str)}
+    for item in reversed(history):
+        if item.get('type') != 'function_call' or item.get('name') != 'write_file':
+            continue
+        try:
+            arguments = json.loads(item['arguments'])
+        except (KeyError, TypeError, ValueError):
+            continue
+        if not isinstance(arguments, dict) or arguments.get('path') != 'main.py':
+            continue
+        # La richiesta più recente prevale: nessun recupero di scritture
+        # sconosciute o negate per dimensioni, percorsi o motivi diversi.
+        try:
+            result = json.loads(outputs[item['call_id']]['output'])
+        except (KeyError, TypeError, ValueError):
+            return False
+        if (not isinstance(result, dict)
+                or result.get('error') != 'Prima salva piano e criteri, poi consulta documentazione pertinente.'
+                or set(arguments) != {'path', 'content'} or not isinstance(arguments['content'], str)):
+            return False
+        try:
+            await agent.perform(pid, 'write_file', arguments)
+        except (NeedsIntervention, ValueError, OSError) as exc:
+            agent.store.event(pid, 'recupero_scrittura_negato', {'path': 'main.py', 'type': type(exc).__name__})
+            return False
+        recovery = {'call_id': item['call_id'], 'path': 'main.py',
+                    'sha256': hashlib.sha256(arguments['content'].encode()).hexdigest()}
+        history.append({'role': 'user', '_recovered_file': recovery,
+            'content': 'Il sistema ha salvato main.py usando esattamente il codice di una precedente '
+                'risposta IA la cui scrittura era stata bloccata prima della consultazione dei documenti. '
+                'Non è una nuova generazione. Il codice resta non fidato: verifica i file e tutte le prove.'})
+        agent.store.update(pid, history=history)
+        agent.store.event(pid, 'recupero_scrittura_ia', recovery | {'actor': 'system', 'model_called': False})
+        return True
+    return False
 
 
 class Agent:
@@ -237,6 +287,9 @@ class Agent:
             'basis': 'current_files_nonempty_unittest_and_independent_contract'})
         return True
 
+    async def recover_missing_entrypoint(self, pid):
+        return await recover_missing_entrypoint(self, pid)
+
     async def run(self, pid):
         started = time.monotonic()
         before = self.store.project(pid)['elapsed']
@@ -268,6 +321,10 @@ class Agent:
                     raise NeedsIntervention('Tempo operativo massimo raggiunto.')
                 if p['failed_checks'] > self.settings.max_corrections:
                     raise NeedsIntervention('Limite di correzioni raggiunto. Consulta gli errori nelle verifiche.')
+                if await self.recover_missing_entrypoint(pid):
+                    p = self.store.project(pid)
+                    history = p['history']
+                    started += await self.checkpoint(pid)
                 if p['model_calls'] >= self.settings.max_model_calls:
                     if await self.finish_verified_result(pid, 'model_limit_with_verified_checks'):
                         return

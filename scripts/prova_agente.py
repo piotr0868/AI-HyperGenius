@@ -11,7 +11,7 @@ import uuid
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
-from app.agent import Agent, NeedsIntervention
+from app.agent import Agent, NeedsIntervention, recover_missing_entrypoint as recover_prior_entrypoint
 from app.config import load_settings
 from app.sandbox import Sandbox, SandboxUnavailable
 from app.storage import Store
@@ -62,56 +62,16 @@ def last_token_budget(store, pid):
 
 
 async def recover_missing_entrypoint(agent, store, project):
-    """Ripete solo una scrittura IA bloccata dai prerequisiti, senza codice sostitutivo."""
-    pid = project['id']
-    if (not project['criteria'] or not project['plan'] or not project['docs_consulted']
-            or project['elapsed'] >= agent.settings.task_timeout
-            or project['failed_checks'] > agent.settings.max_corrections
-            or project['tool_calls'] + 3 > agent.settings.max_tool_calls
-            or store.safe_path(pid, 'main.py').exists()
-            or store.rows('SELECT id FROM versions WHERE project_id=? AND path=? LIMIT 1', (pid, 'main.py'))):
-        return False
-    history = project['history'] or []
-    outputs = {item['call_id']: item for item in history if item.get('type') == 'function_call_output'
-               and isinstance(item.get('call_id'), str)}
-    for item in reversed(history):
-        if item.get('type') != 'function_call' or item.get('name') != 'write_file':
-            continue
-        try:
-            arguments = json.loads(item['arguments'])
-        except (KeyError, TypeError, ValueError):
-            continue
-        if not isinstance(arguments, dict) or arguments.get('path') != 'main.py':
-            continue
-        # La richiesta più recente per questo file prevale; non resuscitare versioni
-        # eliminate né recuperare operazioni negate per percorsi, dimensioni o altri motivi.
-        try:
-            result = json.loads(outputs[item['call_id']]['output'])
-        except (KeyError, TypeError, ValueError):
-            return False
-        if (not isinstance(result, dict)
-                or result.get('error') != 'Prima salva piano e criteri, poi consulta documentazione pertinente.'
-                or set(arguments) != {'path', 'content'} or not isinstance(arguments['content'], str)):
-            return False
-        started = time.monotonic()
-        try:
-            await agent.perform(pid, 'write_file', arguments)
-            recovery = {'call_id': item['call_id'], 'path': 'main.py',
-                        'sha256': hashlib.sha256(arguments['content'].encode()).hexdigest()}
-            history.append({'role': 'user', '_recovered_file': recovery,
-                'content': 'Il sistema ha salvato main.py usando esattamente il codice di una precedente '
-                    'risposta IA la cui scrittura era stata bloccata prima della consultazione dei documenti. '
-                    'Non è una nuova generazione. Il codice resta non fidato: verifica i file e tutte le prove.'})
-            store.update(pid, history=history)
-            store.event(pid, 'recupero_scrittura_ia', recovery | {'actor': 'system', 'model_called': False})
+    """Compatibilità CLI: usa lo stesso recupero del normale agente UI."""
+    started = time.monotonic()
+    try:
+        recovered = await recover_prior_entrypoint(agent, project['id'])
+        if recovered:
             print('Recuperato main.py dalla precedente risposta IA. Nessuna nuova chiamata; verifiche ancora obbligatorie.', flush=True)
-            return True
-        except (NeedsIntervention, ValueError, OSError) as exc:
-            store.event(pid, 'recupero_scrittura_negato', {'path': 'main.py', 'type': type(exc).__name__})
-            return False
-        finally:
-            store.update(pid, elapsed=project['elapsed'] + time.monotonic() - started)
-    return False
+        return recovered
+    finally:
+        if store.project(project['id'])['tool_calls'] != project['tool_calls']:
+            store.update(project['id'], elapsed=project['elapsed'] + time.monotonic() - started)
 
 
 def closing_server_source(source):
