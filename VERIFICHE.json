@@ -1,15 +1,15 @@
 {
   "platform": "Linux",
-  "date": "2026-10-13",
+  "date": "2026-10-14",
   "pytest": {
     "name": "pytest",
     "errors": "0",
     "failures": "0",
     "skipped": "0",
-    "tests": "117",
-    "time": "50.623",
-    "timestamp": "2026-10-13T20:10:25.777513+00:00",
-    "hostname": "d679e40bb841"
+    "tests": "127",
+    "time": "72.905",
+    "timestamp": "2026-10-14T09:21:20.998027+00:00",
+    "hostname": "f5cf448d5661"
   },
   "reference_unit_tests": 8,
   "independent_contract": [
@@ -89,9 +89,9 @@
     },
     "live_ai": {
       "generation": "Verified on user PC after system/Codex listener-lifecycle correction; not an autonomous Groq repair",
-      "reason": "Generation passed; separate repair attempted and not completed. Latest pasted fragment ends before repair; exact reason not supplied.",
+      "reason": "Actual model fix and tests passed; final reply was plain text without finish. Formal completion pending.",
       "exact_quota_type": "unknown",
-      "separate_ai_repair": "attempted, not completed; exact reason pending"
+      "separate_ai_repair": "Defect detected, real Groq write applied, 7 unittests passed; final message lacked finish, so formal status still intervention."
     },
     "docker_desktop": {
       "engine_running": "visible in screenshot",
@@ -99,8 +99,7 @@
       "update": "winget reports installation successful; package Docker.DockerDesktop 4.95.0, installer hash verified"
     },
     "not_verified": [
-      "reason and final counters for separate live repair",
-      "complete live AI acceptance",
+      "formal completion on PC after controller fix",
       "Officina browser workflow beyond page opening"
     ],
     "latest_attempt": {
@@ -116,9 +115,22 @@
       "generation_model_calls": 16,
       "generation_input_tokens": 74968,
       "generation_output_tokens": 10486,
-      "separate_repair": "attempted, initial checks failed; final state and reason not supplied",
+      "separate_repair": {
+        "state": "Serve il tuo intervento",
+        "checks_passed": true,
+        "unit_tests": 7,
+        "unit_errors": 0,
+        "model_calls": 4,
+        "input_tokens": 18917,
+        "output_tokens": 422,
+        "original_unchanged": true,
+        "tests_unchanged": true,
+        "ai_write_recorded": true,
+        "reason": "plain final text without finish"
+      },
       "ai_acceptance": "not completed",
-      "server_pid_reported": 18028
+      "server_pid_reported": 18028,
+      "formal_closure_after_update": "not_run"
     },
     "attempt_history": [
       {
@@ -256,7 +268,7 @@
     "fresh_task_verified": false
   },
   "source_sha256": {
-    "app/agent.py": "d7e531e59dd8f6e83a1f339a1805090d300f77b3a396518333afd455ecf39153",
+    "app/agent.py": "b25f77afd8fa95b90f27759e8fa28327ae086775275fa95c9e78ee9e1a7bf30c",
     "app/providers.py": "7ebc0bdc5682f9fda4130c850a24398ff1a89d3f654565204e6aa598196054c6",
     "app/config.py": "3331e58edffb6766931b5d7f3d34561187041bb8742e4212de1cc295f3034daf",
     "app/sandbox.py": "03740c23c4f71a5ce12526de415c8175322cf5346823ae436cfc8cdb8bbaf4b1",
@@ -276,7 +288,8 @@
     "tests/test_history_recovery.py": "7687cffe1b19cc90f13458cf4ac5d89121beb744f7f59d49112ecf6099d05b00",
     "scripts/leggi_diagnosi.py": "38462440bedb1391fb4082bdb8d75311fc5938173ed5864867ff58f40e3f5c59",
     "tests/test_read_diagnostics.py": "4300f679f71a1be4fa5cb4778773dbf646c61b8e13d1e0918c415e8c08deff53",
-    "tests/test_server_lifecycle.py": "51116492887314fdc2b208c452f4a8a3b46b17f95abcbeb29bb5c9baf6475852"
+    "tests/test_server_lifecycle.py": "1848316cc144ea625bd4c28560e6db83c4161ec09409ff2afb75ff51be97ef8e",
+    "tests/test_agent.py": "698acde84fd0af3e929dd885bece2eb558d8fc0fc6e24d3af4465b1ef54e4318"
   },
   "version": "0.2.0",
   "provider": "groq",
@@ -434,7 +447,7 @@
     "repair_calls": 3,
     "explicit_total_limit": 20,
     "original_and_tests_unchanged": true,
-    "live_ai_on_windows": "Attempted on 2026-10-14, not completed; exact cause pending"
+    "live_ai_on_windows": "Real Groq repair observed, 7 unittests and verification passed; plain final text lacked finish, formal closure after update pending"
   },
   "repair_diagnostics": {
     "date": "2026-10-14",
@@ -453,5 +466,37 @@
     "generated_code_execution": false,
     "windows_notepad": "mocked in test; native PC execution pending",
     "full_pytest": "117 from 2026-10-13; not rerun for read-only diagnostic helper"
+  },
+  "plain_text_completion": {
+    "date": "2026-10-14",
+    "platform": "Linux",
+    "new_cases": 6,
+    "targeted_suite": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "28",
+      "time": "49.150",
+      "timestamp": "2026-10-14T09:19:54.295474+00:00",
+      "hostname": "f5cf448d5661"
+    },
+    "api_transport": "official Groq SDK with mock HTTP",
+    "docker": "real",
+    "conditions": [
+      "plan",
+      "criteria",
+      "documentation consulted",
+      "checks passed",
+      "current file digest matches verified digest"
+    ],
+    "missing_or_failed_evidence_never_ready": true,
+    "exhausted_budget_resume_verified": true,
+    "preserved_generation_calls": 16,
+    "preserved_repair_calls": 4,
+    "preserved_repair_input_tokens": 18917,
+    "preserved_repair_output_tokens": 422,
+    "new_model_calls_on_resume": 0,
+    "windows_after_update": "not_run"
   }
 }

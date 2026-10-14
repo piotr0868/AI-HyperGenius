@@ -293,6 +293,13 @@ passati sui file correnti. Il registro distingue questa verifica del sistema da
 una chiamata IA. Un controllo fallito viene consegnato al modello per la correzione
 entro i limiti; non viene presentato come riuscito.
 
+Se il modello conclude con un messaggio di testo dopo run_checks, il controller
+può registrare finish senza un'altra risposta IA. Richiede piano, criteri,
+documentazione e verifiche passate sui file correnti, con hash ancora valido.
+La conclusione viene attribuita al sistema nel registro; il solo testo del modello
+non certifica il risultato. Una prova già corretta può essere ricontrollata e
+conclusa alla ripresa anche quando le chiamate IA disponibili sono esaurite.
+
 Se `main.py` manca durante la ripresa e non è mai stato versionato, la prova può
 recuperare il codice esatto di una precedente risposta IA la cui scrittura era
 stata bloccata soltanto dai prerequisiti di piano/documentazione. Richiede che

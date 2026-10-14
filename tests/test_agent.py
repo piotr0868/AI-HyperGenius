@@ -46,6 +46,47 @@ async def test_ready_requires_current_successful_proof(agent):
         await agent.perform(pid, 'finish', {'summary': 'Pronto', 'next_step': 'Prova'})
 
 
+@pytest.mark.parametrize('case', ['missing_check', 'failed_check', 'changed_files', 'missing_docs', 'missing_plan'])
+async def test_plain_success_message_never_replaces_current_required_evidence(tmp_path, case):
+    from groq import AsyncGroq
+    requests = []
+
+    def respond(request):
+        requests.append(request)
+        return httpx.Response(200, json={'id': 'chat_plain', 'object': 'chat.completion', 'created': 1,
+            'model': 'openai/gpt-oss-20b', 'choices': [{'index': 0, 'finish_reason': 'stop',
+            'message': {'role': 'assistant', 'content': 'Tutti i test passano. Il progetto è pronto.'}}],
+            'usage': {'prompt_tokens': 100, 'completion_tokens': 20, 'total_tokens': 120}})
+
+    client = AsyncGroq(api_key='offline-only', max_retries=0,
+        http_client=httpx.AsyncClient(transport=httpx.MockTransport(respond)))
+    store = Store(tmp_path)
+    agent = Agent(Settings(data_dir=tmp_path, max_model_calls=1), store, OfflineSandbox(), client=client)
+    pid = store.create_project('Verifica del protocollo offline')['id']
+    store.write_file(pid, 'main.py', 'unchecked = True\n')
+    store.update(pid, criteria=['API e test'], plan=['Verifica'], docs_consulted=1,
+        last_check={'passed': True, 'check': {'unit_tests': 1}}, verified_hash=store.digest(pid))
+    if case == 'missing_check':
+        store.update(pid, last_check=None)
+    elif case == 'failed_check':
+        store.update(pid, last_check={'passed': False, 'check': {'unit_tests': 1, 'unit_errors': 1}})
+    elif case == 'changed_files':
+        store.write_file(pid, 'main.py', 'changed_after_check = True\n')
+    elif case == 'missing_docs':
+        store.update(pid, docs_consulted=0)
+    elif case == 'missing_plan':
+        store.update(pid, plan=[])
+    try:
+        await agent.run(pid)
+        result = store.project(pid)
+        assert result['state'] == 'Serve il tuo intervento' and result['model_calls'] == 1
+        assert len(requests) == 1 and result['input_tokens'] == 100 and result['output_tokens'] == 20
+        assert not any(e['kind'] == 'certificazione_automatica' for e in store.events(pid))
+    finally:
+        await agent.shutdown()
+        store.close()
+
+
 def test_budgets_reject_before_call(agent):
     p = agent.store.create_project('Progetto di test')
     p['model_calls'] = 12

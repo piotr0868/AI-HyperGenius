@@ -117,7 +117,8 @@ async def test_windows_failure_reproduced_and_system_fix_passes_same_tests_in_do
         store.close()
 
 
-async def test_separate_ai_protocol_repairs_after_system_fix_within_four_remaining_calls(tmp_path, monkeypatch):
+@pytest.mark.parametrize('completion', ['finish_tool', 'plain_text'])
+async def test_separate_ai_protocol_repairs_after_system_fix_within_four_remaining_calls(tmp_path, monkeypatch, completion):
     config = replace(load_settings(), data_dir=tmp_path, api_key='offline-only', min_interval=0, max_model_calls=12)
     sandbox = Sandbox(config)
     status = await sandbox.status()
@@ -135,9 +136,14 @@ async def test_separate_ai_protocol_repairs_after_system_fix_within_four_remaini
         failed_checks=3, elapsed=777.391)
     live.save_json(tmp_path / 'live-acceptance/RUN.json', {'generation_id': pid})
     store.close()
-    calls = iter([
-        ('write_file', {'path': 'regression_target.py', 'content': 'def normalize_title(value):\n    return value.strip()\n'}),
-        ('run_checks', {}), ('finish', {'summary': 'Prova offline verificata', 'next_step': 'Risultati'})])
+    steps = [('write_file', {'path': 'regression_target.py', 'content': 'def normalize_title(value):\n    return value.strip()\n'})]
+    if completion == 'plain_text':
+        # Riproduce la sequenza del rapporto Windows: scrive, legge, verifica, testo finale.
+        steps.append(('read_file', {'path': 'regression_target.py'}))
+    steps.append(('run_checks', {}))
+    steps.append(('plain_text', {}) if completion == 'plain_text' else
+                 ('finish', {'summary': 'Prova offline verificata', 'next_step': 'Risultati'}))
+    calls = iter(steps)
     requests = []
 
     def respond(request):
@@ -147,10 +153,13 @@ async def test_separate_ai_protocol_repairs_after_system_fix_within_four_remaini
             assert any('test_strip' in str(message) and 'FAIL' in str(message) for message in payload['messages'])
             assert any('unittest' in str(message) and 'source_date' in str(message) for message in payload['messages'])
         name, args = next(calls)
+        message = {'role': 'assistant', 'content': None, 'tool_calls': [{'id': f'call_{len(requests)}',
+            'type': 'function', 'function': {'name': name, 'arguments': json.dumps(args)}}]}
+        if name == 'plain_text':
+            message = {'role': 'assistant', 'content': 'Tutti i test passano. Il progetto è in stato di successo.'}
         return httpx.Response(200, json={'id': f'chat_{len(requests)}', 'object': 'chat.completion',
-            'created': 1, 'model': config.model, 'choices': [{'index': 0, 'finish_reason': 'tool_calls',
-            'message': {'role': 'assistant', 'content': None, 'tool_calls': [{'id': f'call_{len(requests)}',
-                'type': 'function', 'function': {'name': name, 'arguments': json.dumps(args)}}]}}],
+            'created': 1, 'model': config.model, 'choices': [{'index': 0,
+            'finish_reason': 'stop' if name == 'plain_text' else 'tool_calls', 'message': message}],
             'usage': {'prompt_tokens': 100, 'completion_tokens': 20, 'total_tokens': 120}})
 
     client = AsyncGroq(api_key='offline-only', max_retries=0,
@@ -160,12 +169,50 @@ async def test_separate_ai_protocol_repairs_after_system_fix_within_four_remaini
     monkeypatch.setattr(sys, 'argv', ['prova_agente.py', '--chiamate-prova', '20'])
     assert await live.main() == 0
     result = live.read_json(tmp_path / 'live-acceptance/RESULTS.json')
-    assert result['generation']['model_calls'] == 16 and len(requests) == 3
-    assert result['repair']['project']['model_calls'] == 3
+    expected_calls = 4 if completion == 'plain_text' else 3
+    assert result['generation']['model_calls'] == 16 and len(requests) == expected_calls
+    assert result['repair']['project']['model_calls'] == expected_calls
     assert result['repair']['detected_initial_fault'] and result['repair']['corrected_and_retested']
     assert result['repair']['ai_repair_write'] and result['repair']['original_unchanged']
     assert result['repair']['project']['last_check']['check']['unit_tests'] == 10
     assert result['operational_limits']['repair_model_calls'] == 4 and config.max_model_calls == 12
+    if completion == 'plain_text':
+        store = Store(tmp_path / 'live-acceptance')
+        try:
+            events = store.events(result['repair']['project']['id'])
+            certificate = next(e for e in events if e['kind'] == 'certificazione_automatica')
+            assert certificate['detail']['trigger'] == 'model_returned_without_finish'
+            assert not certificate['detail']['model_called']
+        finally:
+            store.close()
+        # Emula la versione precedente sul PC: prove passate e messaggio finale,
+        # ma stato non concluso. Tutte le 20 chiamate sono già state consumate.
+        rid = result['repair']['project']['id']
+        store = Store(tmp_path / 'live-acceptance')
+        store.update(rid, state='Serve il tuo intervento', tool_calls=6,
+                     input_tokens=18917, output_tokens=422, elapsed=194.719,
+                     summary='L’agente ha concluso senza certificare le verifiche.')
+        interrupted = store.project(rid)
+        store.close()
+        result['repair']['project'] = {key: value for key, value in interrupted.items() if key != 'history'}
+        result['repair']['corrected_and_retested'] = False
+        live.save_json(tmp_path / 'live-acceptance/RESULTS.json', result)
+
+        def reject_generation(request):
+            pytest.fail('La ripresa a budget esaurito deve verificare e concludere senza chiamare il modello')
+
+        resume_client = AsyncGroq(api_key='offline-only', max_retries=0,
+            http_client=httpx.AsyncClient(transport=httpx.MockTransport(reject_generation)))
+        monkeypatch.setattr(live, 'Agent', lambda settings, store, sandbox: Agent(settings, store, sandbox, client=resume_client))
+        assert await live.main() == 0
+        resumed = live.read_json(tmp_path / 'live-acceptance/RESULTS.json')
+        assert resumed['generation']['model_calls'] == 16
+        assert resumed['repair']['project']['model_calls'] == 4
+        assert resumed['repair']['project']['input_tokens'] == 18917
+        assert resumed['repair']['project']['output_tokens'] == 422
+        assert resumed['repair']['corrected_and_retested'] and resumed['repair']['original_unchanged']
+        assert resumed['repair']['tests_unchanged'] and resumed['repair']['ai_repair_write']
+        assert resumed['repair']['project']['elapsed'] > 194.719
 
 
 def test_certificate_requires_actual_successful_ai_write():

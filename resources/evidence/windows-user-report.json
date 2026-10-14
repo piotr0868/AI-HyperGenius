@@ -16,9 +16,9 @@
   },
   "live_ai": {
     "generation": "Verified on user PC after system/Codex listener-lifecycle correction; not an autonomous Groq repair",
-    "reason": "Generation passed; separate repair attempted and not completed. Latest pasted fragment ends before repair; exact reason not supplied.",
+    "reason": "Actual model fix and tests passed; final reply was plain text without finish. Formal completion pending.",
     "exact_quota_type": "unknown",
-    "separate_ai_repair": "attempted, not completed; exact reason pending"
+    "separate_ai_repair": "Defect detected, real Groq write applied, 7 unittests passed; final message lacked finish, so formal status still intervention."
   },
   "docker_desktop": {
     "engine_running": "visible in screenshot",
@@ -26,8 +26,7 @@
     "update": "winget reports installation successful; package Docker.DockerDesktop 4.95.0, installer hash verified"
   },
   "not_verified": [
-    "reason and final counters for separate live repair",
-    "complete live AI acceptance",
+    "formal completion on PC after controller fix",
     "Officina browser workflow beyond page opening"
   ],
   "latest_attempt": {
@@ -43,9 +42,22 @@
     "generation_model_calls": 16,
     "generation_input_tokens": 74968,
     "generation_output_tokens": 10486,
-    "separate_repair": "attempted, initial checks failed; final state and reason not supplied",
+    "separate_repair": {
+      "state": "Serve il tuo intervento",
+      "checks_passed": true,
+      "unit_tests": 7,
+      "unit_errors": 0,
+      "model_calls": 4,
+      "input_tokens": 18917,
+      "output_tokens": 422,
+      "original_unchanged": true,
+      "tests_unchanged": true,
+      "ai_write_recorded": true,
+      "reason": "plain final text without finish"
+    },
     "ai_acceptance": "not completed",
-    "server_pid_reported": 18028
+    "server_pid_reported": 18028,
+    "formal_closure_after_update": "not_run"
   },
   "attempt_history": [
     {

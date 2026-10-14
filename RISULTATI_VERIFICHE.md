@@ -1,13 +1,13 @@
 # Risultati della consegna
 
-Suite rieseguita il 13 ottobre 2026, su **Linux**, Python 3.12.14, Docker 28.4.0,
+Suite rieseguita il 14 ottobre 2026, su **Linux**, Python 3.12.14, Docker 28.4.0,
 Chromium di sistema. I risultati completi sono in `resources/evidence/`.
 Le prove precedenti di browser, riavvio, installazione e riferimento con difetto
-restano quelle del 12 ottobre; il nuovo avvio e la suite sono stati verificati il 13.
+restano quelle del 12 ottobre; il nuovo avvio è stato verificato il 13, la suite il 14.
 
 | Prova | Esito effettivo |
 | --- | --- |
-| Suite applicazione pytest | **117 passati**, 0 falliti, 0 errori, 0 skipped |
+| Suite applicazione pytest | **127 passati**, 0 falliti, 0 errori, 0 skipped |
 | Nuovo avvio automatico | **12 controlli passati su Linux**, API simulate: protezione chiave, posizione fuori dal progetto, annullamento, blocco su errori, tentativi limitati, prove perse/modificate invalidate |
 | Avvio automatico → applicazione e API locali | **Passato su Linux** dopo annullamento chiave, nessuna chiamata IA; interfaccia italiana e risposta salute effettive |
 | Backend di riferimento in Docker | **8 test passati**, 0 falliti, 0 skipped |
@@ -34,11 +34,13 @@ restano quelle del 12 ottobre; il nuovo avvio e la suite sono stati verificati i
 | Verifica dei file prima della ripresa IA | **3 casi passati con Docker reale e SDK simulato**: riferimento certificato senza ulteriore API, zero test e input invalido respinti; contatori preservati e tempo conteggiato |
 | Recupero scrittura IA bloccata | **10 nuovi casi passati su Linux**: solo main.py assente e mai versionato da richiesta bloccata sui prerequisiti; codice esatto, versione/rollback, verifiche in Docker e nessuna nuova API nel caso valido; Windows ancora da provare |
 | Diagnosi del progetto senza IA | **4 controlli passati nella suite Linux**: database e file invariati, codice analizzato senza import/exec, riferimenti esterni rifiutati, mascheramento chiavi, invocazione Notepad simulata |
-| Diagnosi breve della copia, 14 ottobre | **8 controlli mirati passati su Linux**, inclusi i 4 precedenti: selezione della copia, contatori/motivo/operazioni pertinenti, database e file invariati, nessuna importazione/esecuzione del codice generato, chiavi mascherate, copia non avviata e riferimenti invalidi gestiti, apertura Notepad simulata. Suite completa ancora 117 del 13 ottobre |
-| Nuovo rapporto Windows, 14 ottobre | **Backend verificato sul PC dopo la procedura del sistema**: 6 unittest, 0 fallimenti/errori/skipped e verifiche API superate; 16 chiamate conservate. Prova separata con IA tentata e NON COMPLETATA: motivo ancora da leggere, PID comunicato 18028 |
+| Diagnosi breve della copia, 14 ottobre | **8 controlli passati su Linux**, inclusi nella suite: selezione della copia, contatori/motivo/operazioni pertinenti, database e file invariati, nessuna importazione/esecuzione del codice generato, chiavi mascherate, copia non avviata e riferimenti invalidi gestiti, apertura Notepad simulata. Rapporto ricevuto dal PC |
+| Nuovo rapporto Windows, 14 ottobre | **Backend verificato sul PC dopo la procedura del sistema**: 6 unittest, 0 fallimenti/errori/skipped e verifiche API superate; 16 chiamate conservate. Nella copia l'IA ha corretto il difetto: 7 unittest e verifiche passati, originale e test invariati. 4 chiamate, poi testo finale senza finish: stato formale ancora NON COMPLETATA, PID comunicato 18028 |
 | Diagnosi reale Windows del 13 ottobre | **5 controlli API passati**, **5 di 6 unittest passati**; errore di riavvio `Address already in use`. main.py presente. 16 chiamate IA, 85454 token usati; ultima risposta del modello: rifiuto testuale, causa sconosciuta. Accettazione completa ancora incompleta |
 | Procedura di chiusura server del sistema | **9 nuovi controlli passati su Linux**: difetto della porta riprodotto in Docker, implementazione corretta senza modificare test, 9 unittest e 5 API passati, rollback, nessuna esecuzione del codice sull'host, strutture non riconosciute rifiutate |
-| Prova separata dopo correzione del sistema | **Passata offline**: SDK Groq reale con risposte HTTP simulate e Docker reale; 10 unittest e 5 API passati dopo difetto rilevato e scrittura prevista dal test, 3 chiamate della copia (19 complessive), originale e test invariati. Modello reale sul PC **ancora da verificare** |
+| Prova separata dopo correzione del sistema | **Passata offline**: SDK Groq reale con risposte HTTP simulate e Docker reale; 10 unittest e 5 API passati dopo difetto rilevato e scrittura prevista dal test, originale e test invariati; sia finish esplicito (19 chiamate complessive) sia testo finale (20) gestiti. Windows: correzione reale osservata, nuova chiusura formale ancora da verificare |
+| Conclusione dopo messaggio finale | **6 nuovi casi passati nella suite Linux**: successo registrato solo con piano, fonti, prove e hash valido; messaggi di successo con prove mancanti/fallite o file modificati non certificano. SDK simulato e Docker reale riproducono scrittura → lettura → verifiche → testo finale |
+| Ripresa con tutte le 20 chiamate usate | **Passata con Docker reale** nella prova integrata: generazione 16 e copia 4 conservate, token 18917/422 della copia preservati, nuove prove e conclusione senza alcuna chiamata al modello. Chiusura sul PC dopo aggiornamento **ancora da eseguire** |
 | Avvio dopo correzione HTTP 400 | **Passato su Linux**: pagina italiana, API, Docker disponibile, creazione progetto e credenziale assente dichiarata; limite ordinario app ancora 12, zero chiamate live |
 | Aggiornamento con checksum e copie precedenti | **Passato offline**: rifiuto checksum errato prima di modifiche, chiave conservata, sorgenti precedenti archiviati, app attiva impedisce l'aggiornamento |
 | Prova di procedure con Groq reale | **NON ESEGUITA**, stessa credenziale mancante |

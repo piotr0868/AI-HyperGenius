@@ -311,6 +311,20 @@ class Agent:
                 if not calls:
                     if response.output_text:
                         self.store.event(pid, 'messaggio_ia', {'text': response.output_text[:6000]})
+                    # Alcuni modelli concludono in testo dopo run_checks. La riuscita
+                    # dipende dalle prove del sistema sui file correnti, non dal testo.
+                    current = self.store.project(pid)
+                    if (current['criteria'] and current['plan'] and current['docs_consulted']
+                            and current['last_check'] and current['last_check'].get('passed')
+                            and current['verified_hash'] == self.store.digest(pid)):
+                        await self.perform(pid, 'finish', {
+                            'summary': 'Progetto verificato: test, API e persistenza superati.',
+                            'next_step': 'Prova le API del progetto verificato.'})
+                        self.store.event(pid, 'certificazione_automatica', {
+                            'actor': 'system', 'model_called': False,
+                            'trigger': 'model_returned_without_finish',
+                            'basis': 'current_files_nonempty_unittest_and_independent_contract'})
+                        return
                     raise NeedsIntervention('L’agente ha concluso senza certificare le verifiche. Riprendi per completarle.')
                 for call in calls:
                     started += await self.checkpoint(pid)

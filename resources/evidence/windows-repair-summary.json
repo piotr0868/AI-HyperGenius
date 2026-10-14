@@ -1,0 +1,53 @@
+{
+  "source": "Diagnostic pasted by user from native Windows PC, 2026-10-14; not run in cloud",
+  "generation": {
+    "id": "4e61bd1e66894d04bb1993000a90a634",
+    "state": "Pronto",
+    "unit_tests": 6,
+    "model_calls": 16
+  },
+  "repair": {
+    "id": "f00000d61e0f4b019025cc9f62a0aaea",
+    "state": "Serve il tuo intervento",
+    "model_calls": 4,
+    "tool_calls": 6,
+    "input_tokens": 18917,
+    "output_tokens": 422,
+    "failed_checks": 1,
+    "elapsed": 194.71900000000096
+  },
+  "reason": "L’agente ha concluso senza certificare le verifiche. Riprendi per completarle.",
+  "checks_passed": true,
+  "unit_tests": {
+    "unit_tests": 7,
+    "unit_failures": 0,
+    "unit_errors": 0
+  },
+  "proof": {
+    "detected_initial_fault": true,
+    "corrected_and_retested": false,
+    "original_unchanged": true,
+    "tests_unchanged": true
+  },
+  "ai_write_recorded": true,
+  "last_operations": [
+    {
+      "tool": "run_checks",
+      "path": null
+    },
+    {
+      "tool": "read_file",
+      "path": "regression_target.py"
+    },
+    {
+      "tool": "write_file",
+      "path": "regression_target.py"
+    },
+    {
+      "tool": "run_checks",
+      "path": null
+    }
+  ],
+  "last_ai_message": "✅ Tutti i test passano. La funzione `normalize_title` ora rimuove correttamente gli spazi ai bordi. Il progetto è in stato di successo.",
+  "diagnosis": "Actual model fix and tests passed; final reply was plain text without finish. Formal completion pending."
+}

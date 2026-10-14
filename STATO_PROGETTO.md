@@ -5,6 +5,29 @@ con quote operative, senza passaggio automatico a servizi a pagamento.
 
 ### Ultimo esito Windows: 14 ottobre 2026
 
+**Ultimo rapporto breve ricevuto:** la copia `f00000d61e0f4b019025cc9f62a0aaea`
+ha rilevato il difetto, ricevuto una scrittura IA riuscita su regression_target.py
+e superato **7 unittest, zero errori/fallimenti**, con `checks_passed=true`.
+Originale e test invariati. Il modello ha poi risposto soltanto in testo
+"Tutti i test passano…", senza chiamare finish. Il controller precedente ha
+lasciato lo stato su Serve il tuo intervento e `corrected_and_retested=false`
+pur avendo prove passate: è un difetto nella conclusione del flusso.
+La copia ha usato 4 chiamate, 18917 token input e 422 output; con le 16 chiamate
+di generazione il limite complessivo di 20 è già consumato. Il vecchio valore
+used_tokens=12916 è la riserva precedente all'ultima risposta, non il consumo finale.
+
+Corretto app/agent.py: dopo una risposta senza strumenti, il sistema registra
+finish soltanto se piano, criteri, documentazione, verifiche passate e hash dei
+file correnti sono presenti. Registra attore system e trigger separato dal
+messaggio IA; nessuna fiducia nel solo testo di successo. Le prove mancanti,
+fallite o invalidate continuano a impedire Pronto. Il percorso di ripresa già
+esistente ricontrolla in Docker e conclude anche con budget di chiamate esaurito.
+Verificato su Linux con SDK reale/HTTP simulato e Docker reale, incluso il
+caso 16+4 richieste e ripresa senza altre generazioni. **Applicazione del nuovo
+controller e chiusura formale della prova sul PC ancora da confermare.**
+Prossimo comando: aggiornamento mirato con PID comunicato 18028, limite 20
+conservato; non creare nuove prove e non aumentare i budget.
+
 L'utente ha riavviato il PC ed eseguito l'aggiornamento alla revisione
 405a9e1e3f154bfe4c49080c713bc0e3c7f51ecf, senza il PID precedente. Il log
 conferma checksum e backup, accesso Groq/modello, avvio Docker e prova senza IA
@@ -32,7 +55,8 @@ della copia da RESULTS.json e ultimi eventi via SQLite mode=ro, chiavi mascherat
 file diagnostico nuovo a ogni apertura in Notepad. Evita di copiare il rapporto
 completo e le schede precedenti con modifiche non salvate. **8 controlli mirati
 passati su Linux**; invocazione Notepad Windows simulata, nessuna API o esecuzione
-di codice generato. La suite completa resta quella effettiva di 117 del 13 ottobre.
+di codice generato. A quel punto la suite completa era di 117 del 13 ottobre;
+ora è stata rieseguita il 14: **127 passati**, zero fallimenti/errori/skipped.
 
 ### Situazione attuale: diagnosi Windows e correzione del riavvio
 
@@ -359,7 +383,7 @@ Docker non ha rete, segreti, cartelle host o socket Docker; niente ripiego sull'
 
 Su Linux, Python 3.12.14, Docker 28.4.0 e Chromium di sistema:
 
-- **117 test passati** nella suite corrente, 0 errori/fallimenti/skipped.
+- **127 test passati** nella suite corrente, 0 errori/fallimenti/skipped.
 - SDK ufficiali Groq e OpenAI con trasporto HTTP simulato e Docker reale: scrittura,
   difetto rilevato, correzione predisposta dal test e nuova verifica passata.
 - Quota Groq, credenziali separate, migrazione cronologie, argomenti non fidati,
