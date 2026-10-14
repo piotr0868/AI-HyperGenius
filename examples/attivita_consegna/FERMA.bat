@@ -1,8 +1,9 @@
 @echo off
 setlocal
 title Backend attivita - Arresto
-docker inspect --format "{{.Config.Labels.officina_delivery}}" officina-attivita-e32ae57b | findstr /x "e32ae57b" >nul
-if errorlevel 1 (
+set "OFFICINA_CONTAINER_LABEL="
+for /f "delims=" %%d in ('docker container inspect --format={{.Config.Labels.officina_delivery}} officina-attivita-e32ae57b 2^>nul') do set "OFFICINA_CONTAINER_LABEL=%%d"
+if not "%OFFICINA_CONTAINER_LABEL%"=="e32ae57b" (
   echo Il container di questo progetto non e disponibile. Nessun altro programma fermato.
   pause
   exit /b 1

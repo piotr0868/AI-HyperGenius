@@ -627,7 +627,26 @@
       "container_browser_smoke": "passed on Linux",
       "new_provider_calls": 0,
       "windows_batch_execution": "not performed",
-      "original_project": "not changed; incomplete"
+      "original_project": "not changed; incomplete",
+      "container_inspection_regression": "passed in real Docker: generic inspect accepts the same-named network, typed container inspect rejects it"
+    },
+    "windows_startup": {
+      "date": "2026-10-14",
+      "source": "User pasted Windows command output",
+      "platform": "Windows 10.0.26300.9711, Docker Desktop Linux",
+      "image_build_passed": true,
+      "build_seconds": 5.6,
+      "initial_batch_start": "failed before container creation",
+      "container_inspect": "No such container: officina-attivita-e32ae57b",
+      "network_driver": "bridge",
+      "changes": [
+        "docker container inspect instead of untyped docker inspect",
+        "FOR /F and IF instead of FINDSTR pipes",
+        "startup phase and container logs displayed on failure"
+      ],
+      "new_batch_windows_execution": "not yet performed",
+      "direct_existing_image_start": "pending user execution",
+      "data_deleted": false
     }
   }
 }

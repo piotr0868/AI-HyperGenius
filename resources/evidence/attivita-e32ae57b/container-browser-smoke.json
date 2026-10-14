@@ -2,6 +2,7 @@
   "platform": "Linux",
   "model_calls": 0,
   "windows_batch_executed": false,
+  "network_is_not_container": true,
   "container_restart_persistence": true,
   "idempotency_across_restart": true,
   "browser": "Chromium reale, viewport 390x844",

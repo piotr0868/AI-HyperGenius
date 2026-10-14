@@ -5,6 +5,26 @@ con quote operative, senza passaggio automatico a servizi a pagamento.
 
 ### ZIP del progetto ordinario ricevuto: backend mancante, consegna separata
 
+Aggiornamento Windows successivo alla consegna: l'utente ha scaricato ed estratto
+Backend-attivita.zip ed eseguito AVVIA.bat. Docker Desktop ha completato il build
+di tutti i 10 passaggi in 5.6 secondi, compresi COPY --chown e immagine fissata.
+Poi compare un solo ID Docker (944ee300…) e «Avvio non completato».
+Il controllo successivo dell'utente conferma **No such container** per
+`docker container inspect` e **bridge** per la rete. L'avvio si è fermato al
+controllo della rete, prima di docker run. Trovato inoltre un errore nel ramo
+di ripresa: `docker inspect` senza tipo trova la rete omonima e la scambia per
+un container. Corretto AVVIA.bat con inspect specifico per container e rimosse
+le pipe FINDSTR dai confronti di rete/label in AVVIA e FERMA: ora FOR /F legge
+il valore, IF lo confronta. Aggiunti fase dell'errore e ultimi log del container.
+Revisione Windows dei nuovi batch soltanto statica; esecuzione ancora da provare.
+Non cancellare container, rete o volume e non fare ricostruzioni alla cieca.
+Prossima azione sul PC: nella finestra CMD già aperta, creare il container con
+docker run dall'immagine esistente, stessi limiti/mount volume/porta loopback
+del batch, --pull=never. Nessun percorso locale o nuovo download necessario per
+questo avvio. Ricevere l'esito prima di dichiarare il backend avviato su Windows.
+L'utente chiede poche finestre aperte: riutilizzare la stessa CMD, Docker Desktop
+ridotto a icona e questa chat. Non chiedere chiavi né ripetere la prova IA.
+
 L'utente ha caricato `progetto-e32ae57b.zip`. Il rapporto identifica il progetto
 `e32ae57b463c406381faa8efec493542`: 12 chiamate modello, 12 operazioni,
 34765 token input, 7394 output, 677.437 secondi, 1 fonte consultata.

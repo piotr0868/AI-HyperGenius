@@ -29,6 +29,7 @@
     "platform": "Linux",
     "model_calls": 0,
     "windows_batch_executed": false,
+    "network_is_not_container": true,
     "container_restart_persistence": true,
     "idempotency_across_restart": true,
     "browser": "Chromium reale, viewport 390x844",
@@ -46,14 +47,17 @@
     "passed": true
   },
   "windows": {
-    "batch_scripts": "reviewed, not executed on Windows",
-    "user_next_action": "Extract ZIP and double-click AVVIA.bat"
+    "batch_scripts": "First version failed before container creation after successful build; corrected scripts reviewed but not run on Windows",
+    "image_build": "passed per user log",
+    "network_driver": "bridge per user diagnostic",
+    "container": "not yet created per user diagnostic",
+    "user_next_action": "Start from the existing image in the current CMD; report actual result"
   },
   "sha256": {
     "Dockerfile": "5111794e85da5db3e6e5615268dab3a788f7e73551192bac8daa277d02f3920c",
-    "AVVIA.bat": "bdf9e67915a67d66618b1e2320306fe5887941e138055d444a4d488e141b9f9b",
-    "FERMA.bat": "773002abba7da97f4dbe1d5ea71bfb4b881304bbf71976a983ed0b821d848aff",
-    "LEGGIMI.txt": "bb91ff0cb1d29cd2bf56a77bb3501170eb90eb46f07002d701772d55d12a9ce1",
+    "AVVIA.bat": "f05139d366ca2a431481c51134c4a8bd491fb29f893eb983915984023a78d805",
+    "FERMA.bat": "9c42f954197a6517c58c910e22abc0b9743a3ac7829a19805d443752708e15d9",
+    "LEGGIMI.txt": "1cd7aff5d83415d3cf84316af89081a314cde2889e99e42c5c95f108fea68f21",
     "main.py": "c6e215da29aeb6fb51aea9a348d49e4d95cccbdac1a263082afd4e6c5dd3a7f9",
     ".dockerignore": "267376ff2754816217a1b03c579726c3a69c03de5f54bf67297c892990a61c72",
     "web/index.html": "f6a28fdb77f7886da39da9c833cf6ee1b1651f4b61c49acbae4e7a5cdd14aafd",

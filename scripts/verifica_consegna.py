@@ -30,12 +30,20 @@ def main():
     proof = {'platform': 'Linux', 'model_calls': 0, 'windows_batch_executed': False}
     try:
         cli('network', 'create', network)
+        # Regressione osservata su Windows: la rete e il container hanno lo stesso
+        # nome; inspect senza tipo trova la rete anche quando il container manca.
+        generic = json.loads(cli('inspect', network))[0]
+        assert generic['Driver'] == 'bridge'
+        missing = subprocess.run(['docker', 'container', 'inspect', network],
+                                 capture_output=True, text=True, timeout=15)
+        assert missing.returncode != 0
+        proof['network_is_not_container'] = True
         cli('run', '-d', '--name', name, '--label', 'officina_delivery=e32ae57b',
             '--network', network, '-p', '127.0.0.1::8000', '--read-only', '--cap-drop=ALL',
             '--security-opt=no-new-privileges', '--memory=256m', '--memory-swap=256m',
             '--cpus=0.5', '--pids-limit=64', '--tmpfs', '/tmp:rw,noexec,nosuid,size=16m',
             '-v', volume + ':/data', 'officina-attivita-e32ae57b:1')
-        config = json.loads(cli('inspect', name))[0]
+        config = json.loads(cli('container', 'inspect', name))[0]
         if not config['State']['Running']:
             raise AssertionError('Avvio Docker fallito: ' + cli('logs', name))
         port = int(config['NetworkSettings']['Ports']['8000/tcp'][0]['HostPort'])
@@ -70,7 +78,7 @@ def main():
         assert request('POST', {'title': item['title']}, 'persistent-smoke') == (200, item)
         cli('stop', '--time', '2', name)
         cli('start', name)
-        restarted = json.loads(cli('inspect', name))[0]
+        restarted = json.loads(cli('container', 'inspect', name))[0]
         port = int(restarted['NetworkSettings']['Ports']['8000/tcp'][0]['HostPort'])
         ready()
         assert request() == (200, [item])

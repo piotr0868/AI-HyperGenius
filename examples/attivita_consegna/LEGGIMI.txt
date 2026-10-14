@@ -40,6 +40,10 @@ L'originale resta conservato nel repository come dato, senza modifiche.
 PROVE
 Leggi RISULTATI.json per gli esiti effettivi e i limiti.
 Test e API verificati in Docker Linux. File .bat non eseguiti su Windows.
+Primo tentativo Windows: immagine costruita, poi controllo del vecchio batch
+fallito prima della creazione del container, nonostante rete bridge disponibile.
+Batch corretti per distinguere container e rete con lo stesso nome e leggere
+i valori senza pipe FINDSTR; nuova esecuzione su Windows ancora da verificare.
 Il progetto originale nell'interfaccia Officina resta distinto e non viene
 contrassegnato Pronto da questa consegna. Non sono stati cambiati i suoi contatori.
 
