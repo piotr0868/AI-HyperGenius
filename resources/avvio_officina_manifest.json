@@ -1,0 +1,20 @@
+{
+  "purpose": "Open the Officina assistant HTML interface, not the generated API backend",
+  "files": {
+    "APRI_OFFICINA.bat": {
+      "sha256": "8ac0bc60b8d384dda70677aed47e5f368584dab1c7d03c0e8a4ce594ed8d271d",
+      "bytes": 230
+    },
+    "scripts/apri_officina.py": {
+      "sha256": "cfcb19a875eb8e1a9fbe0c85e594758dafe980a9e0f63f6f33533d651280bae3",
+      "bytes": 4020
+    }
+  },
+  "verification": {
+    "platform": "Linux",
+    "tests_passed": 6,
+    "model_calls": 0,
+    "windows": "not yet verified; requires the local session",
+    "report": "resources/evidence/open-officina.xml"
+  }
+}

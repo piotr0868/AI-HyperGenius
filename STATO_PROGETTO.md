@@ -3,6 +3,32 @@
 Aggiornato il 14 ottobre 2026. Il nuovo obiettivo è usare il piano gratuito Groq,
 con quote operative, senza passaggio automatico a servizi a pagamento.
 
+### Avvio principale dell'assistente: correzione del collegamento
+
+Aggiornamento del 14 ottobre 2026: il Codex locale e' stato avviato con successo.
+Il suo rapporto, incollato dall'utente, conferma per il progetto UI e32ae57b
+hash corrente uguale alle prove salvate, 5 test e contratto API passati. La foto
+dell'utente conferma **Pronto** nell'interfaccia sulla porta 8765. Una successiva
+esecuzione Windows autorizzata ha preparato AVVIA_PROGETTO_VERIFICATO.bat,
+avviato/riusato il container e ricevuto HTTP 200 sulla porta 8767. La foto mostra
+`[]`: e' la lista vuota del backend, non l'interfaccia dell'assistente.
+
+L'utente ha segnalato che il doppio clic apre una pagina vuota. Preparati due
+nuovi file distinti: APRI_OFFICINA.bat e scripts/apri_officina.py, per aprire la
+vera interfaccia HTML di Officina. Riusano l'istanza esistente; in caso di nuovo
+avvio caricano la credenziale locale con il helper gia' presente, preparano
+Docker e attendono la risposta HTML prima di aprire il browser. Nessuna nuova
+prova o richiesta IA. Una porta occupata da JSON o da altro sito viene rifiutata
+senza arrestare processi. Non toccano i backend separati ne' i relativi dati.
+
+**6 verifiche mirate passate su Linux** con server HTTP e FastAPI reali, nessun
+modello o codice generato: resources/evidence/open-officina.xml. Il nuovo batch
+non e' ancora verificato su Windows. resources/CORREGGI_AVVIO_PC.md istruisce
+il Codex locale a installare soltanto i due nuovi file con checksum, preservare
+le modifiche locali e creare/provare il collegamento Desktop **Apri Officina**.
+L'installazione locale e' ancora da confermare. Non sostituire lo stato Windows
+locale con questo documento cloud durante l'applicazione.
+
 ### Preferenza attuale: proseguire con un agente sul PC
 
 **Codex CLI ora installato realmente sul PC**, secondo il log dell'utente:

@@ -26,6 +26,14 @@ Credenziali, memoria locale e dipendenze installate sono escluse dal repository.
 
 ## Avvio su Windows 11
 
+Per l'uso quotidiano, apri **APRI_OFFICINA.bat**. Apre l'assistente con la casella
+«Descrivi cosa vuoi ottenere» e i progetti salvati. Se Officina e' gia' attiva,
+riutilizza il server; altrimenti carica la credenziale locale esistente, prepara
+Docker e avvia l'interfaccia. L'apertura non avvia nuove generazioni o prove IA.
+Quando il server viene avviato, conserva la finestra del programma aperta.
+I launcher dei progetti generati sono distinti: `/activities` sulla porta 8767
+e' un backend API e puo' mostrare soltanto `[]`, cioe' nessuna attivita' salvata.
+
 Per una copia con le dipendenze già installate, apri **avvio_automatico.bat**.
 Se manca la credenziale compare una casella locale mascherata: incolla la chiave
 e premi **Salva e continua**. Il programma controlla l'accesso API e il modello,
