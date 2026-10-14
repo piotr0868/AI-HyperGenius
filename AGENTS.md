@@ -16,6 +16,9 @@ tecnici, il piano, le correzioni e le prove.
 - Un piano, un messaggio del modello o una risposta HTTP 200 non bastano a
   certificare il risultato. Continua fino alle prove significative o a un blocco
   concreto. Analizza gli errori e tenta correzioni entro i limiti.
+- Non concludere il compito indicando come prossimo lavoro la correzione di un
+  difetto del controller gia' diagnosticato e correggibile: risolvilo e verificalo
+  nell'ambito autorizzato. Conserva i risultati negativi delle prove precedenti.
 - Chiedi soltanto informazioni, credenziali o permessi indispensabili e davvero
   mancanti. Prima completa il lavoro indipendente. Non richiedere segreti in chat.
 - Quando serve un'azione fisica dell'utente, proponi un solo obiettivo alla volta
@@ -32,6 +35,10 @@ tecnici, il piano, le correzioni e le prove.
   distingui sempre un test del controller dalla riuscita di un vero modello.
 - Conserva i test significativi e correggi l'implementazione. Non nascondere
   errori con skip, expectedFailure, contratti piu' deboli o prove di zero test.
+- I controlli predisposti da app/progress.py sono file dichiarati del sistema,
+  non generazioni del modello. Mantieni questa attribuzione nei risultati. Non
+  sostituire il backend con una fixture o correggerlo manualmente con Codex per
+  presentare una prova come lavoro autonomo dell'agente di Officina.
 - Su Linux usa la `.venv` del repository e `python -m pytest`. Dopo modifiche al
   ciclo dell'agente esegui i test pertinenti con Docker reale, poi la suite.
   Su Windows usa `.venv\Scripts\python.exe` e verifica i nuovi launcher sul PC.

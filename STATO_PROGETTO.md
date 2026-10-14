@@ -3,6 +3,43 @@
 Aggiornato il 14 ottobre 2026. Il nuovo obiettivo è usare il piano gratuito Groq,
 con quote operative, senza passaggio automatico a servizi a pagamento.
 
+### Ciclo di main.py senza test: prova Windows fallita e recupero dell'avanzamento
+
+Il rapporto locale ricevuto dall'utente conferma applicazione della revisione
+2d18bd2 con checksum/backup e **55 test Windows passati con Docker reale**.
+L'unica nuova prova Groq si e' fermata a **12 richieste**: main.py riscritto,
+test non creati, verifica Docker fallita. L'autonomia reale di quella versione
+**non e' dimostrata**. Il rapporto non contiene ID, token o sorgente della prova:
+non inventarli, sono nel contesto e nella memoria del Codex locale. Vecchio
+progetto Pronto, dati, credenziali e limiti sono conservati secondo il rapporto.
+
+Corretto il controller con app/progress.py: una scrittura identica non crea
+versioni ne' invalida prove correnti. Dopo scritture ripetute senza test, o al
+limite delle chiamate senza test, Officina prepara cinque controlli HTTP del
+contratto, il package e un README se mancanti. Non cambia il backend, non
+sostituisce test presenti o rimossi intenzionalmente. I file di sistema hanno
+autore, hash e versioni registrati; la base e' protetta da riscritture del
+modello e la riuscita dichiara questa origine. Le prove vengono eseguite subito
+in Docker; errori restituiti al modello entro i limiti rimasti, niente prove
+duplicate sui file invariati. Nessun aumento o reset dei budget.
+
+**183 test passati su Linux**, zero errori/fallimenti/skipped, in 151.81 s.
+SDK ufficiali Groq/OpenAI con HTTP simulato e Docker reale, fixture di riferimento
+dichiarata. Recupero a 12 richieste senza nuova inferenza e senza modificare il
+backend; il riferimento valido supera 5 test HTTP e 5 controlli indipendenti,
+quello difettoso viene respinto. Simulazione del ciclo ripetuto interrotta con
+verifica e, quando necessario, correzione effettiva del backend. Verificati
+protezione dei test, deduplicazione, file/versioni e limiti. Nessuna nuova
+inferenza reale sul cloud. Il test double OfflineSandbox ora implementa verify
+restituendo fallimento esplicito, per mantenere le asserzioni di non riuscita.
+
+resources/RISOLVI_CICLO_SCRITTURE_PC.md prepara l'applicazione mirata sul PC e
+la ripresa della stessa prova fallita, con contatori e hash del backend invariati,
+poi una sola nuova regressione reale entro il normale budget. Applicazione e
+risultati di questa versione su Windows ancora da confermare: non attribuirvi
+le prove Linux. La preparazione dei test e' un intervento deterministico del
+sistema, non una dimostrazione che il modello li abbia generati autonomamente.
+
 ### Lavoro autonomo: completamento delle prove senza Riprendi manuale
 
 L'utente ha chiesto esplicitamente che l'agente sia capace di lavorare in

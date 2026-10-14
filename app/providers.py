@@ -103,7 +103,8 @@ def groq_messages(history, instructions):
         if message['role'] == 'tool':
             try:
                 result = json.loads(message['content'])
-                if isinstance(result, dict) and 'previous_version' in result and 'path' in result and 'error' not in result:
+                if (isinstance(result, dict) and ('previous_version' in result or result.get('unchanged') is True)
+                        and 'path' in result and 'error' not in result):
                     completed.add(message.get('tool_call_id'))
             except (ValueError, TypeError):
                 pass

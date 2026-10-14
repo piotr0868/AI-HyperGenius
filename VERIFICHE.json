@@ -6,9 +6,9 @@
     "errors": "0",
     "failures": "0",
     "skipped": "0",
-    "tests": "165",
-    "time": "125.223",
-    "timestamp": "2026-10-14T18:09:23.852785+00:00",
+    "tests": "183",
+    "time": "151.802",
+    "timestamp": "2026-10-14T19:08:08.932706+00:00",
     "hostname": "f5cf448d5661"
   },
   "reference_unit_tests": 8,
@@ -297,6 +297,19 @@
       "error": "OSError: [Errno 98] Address already in use in test_persistence_across_restart",
       "new_fix_on_windows": "not_run",
       "date": "2026-10-13"
+    },
+    "autonomy_2d18bd2": {
+      "source": "local Codex report pasted by user; not executed by cloud assistant",
+      "installed_with_checksums_and_backup": true,
+      "tests_passed": 55,
+      "docker": "real according to report",
+      "real_model_calls": 12,
+      "behavior": "rewrote main.py without creating tests",
+      "docker_verification": "failed",
+      "real_autonomy": "not demonstrated",
+      "failed_project_id": "not supplied in the user report",
+      "backend_source": "not transmitted",
+      "data_and_old_ready_project": "preserved according to report"
     }
   },
   "cloud": {
@@ -305,8 +318,8 @@
     "fresh_task_verified": false
   },
   "source_sha256": {
-    "app/agent.py": "ed629f9a135759de3fa3cb00d5a47ebaa9a3a70451e62071f7fed69a5e7ce5c2",
-    "app/providers.py": "7ebc0bdc5682f9fda4130c850a24398ff1a89d3f654565204e6aa598196054c6",
+    "app/agent.py": "6ba35f1518d89a23a8147411d29dfdefc62605340f4411710a5c6dc11988f5cc",
+    "app/providers.py": "a2c6cd1b39c852dac5288f671fc531fb5dde97eb38b220d62b9b1bffb1e80402",
     "app/config.py": "3331e58edffb6766931b5d7f3d34561187041bb8742e4212de1cc295f3034daf",
     "app/sandbox.py": "03740c23c4f71a5ce12526de415c8175322cf5346823ae436cfc8cdb8bbaf4b1",
     "app/acceptance_contract.py": "6f6d3dbc0de77adb9b368dcee638cf8ad31f43a1c47af0fbb1be02fae00d5c4c",
@@ -326,14 +339,18 @@
     "scripts/leggi_diagnosi.py": "91fcbb9a71715e49fd076346aa3128ea0fe857548cb00f47b5ba1a87fd10a135",
     "tests/test_read_diagnostics.py": "9aa18a3a99693e1b23551dfd92b3f7067e7c129bbfd4cc243f2657ab6e22fead",
     "tests/test_server_lifecycle.py": "1848316cc144ea625bd4c28560e6db83c4161ec09409ff2afb75ff51be97ef8e",
-    "tests/test_agent.py": "6096e9fdce49a25865c7c08a5545e504ceb409310ac1819a45a48406e9b586a5",
+    "tests/test_agent.py": "b83b2b1adff803e33e13442a8909baa91f01aab3719b3d44b391f57dcd32a072",
     "tests/test_completion_budget.py": "0c432f898f64704ab3f1359ebc9862924cee9b77d8303a5ad50bd4bce2305751",
     "APRI_OFFICINA.bat": "8ac0bc60b8d384dda70677aed47e5f368584dab1c7d03c0e8a4ce594ed8d271d",
     "scripts/apri_officina.py": "cfcb19a875eb8e1a9fbe0c85e594758dafe980a9e0f63f6f33533d651280bae3",
-    "AGENTS.md": "827d7f69302d508f60d23968b278cb685a2dfbb44c9963745210b1d664327a8b",
+    "AGENTS.md": "29c6eda020d0ddcbc8cf1d374867307cc58ae1839c660db9767173d001341d4a",
     "tests/test_autonomous_completion.py": "919e85c7120f1c8ffa0f7b9cf3be6a62150d1b962665ba27e03b07919e7d1f16",
     "resources/ATTIVA_AUTONOMIA_PC.md": "7d9c27f4f2ea1d474b01bb6cf0860ed156ebf7866b982fa64f83e530b8cc3176",
-    "resources/CONTINUA_SUL_PC.md": "2cf278a082948d3b05d278790975da047b85aecfa40e531af74e6d2a7a8cb128"
+    "resources/CONTINUA_SUL_PC.md": "29ea2a4997e66a0f4937799a1a179dd38fcc5738aa49707e765b4efcf60a8ec3",
+    "app/progress.py": "f153ab38ea4a203f44309fed176ab353a45fe232f18700a4c65b2c832b5f388e",
+    "app/templates/test_activity_api.py.txt": "00ac28423aa4015928dd20d74682b5fe3139de114c87993af9ea265cf12c52cf",
+    "tests/test_progress.py": "46c0b1261eb97e4a19d29c0882d723af2bf35821ce6f33d4bd68b48fc979e903",
+    "resources/RISOLVI_CICLO_SCRITTURE_PC.md": "a410aca3f9a290d890e94b7cbd01085a0fc983cf81457b47fb40f940c8617b6e"
   },
   "version": "0.2.0",
   "provider": "groq",
@@ -770,7 +787,7 @@
       "essential user question",
       "model, tool, correction, token and time limits preserved"
     ],
-    "windows_new_controller": "not yet applied or verified; local Codex instructions prepared",
+    "windows_new_controller": "2d18bd2 applied with 55 Windows tests passed according to user; real probe stopped at 12 calls without tests",
     "local_instructions": "resources/ATTIVA_AUTONOMIA_PC.md",
     "files_to_apply": [
       "app/agent.py",
@@ -778,6 +795,42 @@
       "tests/test_autonomous_completion.py"
     ],
     "baseline_commit": "da935ebb9731711e1ed90ee202bad389dce34a4b",
+    "report": "resources/evidence/pytest.xml"
+  },
+  "progress_recovery": {
+    "platform": "Linux",
+    "full_suite_tests_passed": 183,
+    "new_test_cases": 18,
+    "sdk": [
+      "Groq official SDK",
+      "OpenAI official SDK"
+    ],
+    "provider_http": "simulated",
+    "execution": "real isolated Docker; no generated code on host",
+    "test_template_author": "Officina system, not the model",
+    "backend_replaced_by_system": false,
+    "checks": [
+      "recover missing tests at 12 calls without inference or main changes",
+      "five HTTP tests and independent contract",
+      "faulty backend rejected",
+      "repeated write leads to checks and repair",
+      "identical write preserves versions and proof",
+      "existing or deleted tests preserved",
+      "existing README preserved",
+      "operational limits respected"
+    ],
+    "baseline_commit": "2d18bd2dbb657babf4566fcf2e314794f8413ab5",
+    "files_to_apply": [
+      "app/agent.py",
+      "app/providers.py",
+      "app/progress.py",
+      "app/templates/test_activity_api.py.txt",
+      "tests/test_progress.py",
+      "tests/test_agent.py",
+      "AGENTS.md"
+    ],
+    "local_instructions": "resources/RISOLVI_CICLO_SCRITTURE_PC.md",
+    "windows_new_code": "not yet applied or verified",
     "report": "resources/evidence/pytest.xml"
   }
 }

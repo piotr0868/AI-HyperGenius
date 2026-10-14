@@ -1,0 +1,113 @@
+"""Controlli HTTP predisposti dal sistema Officina, non generati dal modello.
+
+Si eseguono esclusivamente nel container isolato. Non dipendono da classi
+interne del backend: usano main.py --port --db e il contratto /activities.
+"""
+import http.client
+import json
+from pathlib import Path
+import socket
+import subprocess
+import sys
+import tempfile
+import time
+import unittest
+
+
+class ActivityContractTests(unittest.TestCase):
+    def setUp(self):
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        self.database = str(Path(directory.name) / 'activities.sqlite3')
+        self.log = tempfile.TemporaryFile()
+        self.addCleanup(self.log.close)
+        self.process = None
+        self.addCleanup(self.stop)
+        with socket.socket() as probe:
+            probe.bind(('127.0.0.1', 0))
+            self.port = probe.getsockname()[1]
+        self.start()
+
+    def request(self, method, body=None, key=None):
+        connection = http.client.HTTPConnection('127.0.0.1', self.port, timeout=2)
+        headers = {'Content-Type': 'application/json'}
+        if key is not None:
+            headers['Idempotency-Key'] = key
+        try:
+            connection.request(method, '/activities', json.dumps(body) if body is not None else None, headers)
+            response = connection.getresponse()
+            return response.status, json.loads(response.read(100000))
+        finally:
+            connection.close()
+
+    def start(self):
+        self.process = subprocess.Popen(
+            [sys.executable, 'main.py', '--port', str(self.port), '--db', self.database],
+            stdin=subprocess.DEVNULL, stdout=self.log, stderr=self.log)
+        deadline = time.monotonic() + 5
+        while time.monotonic() < deadline:
+            if self.process.poll() is not None:
+                break
+            try:
+                status, value = self.request('GET')
+                if status == 200 and isinstance(value, list):
+                    return
+            except (OSError, ValueError, http.client.HTTPException):
+                pass
+            time.sleep(.05)
+        self.log.seek(0)
+        self.fail('Avvio del backend fallito: ' + self.log.read(3000).decode(errors='replace'))
+
+    def stop(self):
+        if self.process is not None and self.process.poll() is None:
+            self.process.terminate()
+            try:
+                self.process.wait(2)
+            except subprocess.TimeoutExpired:
+                self.process.kill()
+                self.process.wait()
+
+    def test_create_and_list(self):
+        status, created = self.request('POST', {'title': 'Prima attivita'}, 'create')
+        self.assertEqual(status, 201)
+        self.assertIsNotNone(created.get('id'))
+        self.assertEqual(created.get('title'), 'Prima attivita')
+        self.assertEqual(self.request('GET'), (200, [created]))
+
+    def test_invalid_inputs(self):
+        for title in ('', '   ', 42, None, [], {}, 'x' * 201):
+            with self.subTest(title=title):
+                status, _ = self.request('POST', {'title': title}, 'invalid')
+                self.assertIn(status, (400, 422))
+        self.assertIn(self.request('POST', {}, 'missing-title')[0], (400, 422))
+        self.assertEqual(self.request('GET'), (200, []))
+
+    def test_missing_idempotency_key(self):
+        for key in (None, ''):
+            with self.subTest(key=key):
+                status, _ = self.request('POST', {'title': 'Compito'}, key)
+                self.assertIn(status, (400, 422))
+        self.assertEqual(self.request('GET'), (200, []))
+
+    def test_idempotency_and_conflict(self):
+        status, created = self.request('POST', {'title': 'Compito'}, 'same')
+        self.assertEqual(status, 201)
+        status, repeated = self.request('POST', {'title': 'Compito'}, 'same')
+        self.assertIn(status, (200, 201))
+        self.assertEqual(repeated, created)
+        self.assertEqual(self.request('POST', {'title': 'Diverso'}, 'same')[0], 409)
+        self.assertEqual(self.request('GET'), (200, [created]))
+
+    def test_database_and_key_survive_restart(self):
+        status, created = self.request('POST', {'title': 'Persistente'}, 'persist')
+        self.assertEqual(status, 201)
+        self.stop()
+        self.start()
+        self.assertEqual(self.request('GET'), (200, [created]))
+        status, repeated = self.request('POST', {'title': 'Persistente'}, 'persist')
+        self.assertIn(status, (200, 201))
+        self.assertEqual(repeated, created)
+
+
+if __name__ == '__main__':
+    unittest.main()

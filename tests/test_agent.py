@@ -14,6 +14,11 @@ from app.storage import Store
 class OfflineSandbox:
     async def status(self):
         return {'available': True}
+    async def verify(self, files, owner):
+        # Questa fixture di protocollo non esegue codice: nessuna prova puo'
+        # risultare superata dal solo messaggio del modello.
+        return {'passed': False, 'exit_code': 1, 'timeout': False,
+                'check': {'unit_tests': 0, 'passed': False}}
     async def stop(self, owner):
         pass
 

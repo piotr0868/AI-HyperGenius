@@ -57,7 +57,13 @@ incerta dell'URL anche dopo il permesso all'app. Rispettarlo e distinguere
 visione automatica non eseguita, foto fornita dall'utente e prove HTTP/HTML.
 Non eludere il blocco o chiedere altre foto per controlli che non sono visivi.
 
-## Modifica di autonomia pronta sul repository
+## Ultima prova reale e modifica pronta sul repository
+
+Il Codex locale ha applicato 2d18bd2 con backup/checksum e riportato 55 test
+Windows passati con Docker reale. La nuova prova Groq si e' fermata a 12
+richieste: main.py riscritto senza creare test, verifica fallita. L'autonomia
+reale di quella versione non e' dimostrata. ID e sorgente della prova sono nella
+memoria e nello stato locali, non nel rapporto trasmesso alla chat cloud.
 
 app/agent.py ora verifica e prosegue automaticamente quando il modello conclude
 in testo senza file o prove completi. Conclude soltanto da prove passate e hash
@@ -66,16 +72,25 @@ indispensabili, Pausa/Ferma e tutti i budget, senza reset o aumenti.
 AGENTS.md conserva il mandato di autonomia per Codex. La prima versione
 dell'agente resta specializzata nel backend attivita' Python del contratto.
 
-**165 test passati su Linux**, zero errori/fallimenti/skipped, con 11 nuovi casi
-per la continuazione automatica. SDK ufficiali con HTTP simulato e Docker reale:
+Il nuovo app/progress.py recupera lo stallo delle scritture ripetute: prepara
+una base dichiarata di cinque test HTTP quando mancano, senza cambiare il
+backend o sostituire test esistenti/rimossi. README e package solo se mancanti.
+Autore del sistema e hash registrati, base protetta; prove subito in Docker e
+rapporto al modello per correggere il backend. Una scrittura identica non crea
+versioni o invalida prove valide. Nessun reset o aumento dei limiti.
+
+**183 test passati su Linux**, zero errori/fallimenti/skipped. Le nuove prove
+coprono recupero a 12 chiamate senza inferenza, backend valido e difettoso,
+scritture ripetute, protezione dei file e controlli. SDK HTTP simulato, Docker reale:
 nessuna nuova inferenza reale sul cloud. Non attribuire questi esiti a una nuova
 prova con il modello sul PC.
 
-L'applicazione del nuovo controller e la nuova prova reale Windows non sono
-ancora confermate. Seguire resources/ATTIVA_AUTONOMIA_PC.md da una revisione
+L'applicazione del nuovo recupero e la prova Windows non sono ancora confermate.
+Seguire resources/RISOLVI_CICLO_SCRITTURE_PC.md da una revisione
 fissata: solo i file previsti con checksum e backup, integrazione delle modifiche
-locali, test su Windows, riavvio identificato del solo Officina e una singola
-prova reale con Groq entro i budget ordinari, senza sostituire codice generato
+locali, test su Windows, riavvio identificato del solo Officina, ripresa della
+stessa prova fallita senza cambiare backend/contatori e una sola nuova prova
+di regressione reale con Groq nei budget ordinari, senza sostituire codice generato
 facendolo passare per lavoro autonomo. Aggiornare poi lo stato e questo contesto
 locale con gli esiti effettivi. Un blocco di quota resta un esito non completato.
 

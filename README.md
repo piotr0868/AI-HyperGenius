@@ -20,6 +20,14 @@ disponibili. I limiti di richieste, operazioni, token, tempo e costo fermano il
 lavoro; il solo testo del modello non puo' produrre lo stato **Pronto**.
 Il mandato di lavoro per Codex e' conservato in **AGENTS.md**.
 
+Se il modello continua a riscrivere main.py senza creare test, Officina prepara
+una base dichiarata di controlli HTTP del contratto, mantenendo il backend
+invariato. Test esistenti o rimossi non vengono sostituiti. README e package
+vengono aggiunti solo se mancanti. I file predisposti dal sistema sono versionati,
+attribuiti nel registro e distinti dai file generati dall'IA; la base di test e'
+protetta dalle riscritture del modello. Le scritture identiche non creano altre
+versioni. Il sistema esegue le prove e prosegue con le correzioni entro i budget.
+
 ## Codice su GitHub
 
 Il repository di destinazione è <https://github.com/piotr0868/AI-HyperGenius>,
@@ -114,7 +122,7 @@ Il log finale del **14 ottobre 2026** conferma **ACCETTAZIONE IA: PASSATA** e
 con il modello reale. La correzione precedente della porta e la certificazione
 conclusiva sono interventi del sistema esplicitamente registrati. La ripresa
 finale ha conservato le 20 richieste già usate senza altre generazioni.
-La suite attuale eseguita dall'assistente su Linux comprende **165 test passati**,
+La suite attuale eseguita dall'assistente su Linux comprende **183 test passati**,
 senza errori o skipped. I nuovi test della continuazione automatica usano SDK
 ufficiali con HTTP simulato e Docker reale: la nuova prova con il modello reale
 sul PC deve essere registrata separatamente.
