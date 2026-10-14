@@ -72,7 +72,7 @@
     "scope": "cloud"
   },
   "windows": {
-    "date": "2026-10-13",
+    "date": "2026-10-14",
     "platform": "Windows 11, build reported 10.0.26300.9550",
     "source": "Logs pasted by the user and Docker Desktop screenshot; not run by the cloud assistant",
     "verified_from_log": {
@@ -88,10 +88,10 @@
       "assistant_server_startup": "reported successful"
     },
     "live_ai": {
-      "generation": "attempted, not completed",
-      "reason": "Latest diagnostic: all 5 independent API checks passed; 5 of 6 generated unittests passed; persistence restart cannot rebind listening port (Errno 98). Last actual model message refused to continue. Cause of refusal unknown.",
+      "generation": "Verified on user PC after system/Codex listener-lifecycle correction; not an autonomous Groq repair",
+      "reason": "Generation passed; separate repair attempted and not completed. Latest pasted fragment ends before repair; exact reason not supplied.",
       "exact_quota_type": "unknown",
-      "separate_ai_repair": "not run"
+      "separate_ai_repair": "attempted, not completed; exact reason pending"
     },
     "docker_desktop": {
       "engine_running": "visible in screenshot",
@@ -99,28 +99,26 @@
       "update": "winget reports installation successful; package Docker.DockerDesktop 4.95.0, installer hash verified"
     },
     "not_verified": [
-      "complete AI generation and separate live AI repair",
-      "new listener-lifecycle procedure on Windows",
+      "reason and final counters for separate live repair",
+      "complete live AI acceptance",
       "Officina browser workflow beyond page opening"
     ],
     "latest_attempt": {
-      "date": "2026-10-13",
-      "source": "User-uploaded read-only diagnostic after commit 917f1e3, collected using b89ce642",
-      "targeted_stop": "confirmed by log",
-      "source_update": "checksums and backup confirmed",
+      "date": "2026-10-14",
+      "source": "User-pasted Windows update log and beginning of RESULTS.json",
+      "commit": "405a9e1e3f154bfe4c49080c713bc0e3c7f51ecf",
+      "source_update": "checksum and backup confirmed",
       "api_and_model_available": "groq, openai/gpt-oss-20b",
       "reference_backend": "passed",
       "deliberate_fault": "detected",
       "deterministic_restore": "passed",
-      "calls_used_at_resume": 15,
-      "call_limit": 20,
-      "main_history_recovery": "ineligible because main.py already exists",
-      "saved_file_check": "5 API checks passed; 5/6 generated unit tests passed; restart test Errno 98",
+      "generation_checks": "passed after system listener fix, 6 unittest, 0 failures/errors/skipped",
+      "generation_model_calls": 16,
+      "generation_input_tokens": 74968,
+      "generation_output_tokens": 10486,
+      "separate_repair": "attempted, initial checks failed; final state and reason not supplied",
       "ai_acceptance": "not completed",
-      "failure_reason": "plain model refusal after failed restart test; no new tool call",
-      "server_pid_reported": 21380,
-      "calls_used": 16,
-      "last_agent_message": "I’m sorry, but I can’t continue with this task."
+      "server_pid_reported": 18028
     },
     "attempt_history": [
       {
@@ -211,6 +209,25 @@
           "model_calls": "not included in excerpt; prior attempt started from 14",
           "provider_events": []
         }
+      },
+      {
+        "date": "2026-10-13",
+        "source": "User-uploaded read-only diagnostic after commit 917f1e3, collected using b89ce642",
+        "targeted_stop": "confirmed by log",
+        "source_update": "checksums and backup confirmed",
+        "api_and_model_available": "groq, openai/gpt-oss-20b",
+        "reference_backend": "passed",
+        "deliberate_fault": "detected",
+        "deterministic_restore": "passed",
+        "calls_used_at_resume": 15,
+        "call_limit": 20,
+        "main_history_recovery": "ineligible because main.py already exists",
+        "saved_file_check": "5 API checks passed; 5/6 generated unit tests passed; restart test Errno 98",
+        "ai_acceptance": "not completed",
+        "failure_reason": "plain model refusal after failed restart test; no new tool call",
+        "server_pid_reported": 21380,
+        "calls_used": 16,
+        "last_agent_message": "I’m sorry, but I can’t continue with this task."
       }
     ],
     "latest_diagnostic": {
@@ -257,8 +274,8 @@
     "tests/test_token_budget.py": "faeefc114e586651ed4cb7f2a448ca478cf1081381098cd7d20cd9b5ce7064d6",
     "tests/test_resume_precheck.py": "50f145d966ce44438454e387dce85e023d965aee171448c59f04492c53338dba",
     "tests/test_history_recovery.py": "7687cffe1b19cc90f13458cf4ac5d89121beb744f7f59d49112ecf6099d05b00",
-    "scripts/leggi_diagnosi.py": "c23dab3f05b4eebf98d1c2e2912ccbea8b2e3aeba17c148f5a0078d64efceff4",
-    "tests/test_read_diagnostics.py": "1df90684938c5ecfc4ac67cd1b7717b5288aaa81d22ca4d03f5143fef2e2be25",
+    "scripts/leggi_diagnosi.py": "38462440bedb1391fb4082bdb8d75311fc5938173ed5864867ff58f40e3f5c59",
+    "tests/test_read_diagnostics.py": "4300f679f71a1be4fa5cb4778773dbf646c61b8e13d1e0918c415e8c08deff53",
     "tests/test_server_lifecycle.py": "51116492887314fdc2b208c452f4a8a3b46b17f95abcbeb29bb5c9baf6475852"
   },
   "version": "0.2.0",
@@ -403,7 +420,7 @@
       "tests_unchanged": true,
       "rollback_verified": true
     },
-    "windows_application": "not_run"
+    "windows_application": "Confirmed by user log 2026-10-14: applied and saved backend verified, 6 generated unittests passed"
   },
   "separate_repair_context": {
     "platform": "Linux",
@@ -417,6 +434,24 @@
     "repair_calls": 3,
     "explicit_total_limit": 20,
     "original_and_tests_unchanged": true,
-    "live_ai_on_windows": "not_run"
+    "live_ai_on_windows": "Attempted on 2026-10-14, not completed; exact cause pending"
+  },
+  "repair_diagnostics": {
+    "date": "2026-10-14",
+    "platform": "Linux",
+    "targeted_pytest": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "8",
+      "time": "0.041",
+      "timestamp": "2026-10-14T09:10:32.006757+00:00",
+      "hostname": "f5cf448d5661"
+    },
+    "live_ai_calls": 0,
+    "generated_code_execution": false,
+    "windows_notepad": "mocked in test; native PC execution pending",
+    "full_pytest": "117 from 2026-10-13; not rerun for read-only diagnostic helper"
   }
 }

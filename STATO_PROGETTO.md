@@ -1,7 +1,38 @@
 # Stato progetto — Officina v0.2 (Groq)
 
-Aggiornato il 13 ottobre 2026. Il nuovo obiettivo è usare il piano gratuito Groq,
+Aggiornato il 14 ottobre 2026. Il nuovo obiettivo è usare il piano gratuito Groq,
 con quote operative, senza passaggio automatico a servizi a pagamento.
+
+### Ultimo esito Windows: 14 ottobre 2026
+
+L'utente ha riavviato il PC ed eseguito l'aggiornamento alla revisione
+405a9e1e3f154bfe4c49080c713bc0e3c7f51ecf, senza il PID precedente. Il log
+conferma checksum e backup, accesso Groq/modello, avvio Docker e prova senza IA
+(riferimento, difetto rilevato, ripristino) superata. La procedura del sistema
+per rilasciare la porta è stata applicata sul PC: **i file del backend hanno
+superato le verifiche senza un'altra chiamata IA**. Non attribuire questa
+correzione al modello Groq.
+
+Il frammento RESULTS.json successivamente incollato conferma `generation.state`
+Pronto, hash verificato, **6 unittest eseguiti, zero fallimenti/errori/skipped**,
+16 chiamate e gli stessi 74968 token input/10486 output. Il testo incollato si
+interrompe prima della sezione repair: non contiene la causa del nuovo arresto.
+
+La copia della prova di correzione IA è stata creata e verificata, con fallimento
+iniziale, poi il lavoro IA è proseguito. Esito complessivo ancora **NON COMPLETATA**.
+Il log non include la causa dell'arresto della copia né i contatori finali;
+non attribuirla a quota, budget o modello senza leggere il RESULTS.json aggiornato.
+16 richieste già usate all'inizio, limite complessivo 20 conservato. PID attuale
+del server comunicato dall'utente: **18028** (ricontrollarne l'identità prima
+di qualunque arresto). Prossimo passo: leggere soltanto il rapporto in
+`.data/live-acceptance/RESULTS.json`; nessuna nuova esecuzione o aumento dei limiti.
+
+Aggiunta a scripts/leggi_diagnosi.py l'opzione `--correzione`: riepilogo breve
+della copia da RESULTS.json e ultimi eventi via SQLite mode=ro, chiavi mascherate,
+file diagnostico nuovo a ogni apertura in Notepad. Evita di copiare il rapporto
+completo e le schede precedenti con modifiche non salvate. **8 controlli mirati
+passati su Linux**; invocazione Notepad Windows simulata, nessuna API o esecuzione
+di codice generato. La suite completa resta quella effettiva di 117 del 13 ottobre.
 
 ### Situazione attuale: diagnosi Windows e correzione del riavvio
 

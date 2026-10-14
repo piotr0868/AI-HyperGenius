@@ -1,5 +1,6 @@
 """Legge lo stato attuale senza IA, test, import del codice generato o modifiche al database."""
 import ast
+from contextlib import closing
 import json
 from pathlib import Path
 import re
@@ -125,10 +126,53 @@ def collect(settings):
             'last_agent_message': safe_text(last_message, 6000)})
 
 
+def collect_repair_summary(settings):
+    """Riepilogo breve della copia, con soli campi diagnostici e database in lettura."""
+    data = settings.data_dir / 'live-acceptance'
+    saved = json.loads((data / 'RESULTS.json').read_text(encoding='utf-8'))
+    repair = saved.get('repair') or {}
+    project = repair.get('project') or {}
+    if not project:
+        return {'mode': 'read-only; no API or execution', 'repair': 'non avviata',
+                'generation_state': (saved.get('generation') or {}).get('state')}
+    pid = project.get('id')
+    if not isinstance(pid, str) or not re.fullmatch(r'[a-f0-9]{32}', pid):
+        raise ValueError('No valid repair project')
+    check = project.get('last_check') or {}
+    counters = check.get('check') or {}
+    report = {'mode': 'read-only; no API or execution',
+        'repair': {key: project.get(key) for key in ('id', 'state', 'model_calls', 'tool_calls',
+            'input_tokens', 'output_tokens', 'failed_checks', 'elapsed')},
+        'reason': safe_text(project.get('summary'), 400),
+        'checks_passed': check.get('passed'),
+        'unit_tests': {key: counters.get(key) for key in ('unit_tests', 'unit_failures', 'unit_errors')},
+        'last_error': safe_text((check.get('stderr') or '')[-650:], 650),
+        'proof': {key: repair.get(key) for key in ('detected_initial_fault', 'corrected_and_retested',
+            'original_unchanged', 'tests_unchanged')},
+        'ai_write_recorded': bool(repair.get('ai_repair_write'))}
+    budget = (saved.get('last_token_budget') or {}).get('repair') or {}
+    if budget:
+        report['token_budget'] = {key: budget.get(key) for key in ('used_tokens', 'required_tokens', 'limit_tokens')}
+    with closing(sqlite3.connect((data / 'memory.sqlite3').resolve().as_uri() + '?mode=ro', uri=True)) as db:
+        operations = db.execute('SELECT detail FROM events WHERE project_id=? AND kind=? ORDER BY id DESC LIMIT 4',
+                                (pid, 'operazione')).fetchall()
+        report['last_operations'] = [{'tool': detail.get('tool'), 'path': detail.get('arguments', {}).get('path')}
+                                     for (raw,) in operations for detail in [json.loads(raw)]]
+        message = db.execute('SELECT detail FROM events WHERE project_id=? AND kind=? ORDER BY id DESC LIMIT 1',
+                             (pid, 'messaggio_ia')).fetchone()
+        if message:
+            report['last_ai_message'] = safe_text(json.loads(message[0]).get('text'), 350)
+        errors = db.execute('SELECT detail FROM events WHERE project_id=? AND kind=? ORDER BY id DESC LIMIT 2',
+                            (pid, 'errore_strumento')).fetchall()
+        if errors:
+            report['tool_errors'] = [safe_text(json.loads(raw).get('message'), 160) for (raw,) in errors]
+    return safe_value(report)
+
+
 def main():
     try:
         settings = load_settings()
-        report = collect(settings)
+        report = collect_repair_summary(settings) if '--correzione' in sys.argv else collect(settings)
         directory = settings.data_dir / 'diagnostics'
         if directory.is_symlink() or not directory.resolve().is_relative_to(settings.data_dir.resolve()):
             raise ValueError('Diagnostics path not allowed')
