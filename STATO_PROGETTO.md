@@ -5,6 +5,39 @@ con quote operative, senza passaggio automatico a servizi a pagamento.
 
 ### Preferenza attuale: proseguire con un agente sul PC
 
+**Codex CLI ora installato realmente sul PC**, secondo il log dell'utente:
+OpenAI.Codex rust-v0.161.0, archivio Windows x64 da release ufficiale OpenAI,
+156 MB, hash verificato, estrazione e installazione riuscite. Aggiunti alias codex,
+codex-command-runner, codex-windows-sandbox-setup. Ripgrep MSVC 15.2.0 installato
+con checksum verificato; la shell precedente può avere ancora PATH non aggiornato.
+Prossima azione: riutilizzare la finestra CMD aperta, scaricare il riepilogo
+resources/CONTINUA_SUL_PC.md nella .data del progetto con URL GitHub fissato,
+avviare codex dal collegamento utente
+%LOCALAPPDATA%\Microsoft\WinGet\Links\codex.exe per evitare PATH vecchio.
+Usare login ChatGPT e poi incarico iniziale di leggere il riepilogo e completare
+Officina. Nella sorgente ufficiale del tag rust-v0.161.0 è verificato il flag
+**--approve-for-me**, revisione automatica con sandbox workspace-write:
+codex-rs/utils/cli/src/shared_options.rs. Il vecchio --full-auto non è presente
+in quel codice: non usarlo. Non usare opzioni che disattivano il sandbox.
+Login e avvio del lavoro sul PC sono ancora da confermare, non sono accesso
+remoto di questa chat. L'utente farà soltanto l'accesso locale iniziale; trasferire
+il contesto automaticamente nel prompt senza fargli riscrivere il progetto.
+
+La foto successiva dell'utente conferma che il collegamento alla pagina app gli
+ha fatto installare/aprire **ChatGPT Windows**, non un agente locale Codex.
+Errore di indirizzamento riconosciuto: non riproporre quella pagina come download
+Codex verificato. Verificata una strada specifica nel repository Microsoft
+winget-pkgs: PackageIdentifier **OpenAI.Codex**, InstallerType zip, portable,
+alias codex, binari Windows x64/arm64 dal repository ufficiale openai/codex,
+checksum SHA256 nel manifest. Manifest consultato:
+https://raw.githubusercontent.com/microsoft/winget-pkgs/master/manifests/o/OpenAI/Codex/0.114.0/OpenAI.Codex.installer.yaml
+Il README ufficiale openai/codex conferma CLI locale e login ChatGPT. Il registro
+npm ufficiale riporta @openai/codex 0.162.1, ma non è necessario installare Node:
+winget installa il binario portabile. WinGet sul PC è già stato usato con successo
+per Docker. Prossima azione: installazione mirata OpenAI.Codex da fonte winget,
+ambito utente, mantenendo le verifiche del gestore; niente ExecutionPolicy Bypass
+o download generici. Ricevere il log prima di dichiarare Codex installato.
+
 L'utente ha ribadito l'autorizzazione a tutti gli accessi necessari al progetto,
 con tutela dei dati personali, e vuole che l'agente lavori autonomamente sul PC:
 è stanco di incollare comandi. Gli strumenti effettivi di questa chat sono solo

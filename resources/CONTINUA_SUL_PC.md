@@ -6,6 +6,11 @@ Ridurre i comandi da copiare. Questo documento trasferisce il contesto: la nuova
 sessione deve avere l'incarico dell'utente e le proprie autorizzazioni effettive.
 Ispezionare il progetto prima di agire.
 
+Codex CLI 0.161.0 è già installato sul PC Windows tramite il pacchetto
+OpenAI.Codex di WinGet, ambito utente. Il log dell'utente conferma hash verificato,
+installazione riuscita e alias codex aggiunto. Usare questa sessione locale per il
+lavoro; il contesto precedente nella chat rimaneva su una macchina cloud distinta.
+
 ## Ambito e dati
 
 Lavorare nella cartella Windows
