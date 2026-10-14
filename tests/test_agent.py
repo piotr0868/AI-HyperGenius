@@ -87,6 +87,48 @@ async def test_plain_success_message_never_replaces_current_required_evidence(tm
         store.close()
 
 
+@pytest.mark.parametrize('control', ['run', 'stop'])
+async def test_plain_completion_waits_for_pause_and_obeys_stop(tmp_path, control):
+    """Trasporto simulato: pausa richiesta mentre arriva il messaggio finale."""
+    from groq import AsyncGroq
+    received = asyncio.Event()
+    store = Store(tmp_path)
+    pid = store.create_project('Verifica offline dei controlli')['id']
+    store.write_file(pid, 'main.py', 'fixture_only = True\n')
+    store.update(pid, criteria=['API e test'], plan=['Verifica'], docs_consulted=1,
+        last_check={'passed': True, 'check': {'unit_tests': 1}}, verified_hash=store.digest(pid))
+
+    def respond(request):
+        store.update(pid, control='pause')
+        received.set()
+        return httpx.Response(200, json={'id': 'chat_pause_final', 'object': 'chat.completion', 'created': 1,
+            'model': 'openai/gpt-oss-20b', 'choices': [{'index': 0, 'finish_reason': 'stop',
+                'message': {'role': 'assistant', 'content': 'Tutti i test passano.'}}],
+            'usage': {'prompt_tokens': 100, 'completion_tokens': 20, 'total_tokens': 120}})
+
+    client = AsyncGroq(api_key='offline-only', max_retries=0,
+        http_client=httpx.AsyncClient(transport=httpx.MockTransport(respond)))
+    agent = Agent(Settings(data_dir=tmp_path, max_model_calls=1), store, OfflineSandbox(), client=client)
+    task = asyncio.create_task(agent.run(pid))
+    try:
+        await asyncio.wait_for(received.wait(), 1)
+        await asyncio.sleep(.01)
+        assert not task.done() and store.project(pid)['state'] != 'Pronto'
+        assert not any(e['kind'] == 'certificazione_automatica' for e in store.events(pid))
+        store.update(pid, control=control)
+        await asyncio.wait_for(task, 1)
+        result = store.project(pid)
+        assert result['model_calls'] == 1
+        assert result['state'] == ('Pronto' if control == 'run' else 'Serve il tuo intervento')
+        assert any(e['kind'] == 'certificazione_automatica' for e in store.events(pid)) == (control == 'run')
+    finally:
+        if not task.done():
+            task.cancel()
+            await asyncio.gather(task, return_exceptions=True)
+        await agent.shutdown()
+        store.close()
+
+
 def test_budgets_reject_before_call(agent):
     p = agent.store.create_project('Progetto di test')
     p['model_calls'] = 12

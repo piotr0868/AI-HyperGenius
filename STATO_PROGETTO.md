@@ -22,6 +22,8 @@ file correnti sono presenti. Registra attore system e trigger separato dal
 messaggio IA; nessuna fiducia nel solo testo di successo. Le prove mancanti,
 fallite o invalidate continuano a impedire Pronto. Il percorso di ripresa già
 esistente ricontrolla in Docker e conclude anche con budget di chiamate esaurito.
+La conclusione automatica attende una pausa e rispetta Ferma, verificato con
+due casi aggiuntivi. Suite finale del 14 ottobre: **129 passati** senza skipped.
 Verificato su Linux con SDK reale/HTTP simulato e Docker reale, incluso il
 caso 16+4 richieste e ripresa senza altre generazioni. **Applicazione del nuovo
 controller e chiusura formale della prova sul PC ancora da confermare.**
@@ -56,7 +58,7 @@ file diagnostico nuovo a ogni apertura in Notepad. Evita di copiare il rapporto
 completo e le schede precedenti con modifiche non salvate. **8 controlli mirati
 passati su Linux**; invocazione Notepad Windows simulata, nessuna API o esecuzione
 di codice generato. A quel punto la suite completa era di 117 del 13 ottobre;
-ora è stata rieseguita il 14: **127 passati**, zero fallimenti/errori/skipped.
+ora è stata rieseguita il 14: **129 passati**, zero fallimenti/errori/skipped.
 
 ### Situazione attuale: diagnosi Windows e correzione del riavvio
 
@@ -383,7 +385,7 @@ Docker non ha rete, segreti, cartelle host o socket Docker; niente ripiego sull'
 
 Su Linux, Python 3.12.14, Docker 28.4.0 e Chromium di sistema:
 
-- **127 test passati** nella suite corrente, 0 errori/fallimenti/skipped.
+- **129 test passati** nella suite corrente, 0 errori/fallimenti/skipped.
 - SDK ufficiali Groq e OpenAI con trasporto HTTP simulato e Docker reale: scrittura,
   difetto rilevato, correzione predisposta dal test e nuova verifica passata.
 - Quota Groq, credenziali separate, migrazione cronologie, argomenti non fidati,

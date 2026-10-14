@@ -6,9 +6,9 @@
     "errors": "0",
     "failures": "0",
     "skipped": "0",
-    "tests": "127",
-    "time": "72.905",
-    "timestamp": "2026-10-14T09:21:20.998027+00:00",
+    "tests": "129",
+    "time": "74.955",
+    "timestamp": "2026-10-14T09:25:54.678757+00:00",
     "hostname": "f5cf448d5661"
   },
   "reference_unit_tests": 8,
@@ -268,7 +268,7 @@
     "fresh_task_verified": false
   },
   "source_sha256": {
-    "app/agent.py": "b25f77afd8fa95b90f27759e8fa28327ae086775275fa95c9e78ee9e1a7bf30c",
+    "app/agent.py": "9b0fcb83287edc379a6bb16497c63cd41c7a5d54d7e0d1356be82995abfc9fbb",
     "app/providers.py": "7ebc0bdc5682f9fda4130c850a24398ff1a89d3f654565204e6aa598196054c6",
     "app/config.py": "3331e58edffb6766931b5d7f3d34561187041bb8742e4212de1cc295f3034daf",
     "app/sandbox.py": "03740c23c4f71a5ce12526de415c8175322cf5346823ae436cfc8cdb8bbaf4b1",
@@ -289,7 +289,7 @@
     "scripts/leggi_diagnosi.py": "38462440bedb1391fb4082bdb8d75311fc5938173ed5864867ff58f40e3f5c59",
     "tests/test_read_diagnostics.py": "4300f679f71a1be4fa5cb4778773dbf646c61b8e13d1e0918c415e8c08deff53",
     "tests/test_server_lifecycle.py": "1848316cc144ea625bd4c28560e6db83c4161ec09409ff2afb75ff51be97ef8e",
-    "tests/test_agent.py": "698acde84fd0af3e929dd885bece2eb558d8fc0fc6e24d3af4465b1ef54e4318"
+    "tests/test_agent.py": "6096e9fdce49a25865c7c08a5545e504ceb409310ac1819a45a48406e9b586a5"
   },
   "version": "0.2.0",
   "provider": "groq",
@@ -470,17 +470,7 @@
   "plain_text_completion": {
     "date": "2026-10-14",
     "platform": "Linux",
-    "new_cases": 6,
-    "targeted_suite": {
-      "name": "pytest",
-      "errors": "0",
-      "failures": "0",
-      "skipped": "0",
-      "tests": "28",
-      "time": "49.150",
-      "timestamp": "2026-10-14T09:19:54.295474+00:00",
-      "hostname": "f5cf448d5661"
-    },
+    "new_cases": 8,
     "api_transport": "official Groq SDK with mock HTTP",
     "docker": "real",
     "conditions": [
@@ -497,6 +487,28 @@
     "preserved_repair_input_tokens": 18917,
     "preserved_repair_output_tokens": 422,
     "new_model_calls_on_resume": 0,
-    "windows_after_update": "not_run"
+    "windows_after_update": "not_run",
+    "initial_targeted_suite": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "28",
+      "time": "49.150",
+      "timestamp": "2026-10-14T09:19:54.295474+00:00",
+      "hostname": "f5cf448d5661"
+    },
+    "pause_stop_respected": true,
+    "pause_stop_cases": 2,
+    "verified_in_full_suite": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "129",
+      "time": "74.955",
+      "timestamp": "2026-10-14T09:25:54.678757+00:00",
+      "hostname": "f5cf448d5661"
+    }
   }
 }

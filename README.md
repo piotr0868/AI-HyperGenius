@@ -299,6 +299,7 @@ documentazione e verifiche passate sui file correnti, con hash ancora valido.
 La conclusione viene attribuita al sistema nel registro; il solo testo del modello
 non certifica il risultato. Una prova già corretta può essere ricontrollata e
 conclusa alla ripresa anche quando le chiamate IA disponibili sono esaurite.
+La conclusione automatica rispetta Pausa e Ferma prima di registrare Pronto.
 
 Se `main.py` manca durante la ripresa e non è mai stato versionato, la prova può
 recuperare il codice esatto di una precedente risposta IA la cui scrittura era

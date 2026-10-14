@@ -317,6 +317,7 @@ class Agent:
                     if (current['criteria'] and current['plan'] and current['docs_consulted']
                             and current['last_check'] and current['last_check'].get('passed')
                             and current['verified_hash'] == self.store.digest(pid)):
+                        started += await self.checkpoint(pid)
                         await self.perform(pid, 'finish', {
                             'summary': 'Progetto verificato: test, API e persistenza superati.',
                             'next_step': 'Prova le API del progetto verificato.'})
