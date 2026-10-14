@@ -328,3 +328,12 @@ La copia con difetto deliberato ha un contesto separato: piano e documentazione
 sono preparati dal sistema, ma la correzione deve essere scritta dal modello.
 L'accettazione richiede l'errore `test_strip` iniziale, una scrittura IA riuscita
 corrispondente al file finale, tutti i controlli passati, test e originale invariati.
+## Backend separato del progetto e32ae57b
+
+La consegna in `examples/attivita_consegna` completa il programma mancante nello
+ZIP dell'utente, con una pagina italiana, SQLite, API e avvio isolato in Docker.
+È completata da Codex dal riferimento dichiarato, non generata dall'agente Groq.
+18 test e 5 controlli API passati in Docker Linux, smoke Chromium e persistenza
+del volume passati. Leggere `LEGGIMI.txt` e `RISULTATI.json` nella cartella.
+I file Windows AVVIA.bat/FERMA.bat restano da provare sul PC. Il progetto originario
+nell'interfaccia Officina rimane distinto e incompleto; nessun contatore azzerato.

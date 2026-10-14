@@ -1,0 +1,20 @@
+{
+  "platform": "Linux",
+  "model_calls": 0,
+  "windows_batch_executed": false,
+  "container_restart_persistence": true,
+  "idempotency_across_restart": true,
+  "browser": "Chromium reale, viewport 390x844",
+  "browser_save_and_reload": true,
+  "titles_rendered_as_text": true,
+  "javascript_errors": [],
+  "isolation": {
+    "user": "65534:65534",
+    "readonly_root": true,
+    "cap_drop_all": true,
+    "host_bind_mounts": false,
+    "network": "dedicated bridge; outbound traffic possible",
+    "published_on_loopback_only": true
+  },
+  "passed": true
+}

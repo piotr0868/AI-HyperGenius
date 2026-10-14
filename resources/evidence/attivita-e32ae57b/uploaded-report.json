@@ -1,0 +1,62 @@
+{
+  "zip_sha256": "b2c9a6e540bc8aa4e517ad0f03a5d414a693403b6c3156d67e5c87d1586f9451",
+  "project": {
+    "id": "e32ae57b463c406381faa8efec493542",
+    "description": "Crea un piccolo backend locale per registrare attività in SQLite. Voglio API per creare e consultare le attività, validazione degli input, richieste ripetute senza duplicazioni e dati conservati dopo un riavvio.",
+    "state": "Serve il tuo intervento",
+    "summary": "Limite di chiamate IA raggiunto. Conservati tutti i risultati.",
+    "next_step": "Completa il requisito indicato, poi premi Riprendi.",
+    "created": "2026-10-14T10:11:25.889107+00:00",
+    "updated": "2026-10-14T10:22:43.331185+00:00",
+    "control": "run",
+    "criteria": [
+      "Implementa main.py con argomenti --port e --db",
+      "GET /activities restituisce lista JSON",
+      "POST /activities crea attività con idempotency",
+      "Validazioni title",
+      "Gestione duplicati con Idempotency-Key",
+      "Persistenza SQLite",
+      "ThreadingHTTPServer",
+      "Parametrizzate query",
+      "Unittest"
+    ],
+    "plan": [
+      "1. Definire schema DB",
+      "2. Scrivere main.py con server",
+      "3. Implementare handler GET/POST",
+      "4. Validazioni",
+      "5. Idempotency logic",
+      "6. Test",
+      "7. README"
+    ],
+    "question": null,
+    "model_calls": 12,
+    "tool_calls": 12,
+    "input_tokens": 34765,
+    "output_tokens": 7394,
+    "estimated_cost": null,
+    "failed_checks": 0,
+    "verified_hash": null,
+    "last_check": null,
+    "elapsed": 677.4369999999981,
+    "outcome": "Implementare e testare backend",
+    "docs_consulted": 1
+  },
+  "files": {
+    "tests/__init__.py": {
+      "bytes": 6,
+      "sha256": "0486028fa4d1cc658211b606e5935a4c74386a6e9cf5055b812f3484b1b46e57"
+    },
+    "tests/test_api.py": {
+      "bytes": 2456,
+      "sha256": "5f805072fb216d3f10bfe6123dbc43950efeb20a5b89214df26ea5d2d0d1f025"
+    },
+    "OFFICINA_RISULTATI.json": {
+      "bytes": 1441,
+      "sha256": "76fd365a24acffeabe0c7c457f466754519c94d78a8c9378d8cc479c725ad676"
+    }
+  },
+  "source": "User uploaded ZIP; read without executing its contents",
+  "main_present": false,
+  "native_update_eecd1d6_confirmed": false
+}

@@ -3,13 +3,47 @@
 Aggiornato il 14 ottobre 2026. Il nuovo obiettivo è usare il piano gratuito Groq,
 con quote operative, senza passaggio automatico a servizi a pagamento.
 
+### ZIP del progetto ordinario ricevuto: backend mancante, consegna separata
+
+L'utente ha caricato `progetto-e32ae57b.zip`. Il rapporto identifica il progetto
+`e32ae57b463c406381faa8efec493542`: 12 chiamate modello, 12 operazioni,
+34765 token input, 7394 output, 677.437 secondi, 1 fonte consultata.
+Contiene soltanto `tests/__init__.py`, `tests/test_api.py` e il rapporto;
+**main.py manca**, `last_check=null`, `verified_hash=null`, zero verifiche
+registrate. Non attribuire la causa della scrittura mancante al modello o al
+controller senza leggere la storia. L'aggiornamento eecd1d6 sul PC non è ancora
+confermato. Il suo controllo dei file non può far passare un programma mancante.
+
+Completata una **consegna separata da Codex**, `examples/attivita_consegna`, dal
+backend di riferimento dichiarato: main.py, pagina italiana per salvare/listare
+attività, Dockerfile con base fissata e file AVVIA.bat/FERMA.bat. Nessuna API usata,
+nessuna modifica al progetto o ai contatori sul PC. Non presentarla come risultato
+autonomo dell'agente Groq. ZIP originale e test conservati come evidenza immutata.
+I test originali dipendono dall'ordine (3 fallimenti eseguendoli al contrario su
+backend valido); sostituiti nella sola consegna con 18 prove isolate e più ampie.
+**18 test e 5 controlli indipendenti API passati in Docker senza rete**; anche tutti
+i 18 test in ordine inverso passano. Smoke con immagine costruita, container non
+root e volume reale: attività e idempotenza conservate dopo stop/start, browser
+Chromium reale a 390px, salvataggio/ricarica, testo HTML non interpretato, zero
+errori JavaScript. La pagina di prova usa una rete bridge dedicata con porta solo
+loopback; può consentire traffico uscente. Le verifiche del codice restano senza
+rete e senza mount host. File .bat non eseguiti su Windows, ancora da provare.
+
+Prossimo passo per l'utente: scaricare il nuovo ZIP della consegna; poi guidarlo
+una sola azione alla volta nell'estrazione e nell'apertura di AVVIA.bat. La nuova
+pagina si chiama «Le mie attività», distinta da Officina (porta 8766, Officina 8765).
+Non fargli ricreare chiavi, aumentare budget o creare un altro obiettivo per questa
+prova. Il flusso del progetto originale dentro Officina **rimane incompleto**.
+Per correggerlo ulteriormente serve la sua storia/eventi, assenti dallo ZIP:
+non usare la diagnosi CLI della copia di accettazione, che è un progetto diverso.
+
 ### Primo progetto dall'interfaccia Windows: limite richieste raggiunto
 
 Il nuovo screenshot dell'utente mostra **Serve il tuo intervento — Limite di
 chiamate IA raggiunto. Conservati tutti i risultati**, con file scaricabili.
 È un progetto ordinario dell'interfaccia, distinto dalla prova di accettazione
 già PASSATA. Tre progetti sono visibili nella lista; non crearne altri per riprovare.
-Conteggi esatti e ultima verifica del progetto selezionato non ancora ricevuti.
+Conteggi e ultima verifica ora ricevuti nello ZIP: vedere la sezione iniziale.
 Il limite predefinito ordinario è 12; non attribuirlo alla quota del provider
 e non aumentarlo automaticamente. Ultimo PID del servizio comunicato: 3668.
 

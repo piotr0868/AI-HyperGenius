@@ -1,0 +1,25 @@
+{
+  "exit_code": 0,
+  "timeout": false,
+  "stdout": "OFFICINA_CHECK={\"unit_tests\": 18, \"unit_failures\": 0, \"unit_errors\": 0, \"unit_skipped\": 0, \"unit_expected_failures\": 0, \"unit_unexpected_successes\": 0, \"contract\": [\"creazione\", \"consultazione\", \"validazione\", \"idempotenza\", \"persistenza dopo riavvio\"], \"unit_ok\": true, \"server_log\": \"Backend attività sulla porta 45697\\nBackend attività sulla porta 45697\\n\", \"passed\": true}\n",
+  "stderr": "test_concurrent_repetition_creates_one_row (test_api.APITest.test_concurrent_repetition_creates_one_row) ... ok\ntest_cross_origin_post_is_rejected (test_api.APITest.test_cross_origin_post_is_rejected) ... ok\ntest_different_keys_create_distinct_rows (test_api.APITest.test_different_keys_create_distinct_rows) ... ok\ntest_get_empty (test_api.APITest.test_get_empty) ... ok\ntest_home_and_script_are_accessible (test_api.APITest.test_home_and_script_are_accessible) ... ok\ntest_idempotency_key_validation (test_api.APITest.test_idempotency_key_validation) ... ok\ntest_invalid_json (test_api.APITest.test_invalid_json) ... ok\ntest_max_length_is_accepted (test_api.APITest.test_max_length_is_accepted) ... ok\ntest_missing_title (test_api.APITest.test_missing_title) ... ok\ntest_oversized_body (test_api.APITest.test_oversized_body) ... ok\ntest_parameterized_sql_and_unicode (test_api.APITest.test_parameterized_sql_and_unicode) ... ok\ntest_persistence_across_restart (test_api.APITest.test_persistence_across_restart) ... ok\ntest_post_create_and_trim (test_api.APITest.test_post_create_and_trim) ... ok\ntest_post_duplicate_diff (test_api.APITest.test_post_duplicate_diff) ... ok\ntest_post_duplicate_same (test_api.APITest.test_post_duplicate_same) ... ok\ntest_title_validation (test_api.APITest.test_title_validation) ... ok\ntest_trimmed_duplicate_is_same (test_api.APITest.test_trimmed_duplicate_is_same) ... ok\ntest_unknown_path (test_api.APITest.test_unknown_path) ... ok\n\n----------------------------------------------------------------------\nRan 18 tests in 0.496s\n\nOK\n",
+  "passed": true,
+  "check": {
+    "unit_tests": 18,
+    "unit_failures": 0,
+    "unit_errors": 0,
+    "unit_skipped": 0,
+    "unit_expected_failures": 0,
+    "unit_unexpected_successes": 0,
+    "contract": [
+      "creazione",
+      "consultazione",
+      "validazione",
+      "idempotenza",
+      "persistenza dopo riavvio"
+    ],
+    "unit_ok": true,
+    "server_log": "Backend attività sulla porta 45697\nBackend attività sulla porta 45697\n",
+    "passed": true
+  }
+}

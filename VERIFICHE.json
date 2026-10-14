@@ -598,5 +598,36 @@
     "windows_after_update": "not_run",
     "separate_acceptance_status": "previous CLI acceptance remains passed according to native user log",
     "test_evidence": "resources/evidence/ui-budget-completion.xml"
+  },
+  "uploaded_ui_project_delivery": {
+    "project_id": "e32ae57b463c406381faa8efec493542",
+    "source": "Uploaded ZIP, not live access to the user PC",
+    "original_model_calls": 12,
+    "original_tool_calls": 12,
+    "original_input_tokens": 34765,
+    "original_output_tokens": 7394,
+    "original_files": [
+      "tests/__init__.py",
+      "tests/test_api.py"
+    ],
+    "missing": [
+      "main.py",
+      "README.md"
+    ],
+    "original_last_check": null,
+    "original_state": "Serve il tuo intervento",
+    "eecd1d6_update_on_pc": "not confirmed",
+    "separate_codex_delivery": {
+      "path": "examples/attivita_consegna",
+      "unit_tests": 18,
+      "unit_failures": 0,
+      "unit_errors": 0,
+      "unit_skipped": 0,
+      "independent_api_checks": 5,
+      "container_browser_smoke": "passed on Linux",
+      "new_provider_calls": 0,
+      "windows_batch_execution": "not performed",
+      "original_project": "not changed; incomplete"
+    }
   }
 }

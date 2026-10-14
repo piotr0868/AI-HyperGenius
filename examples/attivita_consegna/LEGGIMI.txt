@@ -1,0 +1,55 @@
+BACKEND ATTIVITA - CONSEGNA COMPLETATA DA CODEX
+
+Questa e una copia separata del programma richiesto. Non sostituisce Officina.
+Non richiede una chiave API e non consuma chiamate IA.
+
+PRIMO AVVIO SU WINDOWS 11
+1. Trova lo ZIP nella cartella Download.
+2. Clic destro sullo ZIP, poi Estrai tutto, poi Estrai.
+3. Apri la cartella estratta Backend-attivita.
+4. Fai doppio clic su AVVIA.bat (puo apparire come AVVIA se le estensioni sono nascoste).
+5. Se chiede di aprire Docker Desktop, aprilo dal menu Start, attendi
+   Engine running e ripeti soltanto il punto 4.
+6. Quando si apre la pagina Le mie attivita, scrivi un'attivita e premi Salva attivita.
+
+DOPO
+Per fermare il backend: doppio clic su FERMA.bat.
+Per riaprirlo: doppio clic su AVVIA.bat. Le attivita rimangono salvate.
+Il database si trova nel volume Docker officina-attivita-e32ae57b-dati.
+Non cancellare quel volume se vuoi conservare le attivita.
+
+ISOLAMENTO
+Esecuzione nel container Docker, utente 65534, rete bridge dedicata,
+porta pubblicata soltanto su 127.0.0.1:8766, nessun file del PC o segreto montato,
+volume separato per SQLite, limiti di risorse, nessun privilegio aggiuntivo.
+Serve Docker Desktop in modalita container Linux, gia usato per Officina.
+Le prove automatiche del codice sono eseguite separatamente con --network=none.
+La rete per la pagina di prova consente l'uscita; il programma non effettua
+chiamate esterne. Non esporre la porta in rete o aggiungere file personali al container.
+
+CHE COSA E STATO CORRETTO
+Lo ZIP originale e32ae57b conteneva soltanto tests/__init__.py,
+tests/test_api.py e il rapporto. Mancava main.py. Nessuna verifica era registrata.
+Il programma e la pagina di prova sono completati da Codex sulla base del backend
+di riferimento del repository: non sono una nuova generazione dell'agente Groq.
+I test originali dipendevano dall'ordine: il caso con dati diversi poteva partire
+prima della creazione della chiave. Le prove qui hanno un database separato per
+ogni test e preparano esplicitamente i dati, mantenendo i controlli sostanziali.
+L'originale resta conservato nel repository come dato, senza modifiche.
+
+PROVE
+Leggi RISULTATI.json per gli esiti effettivi e i limiti.
+Test e API verificati in Docker Linux. File .bat non eseguiti su Windows.
+Il progetto originale nell'interfaccia Officina resta distinto e non viene
+contrassegnato Pronto da questa consegna. Non sono stati cambiati i suoi contatori.
+
+API PER SVILUPPATORI
+GET /activities : lista JSON.
+POST /activities : JSON con title, intestazione Idempotency-Key obbligatoria.
+Creazione 201; ripetizione stessi dati 200; stessa chiave e dati diversi 409.
+Input invalido 422. Title viene ripulito ai bordi: da 1 a 200 caratteri.
+La chiave e i dati rimangono salvati dopo riavvio del container.
+
+RIPRODURRE I TEST IN AMBIENTE ISOLATO
+Con Python 3.12 nel container: python -m unittest discover -s tests -v
+Il codice usa soltanto la libreria standard di Python.

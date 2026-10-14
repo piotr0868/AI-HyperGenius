@@ -1,0 +1,65 @@
+{
+  "date": "2026-10-14",
+  "project_id": "e32ae57b463c406381faa8efec493542",
+  "status": "verified_on_linux_windows_pending",
+  "author": "Completed by Codex from the declared reference backend; not a new Groq agent generation",
+  "original_officina_project_modified": false,
+  "new_provider_calls": 0,
+  "original_officina_model_calls": 12,
+  "unit_tests": {
+    "unit_tests": 18,
+    "unit_failures": 0,
+    "unit_errors": 0,
+    "unit_skipped": 0,
+    "unit_expected_failures": 0,
+    "unit_unexpected_successes": 0,
+    "contract": [
+      "creazione",
+      "consultazione",
+      "validazione",
+      "idempotenza",
+      "persistenza dopo riavvio"
+    ],
+    "unit_ok": true,
+    "server_log": "Backend attività sulla porta 45697\nBackend attività sulla porta 45697\n",
+    "passed": true
+  },
+  "test_order": "All 18 corrected tests also passed in reversed order; original tests failed 3/5 in reversed order with valid main.py",
+  "container_browser": {
+    "platform": "Linux",
+    "model_calls": 0,
+    "windows_batch_executed": false,
+    "container_restart_persistence": true,
+    "idempotency_across_restart": true,
+    "browser": "Chromium reale, viewport 390x844",
+    "browser_save_and_reload": true,
+    "titles_rendered_as_text": true,
+    "javascript_errors": [],
+    "isolation": {
+      "user": "65534:65534",
+      "readonly_root": true,
+      "cap_drop_all": true,
+      "host_bind_mounts": false,
+      "network": "dedicated bridge; outbound traffic possible",
+      "published_on_loopback_only": true
+    },
+    "passed": true
+  },
+  "windows": {
+    "batch_scripts": "reviewed, not executed on Windows",
+    "user_next_action": "Extract ZIP and double-click AVVIA.bat"
+  },
+  "sha256": {
+    "Dockerfile": "5111794e85da5db3e6e5615268dab3a788f7e73551192bac8daa277d02f3920c",
+    "AVVIA.bat": "bdf9e67915a67d66618b1e2320306fe5887941e138055d444a4d488e141b9f9b",
+    "FERMA.bat": "773002abba7da97f4dbe1d5ea71bfb4b881304bbf71976a983ed0b821d848aff",
+    "LEGGIMI.txt": "bb91ff0cb1d29cd2bf56a77bb3501170eb90eb46f07002d701772d55d12a9ce1",
+    "main.py": "c6e215da29aeb6fb51aea9a348d49e4d95cccbdac1a263082afd4e6c5dd3a7f9",
+    ".dockerignore": "267376ff2754816217a1b03c579726c3a69c03de5f54bf67297c892990a61c72",
+    "web/index.html": "f6a28fdb77f7886da39da9c833cf6ee1b1651f4b61c49acbae4e7a5cdd14aafd",
+    "web/app.js": "9f33c48b8b49822c5768d08a1bb2baa14214802dff5d5f69d4065476aacc7cf7",
+    "tests/__init__.py": "a27a9d11dfa36afa6364bee99760ee4215f0a7e52c37c212b38dc887be615821",
+    "tests/test_api.py": "2694c166fafeb1d13af240224fbf1e8d6218b522f3bd239fa59e4bc0af277fcd"
+  },
+  "sha256_basis": "Packaged files, Windows batch line endings normalized to CRLF. Full ZIP manifest includes this report."
+}

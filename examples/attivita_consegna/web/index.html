@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="it">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le mie attività</title>
+<style>
+body{font:20px/1.5 system-ui,sans-serif;background:#f3f7f5;color:#18352e;margin:0;padding:24px}
+main{max-width:640px;margin:30px auto;background:white;border-radius:16px;padding:28px}
+h1{font-size:30px}label,input,button{display:block}input{font:inherit;box-sizing:border-box;width:100%;padding:12px;border:2px solid #577269;border-radius:7px;margin:8px 0 16px}
+button{font:inherit;background:#146857;color:white;border:0;border-radius:7px;padding:12px 20px;cursor:pointer}button:disabled{opacity:.6;cursor:wait}
+:focus-visible{outline:3px solid #c27800;outline-offset:3px}li{padding:8px 0;overflow-wrap:anywhere}small{font-size:16px}#esito{min-height:32px}
+</style>
+<main>
+<h1>Le mie attività</h1>
+<p>Scrivi una cosa da fare e premi Salva attività.</p>
+<form id="form">
+<label for="title">Cosa vuoi ricordare?</label>
+<input id="title" name="title" maxlength="200" required autocomplete="off">
+<button id="save">Salva attività</button>
+</form>
+<p id="esito" role="status" aria-live="polite"></p>
+<h2>Attività salvate</h2><ul id="items"></ul>
+<small>I dati sono conservati nel volume Docker di questa applicazione. Per fermarla usa FERMA.bat.</small>
+</main>
+<script src="/app.js" defer></script>
+</html>
