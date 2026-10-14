@@ -5,6 +5,34 @@ con quote operative, senza passaggio automatico a servizi a pagamento.
 
 ### ZIP del progetto ordinario ricevuto: backend mancante, consegna separata
 
+**Esito attuale sul PC: il backend separato funziona per creazione, consultazione
+e persistenza dopo riavvio del container**, secondo i messaggi dell'utente.
+Il comando docker run dall'immagine esistente ha restituito il container
+bf60f3d1a45f66f9dd5124f36bb6f803a03681021b5ef72a3950072f9b38d2e5.
+La pagina «Le mie attività» ha mostrato il database vuoto; l'utente ha salvato
+«Prova di salvataggio», ricevuto «Attività salvata» e visto l'elemento nella lista.
+Dopo `docker restart --time 2 officina-attivita-e32ae57b`, concluso con successo,
+ha ricaricato la pagina con Ctrl+R e confermato «rimasta». L'avviso deprecated
+sull'opzione --time non è un fallimento; usare --timeout nei prossimi comandi.
+Validazione e idempotenza sono verificate in Docker Linux, non ancora provate
+direttamente su Windows. Nuovi AVVIA/FERMA corretti non ancora applicati/provati
+sul PC: **non fargli usare i vecchi batch come se fossero aggiornati**.
+
+Il problema da risolvere rimane il progetto originale nell'assistente Officina,
+non il backend separato. Esteso scripts/leggi_diagnosi.py con `--progetto ID`:
+legge il DB principale e la storia di quel progetto, senza API, test, import o
+esecuzione dei file generati; restituisce ricevute/somme hash delle scritture
+main.py e motivi degli errori senza riportare il codice della storia. Chiavi
+mascherate e rapporto nuovo in Blocco note, distinto dai rapporti CLI già passati.
+**14 controlli diagnostici passati su Linux**, incluso DB principale distinto
+dall'accettazione, DB invariati, ID invalidi respinti e apertura Notepad simulata.
+Prossima azione: leggere il rapporto del progetto e32ae57b463c406381faa8efec493542
+sul PC con questo nuovo helper; il vecchio helper Windows va prima scaricato
+dalla revisione fissata. Aprire solo CMD con Win+R, poi incollare il lungo comando
+nella finestra nera: NON incollare comandi lunghi nella casella Esegui.
+
+Cronologia del problema iniziale di avvio della consegna:
+
 Aggiornamento Windows successivo alla consegna: l'utente ha scaricato ed estratto
 Backend-attivita.zip ed eseguito AVVIA.bat. Docker Desktop ha completato il build
 di tutti i 10 passaggi in 5.6 secondi, compresi COPY --chown e immagine fissata.
@@ -18,10 +46,7 @@ le pipe FINDSTR dai confronti di rete/label in AVVIA e FERMA: ora FOR /F legge
 il valore, IF lo confronta. Aggiunti fase dell'errore e ultimi log del container.
 Revisione Windows dei nuovi batch soltanto statica; esecuzione ancora da provare.
 Non cancellare container, rete o volume e non fare ricostruzioni alla cieca.
-Prossima azione sul PC: nella finestra CMD già aperta, creare il container con
-docker run dall'immagine esistente, stessi limiti/mount volume/porta loopback
-del batch, --pull=never. Nessun percorso locale o nuovo download necessario per
-questo avvio. Ricevere l'esito prima di dichiarare il backend avviato su Windows.
+Questa fase è superata dal successivo avvio diretto con docker run, descritto sopra.
 L'utente chiede poche finestre aperte: riutilizzare la stessa CMD, Docker Desktop
 ridotto a icona e questa chat. Non chiedere chiavi né ripetere la prova IA.
 
@@ -49,8 +74,7 @@ errori JavaScript. La pagina di prova usa una rete bridge dedicata con porta sol
 loopback; può consentire traffico uscente. Le verifiche del codice restano senza
 rete e senza mount host. File .bat non eseguiti su Windows, ancora da provare.
 
-Prossimo passo per l'utente: scaricare il nuovo ZIP della consegna; poi guidarlo
-una sola azione alla volta nell'estrazione e nell'apertura di AVVIA.bat. La nuova
+L'utente ha già scaricato, estratto e provato la consegna separata. La nuova
 pagina si chiama «Le mie attività», distinta da Officina (porta 8766, Officina 8765).
 Non fargli ricreare chiavi, aumentare budget o creare un altro obiettivo per questa
 prova. Il flusso del progetto originale dentro Officina **rimane incompleto**.

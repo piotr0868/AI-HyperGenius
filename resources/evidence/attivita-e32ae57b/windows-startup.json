@@ -13,6 +13,19 @@
     "startup phase and container logs displayed on failure"
   ],
   "new_batch_windows_execution": "not yet performed",
-  "direct_existing_image_start": "pending user execution",
-  "data_deleted": false
+  "direct_existing_image_start": "passed, per user pasted Docker run result",
+  "data_deleted": false,
+  "container_id": "bf60f3d1a45f66f9dd5124f36bb6f803a03681021b5ef72a3950072f9b38d2e5",
+  "user_observed_browser": {
+    "page": "Le mie attività",
+    "initial_list": "empty",
+    "save_message": "Attività salvata.",
+    "saved_activity": "Prova di salvataggio",
+    "activity_visible_after_save": true,
+    "restart_command": "docker restart --time 2 officina-attivita-e32ae57b",
+    "restart_result": "success; deprecated --time warning",
+    "after_ctrl_r": "user confirmed rimasta",
+    "persistent_after_container_restart": true
+  },
+  "windows_validation_and_idempotency": "not tested on Windows; covered by actual Linux Docker tests"
 }

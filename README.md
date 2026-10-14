@@ -335,5 +335,12 @@ ZIP dell'utente, con una pagina italiana, SQLite, API e avvio isolato in Docker.
 È completata da Codex dal riferimento dichiarato, non generata dall'agente Groq.
 18 test e 5 controlli API passati in Docker Linux, smoke Chromium e persistenza
 del volume passati. Leggere `LEGGIMI.txt` e `RISULTATI.json` nella cartella.
-I file Windows AVVIA.bat/FERMA.bat restano da provare sul PC. Il progetto originario
+Sul PC Windows l'utente ha confermato avvio diretto, salvataggio e permanenza dei
+dati dopo docker restart e ricarica. I nuovi AVVIA.bat/FERMA.bat corretti restano da
+provare sul PC. Il progetto originario
 nell'interfaccia Officina rimane distinto e incompleto; nessun contatore azzerato.
+
+Per leggere lo stato del progetto originale senza chiamate IA o esecuzione di
+codice generato, usare `scripts/leggi_diagnosi.py --progetto ID`. Questo modo
+seleziona la memoria principale dell'interfaccia; senza l'opzione il diagnostico
+legge la prova di generazione CLI, mentre `--correzione` legge la relativa copia.

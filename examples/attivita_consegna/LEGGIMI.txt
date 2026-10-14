@@ -44,6 +44,11 @@ Primo tentativo Windows: immagine costruita, poi controllo del vecchio batch
 fallito prima della creazione del container, nonostante rete bridge disponibile.
 Batch corretti per distinguere container e rete con lo stesso nome e leggere
 i valori senza pipe FINDSTR; nuova esecuzione su Windows ancora da verificare.
+Successiva prova Windows dell'utente: avvio diretto dall'immagine costruita,
+pagina aperta, attivita salvata e ritrovata dopo docker restart e ricarica del
+browser. Confermata quindi la persistenza dopo riavvio del container. Le prove
+Windows su input invalidi e duplicati non sono state eseguite. L'avvio diretto
+non dimostra il funzionamento dei nuovi file .bat, ancora da provare.
 Il progetto originale nell'interfaccia Officina resta distinto e non viene
 contrassegnato Pronto da questa consegna. Non sono stati cambiati i suoi contatori.
 

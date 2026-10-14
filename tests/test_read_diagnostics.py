@@ -72,7 +72,7 @@ def test_windows_reports_use_new_files_and_open_only_notepad(tmp_path, monkeypat
     monkeypatch.setattr(diagnostic.sys, 'platform', 'win32')
     launched = []
     monkeypatch.setattr(diagnostic.subprocess, 'Popen', lambda args: launched.append(args))
-    assert diagnostic.main() == 0 and diagnostic.main() == 0
+    assert diagnostic.main([]) == 0 and diagnostic.main([]) == 0
     assert len(launched) == 2 and launched[0][1] != launched[1][1]
     for args in launched:
         assert args[0] == 'notepad.exe'
@@ -152,3 +152,55 @@ def test_windows_short_mode_opens_fresh_compact_report(tmp_path, monkeypatch):
     report = json.loads(Path(launched[0][1]).read_text())
     assert report['repair']['id'] == repair['id']
     assert report['reason'] == 'Limite raggiunto' and 'python_outline_now' not in report
+
+
+def test_ordinary_ui_diagnostic_uses_main_database_and_never_acceptance_copy(tmp_path):
+    acceptance, other = prepare(tmp_path)
+    acceptance.close()
+    store = Store(tmp_path)
+    ui = store.create_project('Obiettivo ordinario')
+    code = "raise RuntimeError('do not execute history content')\n"
+    secret = 'gsk_test-ui-placeholder-hidden'
+    store.write_file(ui['id'], 'tests/test_api.py', 'raise RuntimeError("do not import")\n')
+    store.update(ui['id'], model_calls=12, summary='Limite di chiamate IA raggiunto.',
+        history=[{'type': 'function_call', 'call_id': 'missing-main', 'name': 'write_file',
+            'arguments': json.dumps({'path': 'main.py', 'content': code})},
+            {'type': 'function_call_output', 'call_id': 'missing-main',
+             'output': json.dumps({'error': 'Prima salva piano e criteri. ' + secret})}])
+    store.close()
+    databases = [tmp_path / 'memory.sqlite3', tmp_path / 'live-acceptance/memory.sqlite3']
+    before = [hashlib.sha256(path.read_bytes()).hexdigest() for path in databases]
+    report = diagnostic.collect(Settings(data_dir=tmp_path), ui['id'])
+    assert report['project_scope'] == 'ordinary_ui'
+    assert report['project']['id'] == ui['id'] and report['project']['id'] != other['id']
+    assert report['project']['model_calls'] == 12
+    assert report['files_now'][0]['path'] == 'tests/test_api.py'
+    assert report['main_write_attempts'][0]['content_sha256'] == hashlib.sha256(code.encode()).hexdigest()
+    assert 'Prima salva piano' in report['main_write_attempts'][0]['result']
+    assert secret not in json.dumps(report) and code not in json.dumps(report)
+    assert before == [hashlib.sha256(path.read_bytes()).hexdigest() for path in databases]
+    assert not (tmp_path / f'projects/{ui["id"]}/workspace/main.py').exists()
+
+
+@pytest.mark.parametrize('identifier', ['', '../escape', 'f' * 31, 'g' * 32])
+def test_ordinary_ui_invalid_id_does_not_fall_back_to_acceptance(tmp_path, monkeypatch, identifier):
+    store, _ = prepare(tmp_path)
+    store.close()
+    monkeypatch.setattr(diagnostic.sqlite3, 'connect', lambda *args, **kwargs: pytest.fail('Invalid ID must not query a database'))
+    with pytest.raises(ValueError):
+        diagnostic.collect(Settings(data_dir=tmp_path), identifier)
+
+
+def test_windows_ordinary_ui_mode_opens_only_its_fresh_report(tmp_path, monkeypatch):
+    store = Store(tmp_path)
+    project = store.create_project('Progetto UI')
+    store.close()
+    monkeypatch.setattr(diagnostic, 'load_settings', lambda: Settings(data_dir=tmp_path))
+    monkeypatch.setattr(diagnostic.sys, 'platform', 'win32')
+    launched = []
+    monkeypatch.setattr(diagnostic.subprocess, 'Popen', lambda args: launched.append(args))
+    assert diagnostic.main(['--progetto', project['id']]) == 0
+    assert launched[0][0] == 'notepad.exe'
+    report = json.loads(Path(launched[0][1]).read_text())
+    assert report['project']['id'] == project['id'] and report['project_scope'] == 'ordinary_ui'
+    assert not (tmp_path / 'live-acceptance').exists()

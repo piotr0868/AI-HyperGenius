@@ -14,6 +14,8 @@ né una verifica di ogni futuro programma; l'esito riguarda il contratto attivit
 
 | Prova | Esito effettivo |
 | --- | --- |
+| Backend separato sul PC Windows, prova manuale dell'utente | **Passato**: avvio diretto dall'immagine esistente, pagina italiana, creazione di «Prova di salvataggio», consultazione e attività ritrovata dopo vero docker restart e ricarica del browser. Validazione/idempotenza Windows non eseguite; nuovi batch corretti ancora da provare |
+| Diagnosi in sola lettura del progetto UI | **14 controlli mirati passati su Linux**, zero errori/fallimenti/skipped: selezione del DB principale distinta dall'accettazione, nessun import/exec/API, hash e ricevuta della scrittura persa, mascheramento chiavi, ID invalidi respinti senza accesso DB, database invariati e nuova finestra Notepad simulata. Rapporto reale UI Windows ancora da ricevere |
 | ZIP ordinario e32ae57b caricato dall'utente | **Incompleto**: main.py assente, 12 chiamate consumate e nessuna verifica registrata. Copia originale riprodotta in Docker: prove fallite, non Pronto |
 | Consegna separata completata da Codex | **18 test e 5 controlli API passati** in Docker senza rete, zero skipped; stessi 18 test passati anche in ordine inverso. Non è una nuova generazione Groq e non modifica lo stato del progetto ordinario sul PC |
 | Browser e avvio container della consegna separata | **Passati su Linux**: Chromium reale a 390px, salvataggio e ricarica, nessun errore JavaScript, dati e idempotenza conservati dopo stop/start con volume Docker; immagine non root, root filesystem in sola lettura, nessun bind mount host. Rete bridge dedicata e porta pubblicata solo loopback; traffico uscente possibile |

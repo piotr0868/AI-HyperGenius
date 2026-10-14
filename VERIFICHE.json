@@ -323,8 +323,8 @@
     "tests/test_token_budget.py": "faeefc114e586651ed4cb7f2a448ca478cf1081381098cd7d20cd9b5ce7064d6",
     "tests/test_resume_precheck.py": "50f145d966ce44438454e387dce85e023d965aee171448c59f04492c53338dba",
     "tests/test_history_recovery.py": "7687cffe1b19cc90f13458cf4ac5d89121beb744f7f59d49112ecf6099d05b00",
-    "scripts/leggi_diagnosi.py": "38462440bedb1391fb4082bdb8d75311fc5938173ed5864867ff58f40e3f5c59",
-    "tests/test_read_diagnostics.py": "4300f679f71a1be4fa5cb4778773dbf646c61b8e13d1e0918c415e8c08deff53",
+    "scripts/leggi_diagnosi.py": "91fcbb9a71715e49fd076346aa3128ea0fe857548cb00f47b5ba1a87fd10a135",
+    "tests/test_read_diagnostics.py": "9aa18a3a99693e1b23551dfd92b3f7067e7c129bbfd4cc243f2657ab6e22fead",
     "tests/test_server_lifecycle.py": "1848316cc144ea625bd4c28560e6db83c4161ec09409ff2afb75ff51be97ef8e",
     "tests/test_agent.py": "6096e9fdce49a25865c7c08a5545e504ceb409310ac1819a45a48406e9b586a5",
     "tests/test_completion_budget.py": "0c432f898f64704ab3f1359ebc9862924cee9b77d8303a5ad50bd4bce2305751"
@@ -628,7 +628,8 @@
       "new_provider_calls": 0,
       "windows_batch_execution": "not performed",
       "original_project": "not changed; incomplete",
-      "container_inspection_regression": "passed in real Docker: generic inspect accepts the same-named network, typed container inspect rejects it"
+      "container_inspection_regression": "passed in real Docker: generic inspect accepts the same-named network, typed container inspect rejects it",
+      "windows_manual_save_and_container_restart": "passed per user reports"
     },
     "windows_startup": {
       "date": "2026-10-14",
@@ -645,8 +646,33 @@
         "startup phase and container logs displayed on failure"
       ],
       "new_batch_windows_execution": "not yet performed",
-      "direct_existing_image_start": "pending user execution",
-      "data_deleted": false
+      "direct_existing_image_start": "passed, per user pasted Docker run result",
+      "data_deleted": false,
+      "container_id": "bf60f3d1a45f66f9dd5124f36bb6f803a03681021b5ef72a3950072f9b38d2e5",
+      "user_observed_browser": {
+        "page": "Le mie attività",
+        "initial_list": "empty",
+        "save_message": "Attività salvata.",
+        "saved_activity": "Prova di salvataggio",
+        "activity_visible_after_save": true,
+        "restart_command": "docker restart --time 2 officina-attivita-e32ae57b",
+        "restart_result": "success; deprecated --time warning",
+        "after_ctrl_r": "user confirmed rimasta",
+        "persistent_after_container_restart": true
+      },
+      "windows_validation_and_idempotency": "not tested on Windows; covered by actual Linux Docker tests"
     }
+  },
+  "ordinary_ui_readonly_diagnostic": {
+    "tests": 14,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "platform": "Linux",
+    "evidence": "resources/evidence/ui-readonly-diagnostic.xml",
+    "main_database_selected_separately": true,
+    "api_or_generated_code_execution": false,
+    "windows_notepad": "simulated only",
+    "actual_ui_project_report_from_windows": "pending"
   }
 }

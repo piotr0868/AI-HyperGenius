@@ -1,6 +1,8 @@
 """Legge lo stato attuale senza IA, test, import del codice generato o modifiche al database."""
 import ast
+import argparse
 from contextlib import closing
+import hashlib
 import json
 from pathlib import Path
 import re
@@ -52,14 +54,16 @@ def code_outline(path):
     return {'functions': functions[:20], 'imports': imports[:20], 'contract_cli_flags': flags}
 
 
-def collect(settings):
-    data = settings.data_dir / 'live-acceptance'
+def collect(settings, project_id=None):
+    # Gli obiettivi della UI usano il DB principale, non quello di accettazione.
+    ordinary = project_id is not None
+    data = settings.data_dir if ordinary else settings.data_dir / 'live-acceptance'
     checkpoint = data / 'RUN.json'
     saved = data / 'RESULTS.json'
-    identifier = None
-    if checkpoint.exists():
+    identifier = project_id
+    if not ordinary and checkpoint.exists():
         identifier = json.loads(checkpoint.read_text(encoding='utf-8')).get('generation_id')
-    if not identifier and saved.exists():
+    if not ordinary and not identifier and saved.exists():
         identifier = json.loads(saved.read_text(encoding='utf-8')).get('generation', {}).get('id')
     if not isinstance(identifier, str) or not re.fullmatch(r'[a-f0-9]{32}', identifier):
         raise ValueError('No valid generation project')
@@ -104,7 +108,9 @@ def collect(settings):
         if not isinstance(args, dict) or args.get('path') != 'main.py':
             continue
         output = outputs.get(item.get('call_id'), {}).get('output', '')
-        attempts.append({'characters': len(args.get('content', '')) if isinstance(args.get('content'), str) else None,
+        content = args.get('content')
+        attempts.append({'characters': len(content) if isinstance(content, str) else None,
+                         'content_sha256': hashlib.sha256(content.encode()).hexdigest() if isinstance(content, str) else None,
                          'result': safe_text(output, 800)})
     last_message = next((event['detail'].get('text', '') for event in events if event['kind'] == 'messaggio_ia'), '')
     errors = [{'tool': safe_text(event['detail'].get('tool'), 100),
@@ -116,9 +122,11 @@ def collect(settings):
     check = json.loads(project['last_check']) if project.get('last_check') else {}
     budget = next((event['detail'] for event in events if event['kind'] == 'controllo_budget_token'), None)
     return safe_value({'mode': 'project read-only; no API or generated-code execution',
+            'project_scope': 'ordinary_ui' if ordinary else 'live_acceptance_generation',
             'project': {key: project[key] for key in ('id', 'state', 'model_calls', 'tool_calls',
                 'input_tokens', 'output_tokens', 'failed_checks', 'docs_consulted', 'elapsed')},
             'files_now': files, 'python_outline_now': outlines,
+            'reason': safe_text(project.get('summary'), 600),
             'last_check': {'passed': check.get('passed'), 'check': check.get('check'),
                 'stderr': safe_text(check.get('stderr'), 4000)},
             'last_token_budget': budget, 'main_write_attempts': attempts[-5:],
@@ -169,10 +177,15 @@ def collect_repair_summary(settings):
     return safe_value(report)
 
 
-def main():
+def main(argv=None):
+    parser = argparse.ArgumentParser(description='Diagnosi locale in sola lettura, senza IA.')
+    modes = parser.add_mutually_exclusive_group()
+    modes.add_argument('--correzione', action='store_true')
+    modes.add_argument('--progetto', metavar='ID', help='ID dell’obiettivo nell’interfaccia Officina.')
+    args = parser.parse_args(argv)
     try:
         settings = load_settings()
-        report = collect_repair_summary(settings) if '--correzione' in sys.argv else collect(settings)
+        report = collect_repair_summary(settings) if args.correzione else collect(settings, args.progetto)
         directory = settings.data_dir / 'diagnostics'
         if directory.is_symlink() or not directory.resolve().is_relative_to(settings.data_dir.resolve()):
             raise ValueError('Diagnostics path not allowed')
