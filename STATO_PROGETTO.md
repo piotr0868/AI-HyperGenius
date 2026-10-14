@@ -3,6 +3,22 @@
 Aggiornato il 14 ottobre 2026. Il nuovo obiettivo è usare il piano gratuito Groq,
 con quote operative, senza passaggio automatico a servizi a pagamento.
 
+### Preferenza attuale: proseguire con un agente sul PC
+
+L'utente ha ribadito l'autorizzazione a tutti gli accessi necessari al progetto,
+con tutela dei dati personali, e vuole che l'agente lavori autonomamente sul PC:
+è stanco di incollare comandi. Gli strumenti effettivi di questa chat sono solo
+cloud; ricerca delle capacità effettuata, nessun controllo desktop/PC disponibile.
+Non fingere accesso Windows. Consultato README ufficiale openai/codex via GitHub:
+conferma CLI locale e pagina app https://chatgpt.com/codex?app-landing-page=true.
+I siti developers.openai.com e la pagina app hanno restituito 403 dal proxy cloud;
+non attribuirlo al PC dell'utente e non inventare il contenuto della pagina.
+Preparato resources/CONTINUA_SUL_PC.md con percorso, limiti, stato, prove e lavoro
+da finire. La sessione locale sarà distinta: trasferire il contesto, non promettere
+che aprire l'app dia controllo remoto a questa chat. Nessuna promessa di zero
+elaborazione dati da parte del fornitore IA; limitare gli accessi ai file necessari.
+Ultimo aggiornamento f91612f pronto ma applicazione Windows ancora non confermata.
+
 ### Recupero del programma originale nell'interfaccia, 14 ottobre
 
 Ricevuto il rapporto reale `--progetto e32ae57b463c406381faa8efec493542`:
