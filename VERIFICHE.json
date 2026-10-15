@@ -434,7 +434,14 @@
         "scope": "historical activities project; not the postboot probe"
       },
       "matrix": "still displays pre-reboot status and pending probe migrations; reconcile with actual local report",
-      "scope": "UI reports recovery probe passed; does not certify all permissions, capabilities or future reboots"
+      "scope": "UI reports recovery probe passed; does not certify all permissions, capabilities or future reboots",
+      "selected_recovery_probe_followup": {
+        "source": "User pasted the recovery probe project text after selecting it in Officina",
+        "state": "Pronto",
+        "exact_title": "Controlli Docker superati sui file correnti, senza altre chiamate IA.",
+        "description": "Declared full Windows reboot probe: Python standard-library SQLite versioned migrations, migrate(connection,target=2), items v1 and tag v2; PRAGMA user_version, transactions, idempotence and caller-data preservation requested",
+        "scope": "Probe UI reports current-file Docker checks passed without additional AI calls for checks; no raw check JSON or before/after counters supplied"
+      }
     }
   },
   "cloud": {

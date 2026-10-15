@@ -30,6 +30,17 @@ contatori. Non assegnare a migrazioni o autorizzazioni tecniche una riuscita
 non descritta dal nuovo rapporto. Il report dettagliato dopo riavvio non e'
 stato trasmesso al cloud: e' disponibile la notifica dell'interfaccia.
 
+L'utente ha poi selezionato la sonda corretta e incollato il suo riepilogo:
+Pronto, titolo **Controlli Docker superati sui file correnti, senza altre
+chiamate IA.** La descrizione e' quella delle migrazioni SQLite Python:
+migrations.py, migrate(connection,target=2), items alla v1, tag alla v2,
+PRAGMA user_version, transazioni, idempotenza e conservazione dei dati.
+Questo conferma l'esito visibile della sonda dopo il riavvio, distinto dalla
+prova WebSocket aperta per errore in un passaggio intermedio. Il testo incollato
+non comprende il JSON dell'ultima verifica o contatori prima/dopo: non inventare
+conteggi o dichiarare una verifica cloud indipendente. La matrice locale va
+allineata alle evidenze effettive senza ripetere il test gia' superato.
+
 Restano le limitazioni della matrice, tra cui Solana reale bloccata da
 io_uring/seccomp mantenendo le protezioni e l'invio Solana non implementato.
 La nuova documentazione registra l'esito, senza trasferire nel cloud i sorgenti
