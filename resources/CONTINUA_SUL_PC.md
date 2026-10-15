@@ -7,7 +7,27 @@ Leggere AGENTS.md e lo STATO_PROGETTO.md locale prima di agire. Ridurre le
 richieste all'utente alle sole informazioni o autorizzazioni indispensabili
 realmente mancanti. Non chiedere riconferme per il lavoro ordinario autorizzato.
 
-## Priorita' attuale: recuperare il lavoro locale senza ricominciare
+## Stato attuale: lavoro locale ripreso, verifica dopo riavvio ancora mancante
+
+Il successivo rapporto del Codex locale conferma ripresa dai file recenti,
+Officina avviata e dati/credenziali/contatori conservati. Dichiarati disponibili
+backend diversi, code/worker, Python/TypeScript/Go/Rust e integrazioni locali
+EVM/Bitcoin. Riferite prove di generazione IA di due progetti differenti,
+riparazione autonoma, procedure eseguibili, rollback, build Docker, WebSocket
+e transazioni locali. Suite completa: 119 test passati, piu' controlli mirati
+successivi non quantificati. Fonte: riepilogo locale incollato dall'utente;
+comandi, progetti e sorgenti aggiornati non sono stati trasmessi al cloud.
+
+Solana reale resta bloccata da io_uring con protezioni mantenute. Restano la
+prova dopo riavvio completo Windows e altre capacita' della matrice locale,
+non specificate nel riepilogo. Visione del browser non eseguita. Non dichiarare
+completato l'intero incarico o collaudato lo spegnimento. Non ripetere setup o
+installazioni funzionanti per il semplice avvio. Usare Apri Officina.
+
+Leggere lo stato e la matrice Windows per individuare il lavoro implementabile
+rimasto. Non sovrascrivere i sorgenti locali con la precedente versione cloud.
+
+## Cronologia della ripresa e indicazioni di conservazione
 
 Leggere resources/INCARICO_E_RIPRESA_OFFICINA.md. L'obiettivo e' un assistente
 backend/blockchain per richieste diverse; il backend attivita' e' soltanto una
@@ -21,8 +41,8 @@ non trattarlo come prova di memoria cancellata. WinGet non offre ancora la
 0.162.1 segnalata da Doctor. Il successivo setup amministrativo ufficiale
 della 0.161.0 e' riuscito per melon in C:\Users\melon\.codex secondo il log
 ricevuto. Riaprire Codex con l'account ordinario, nella cartella del progetto,
-e verificare la lettura dei file. Ripresa operativa e recupero dopo riavvio
-Windows restano da verificare sul PC.
+e verificare la lettura dei file: il successivo rapporto sopra riferisce la
+ripresa operativa riuscita. Recupero dopo riavvio Windows ancora da verificare.
 
 Una volta ripristinati gli strumenti, recuperare richieste e autorizzazioni
 dalla cronologia locale, aggiornare checkpoint e registro delle decisioni e

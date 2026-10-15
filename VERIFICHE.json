@@ -361,11 +361,46 @@
         "reported_user": "melon",
         "reported_codex_home": "C:\\Users\\melon\\.codex",
         "exact_output": "Windows elevated sandbox setup completed for melon at C:\\Users\\melon\\.codex.",
-        "shell_execution_in_resumed_session": "not yet verified"
+        "shell_execution_in_resumed_session": "Subsequent local Codex report states work resumed and tests ran; exact shell probe not supplied"
       },
-      "shell_recovery": "not verified",
+      "shell_recovery": "Operational work and tests resumed according to subsequent local Codex summary",
       "work_loss": "not established by diagnostics",
       "windows_restart_and_resumption": "not verified"
+    },
+    "broader_engineering_2026_10_15": {
+      "source": "Local Codex summary pasted by user; not executed or independently inspected by cloud assistant",
+      "work_resumption": "from recent local files; data, credentials and counters preserved according to report",
+      "available_capabilities_reported": [
+        "different backends",
+        "queues and workers",
+        "Python",
+        "TypeScript",
+        "Go",
+        "Rust",
+        "local EVM and Bitcoin integrations"
+      ],
+      "checks_reported": [
+        "real AI generation of two different projects",
+        "autonomous repair",
+        "executable procedures",
+        "rollback",
+        "Docker build",
+        "WebSocket",
+        "local transactions"
+      ],
+      "full_suite_tests_passed": 119,
+      "other_test_outcomes": "not specified in pasted summary",
+      "additional_targeted_checks": "reported; count and commands not supplied",
+      "provider_project_ids_hashes_and_current_sources": "not supplied in pasted summary",
+      "unresolved": {
+        "real_solana": "blocked by io_uring with protections preserved; exact details not supplied",
+        "windows_full_restart_resumption": "not tested",
+        "other_capabilities": "in local matrix; not enumerated in pasted summary"
+      },
+      "browser": "Officina running; launcher requested browser opening; visual observation not performed",
+      "local_state_evidence_checkpoints": "updated according to report",
+      "launcher": "Apri Officina",
+      "scope": "current local version; neither entire engineering mandate nor reboot recovery certified"
     }
   },
   "cloud": {
@@ -402,12 +437,12 @@
     "AGENTS.md": "862abad4b66579563fa80cc756af90591927e3b5115dee7814538d0f6defb91e",
     "tests/test_autonomous_completion.py": "919e85c7120f1c8ffa0f7b9cf3be6a62150d1b962665ba27e03b07919e7d1f16",
     "resources/ATTIVA_AUTONOMIA_PC.md": "7d9c27f4f2ea1d474b01bb6cf0860ed156ebf7866b982fa64f83e530b8cc3176",
-    "resources/CONTINUA_SUL_PC.md": "897d52060fcea9ec3cd8e1d9bc150c5f9f635e12e3c072f3c3430495ff5388f3",
+    "resources/CONTINUA_SUL_PC.md": "35264aed26c7766140e8c56725a91f2c5fb1fa46046970e3da9efabd2ddbead3",
     "app/progress.py": "f153ab38ea4a203f44309fed176ab353a45fe232f18700a4c65b2c832b5f388e",
     "app/templates/test_activity_api.py.txt": "00ac28423aa4015928dd20d74682b5fe3139de114c87993af9ea265cf12c52cf",
     "tests/test_progress.py": "46c0b1261eb97e4a19d29c0882d723af2bf35821ce6f33d4bd68b48fc979e903",
     "resources/RISOLVI_CICLO_SCRITTURE_PC.md": "a410aca3f9a290d890e94b7cbd01085a0fc983cf81457b47fb40f940c8617b6e",
-    "resources/INCARICO_E_RIPRESA_OFFICINA.md": "b4ee7c1633b2d7add1c31791e50a94ee373eada0148ff0d2ae07abb42337fdc8"
+    "resources/INCARICO_E_RIPRESA_OFFICINA.md": "b43e8433c6e3a7e8156dfdb4eeb90ded0a7fe30deea3e0bc774cec2413c4c91b"
   },
   "version": "0.2.0",
   "provider": "groq",
@@ -900,6 +935,6 @@
     "scope_of_change": "Documentation only; no application code or checkpoint implementation changed",
     "windows_document_installation": "not verified",
     "local_five_hour_work": "must be inspected and preserved; not replaced by older cloud sources",
-    "new_runtime_checkpoint_and_restart_test": "required, not implemented or verified by this documentation update"
+    "new_runtime_checkpoint_and_restart_test": "Local state and checkpoint artifacts updated according to subsequent report; runtime mechanism not described; full Windows restart test still pending"
   }
 }

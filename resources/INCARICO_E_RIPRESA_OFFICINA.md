@@ -196,3 +196,21 @@ Questo documento e' salvato sul repository cloud. Non e' stato verificato come
 presente sul PC e non implementa da solo il nuovo sistema di checkpoint. Il
 Codex locale deve integrare il mandato con la propria cronologia e verificare
 il recupero, preservando le modifiche delle cinque ore di lavoro.
+
+## Aggiornamento: ripresa operativa riferita dal Codex locale
+
+Un successivo riepilogo del 15 ottobre riferisce lavoro ripreso dai file
+recenti, 119 test passati e controlli mirati successivi, due generazioni IA
+diverse, riparazione autonoma, procedure eseguibili, rollback, build Docker,
+WebSocket e transazioni locali. Stato, prove e checkpoint locali aggiornati;
+Officina avviata, dati/credenziali/contatori conservati. Questo esito non va
+confuso con un nuovo collaudo della ripresa dopo spegnimento completo Windows,
+che il riepilogo indica esplicitamente ancora mancante.
+
+Solana reale resta bloccata da io_uring con protezioni mantenute. Altre capacita'
+della matrice locale sono incomplete ma non elencate nel riepilogo. Consultare
+i file Windows per dettagli, senza inventare identificativi, comandi o risultati.
+I nuovi sorgenti non sono stati trasmessi al cloud. Il presente consolidamento
+non prova l'installazione di ogni documento o l'implementazione di un particolare
+meccanismo di checkpoint. Il rapporto riferisce l'aggiornamento degli artefatti
+di stato; verificare separatamente continuita' e permessi dopo riavvio.

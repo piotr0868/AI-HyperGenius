@@ -4,6 +4,38 @@ Aggiornato il 15 ottobre 2026. L'obiettivo aggiornato e' un assistente di
 ingegneria backend e blockchain per progetti diversi, non il solo backend
 attivita'. Conservare i servizi configurati senza passaggi automatici a pagamento.
 
+### Ripresa riuscita e nuove capacita': rapporto locale del 15 ottobre
+
+Il nuovo riepilogo del Codex locale, incollato dall'utente, riferisce ripresa
+dai file recenti con dati, credenziali e contatori conservati. Officina e'
+avviata e il launcher ha richiesto l'apertura del browser. Stato, prove e
+checkpoint locali sono stati aggiornati. La ripresa operativa e' dunque
+riuscita secondo questo rapporto; non occorre ricreare il progetto o ripetere
+il provisioning senza un nuovo errore concreto.
+
+Capacita' dichiarate dal Codex locale: backend diversi, code/worker, progetti
+Python/TypeScript/Go/Rust e integrazioni locali EVM/Bitcoin. Prove effettive
+riferite: generazione IA di due progetti diversi, riparazione autonoma,
+procedure eseguibili, rollback, build Docker, WebSocket e transazioni locali.
+Il rapporto indica **119 test passati nella suite completa**, oltre a controlli
+mirati successivi non quantificati. Non specifica quali test o stack compongano
+la suite, gli identificativi/hash dei progetti, il provider o i comandi completi.
+Questi risultati sono attribuiti al rapporto locale e non a prove eseguite
+dalla sessione cloud. Non sommare o confrontare direttamente questo conteggio
+con le precedenti suite di revisioni diverse.
+
+Restano incompleti: Solana reale, bloccata da io_uring mantenendo le protezioni;
+recupero dopo un riavvio completo di Windows; altre capacita' della matrice
+locale, non elencate nel riepilogo ricevuto. Osservazione visiva del browser
+non eseguita. Non dichiarare quindi completato l'intero incarico professionale
+o verificata la continuita' dopo spegnimento del PC. Non aggirare le protezioni
+per ottenere un esito positivo di Solana e non riavviare Windows autonomamente.
+
+Avvio quotidiano: **Apri Officina** sul Desktop. I sorgenti recenti e i rapporti
+dettagliati sono nella copia Windows, non sono stati trasmessi al cloud. La
+pubblicazione di questo riepilogo conserva il contesto e non aggiorna da sola
+il codice cloud alla nuova versione locale.
+
 ### Incarico generale, lavoro locale e ripresa del 15 ottobre
 
 L'utente ha chiarito che il backend attivita' era un esempio di accettazione.
@@ -30,8 +62,9 @@ nelle origini configurate. Il successivo comando ufficiale della 0.161.0
 sandbox setup --elevated --current-user da PowerShell amministrativa ha
 restituito: Windows elevated sandbox setup completed for melon at
 C:\Users\melon\.codex. Il setup e' dunque riuscito secondo il log ricevuto.
-Esecuzione dei comandi nella sessione ripresa e riavvio Windows restano da
-verificare. Non disabilitare sandbox o protezioni per aggirare eventuali errori.
+In quel momento la ripresa era ancora da verificare; il successivo rapporto
+locale riportato sopra riferisce lavoro e test eseguiti. Il riavvio completo
+Windows resta da verificare. Non disabilitare sandbox o protezioni.
 
 resources/INCARICO_E_RIPRESA_OFFICINA.md conserva il mandato e i requisiti di
 continuita'. AGENTS.md ne richiede la lettura all'avvio. Sono istruzioni e
