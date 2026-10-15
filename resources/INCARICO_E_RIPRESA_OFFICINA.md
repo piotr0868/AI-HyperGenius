@@ -214,3 +214,19 @@ I nuovi sorgenti non sono stati trasmessi al cloud. Il presente consolidamento
 non prova l'installazione di ogni documento o l'implementazione di un particolare
 meccanismo di checkpoint. Il rapporto riferisce l'aggiornamento degli artefatti
 di stato; verificare separatamente continuita' e permessi dopo riavvio.
+
+## Aggiornamento successivo: esito positivo nell'interfaccia dopo riavvio
+
+Il 15 ottobre l'utente ha confermato il riavvio completo e incollato la pagina
+di Officina aperta automaticamente. La notifica dice: Riavvio Windows
+verificato: memoria conservata e sonda ripresa con test Docker superati.
+La sonda in prima posizione e' Pronto. E' la fonte disponibile alla chat cloud,
+distinta dal rapporto dettagliato della sonda che resta da leggere localmente.
+
+Il precedente riepilogo Codex indicava 139 test completi passati, piu' controlli
+mirati, backup e confronto di 13 progetti. Sono verifiche prima del riavvio.
+La selezione visibile e' invece il vecchio progetto attivita' e32ae57b, con
+prove del 14 ottobre. La matrice non riflette ancora il nuovo messaggio: leggere
+il rapporto della sonda e riconciliare stato e capacita', senza ripetere prove
+gia' concluse o azzerare contatori. Non estendere l'esito a tutte le operazioni,
+ai permessi del sistema o all'intero incarico professionale.

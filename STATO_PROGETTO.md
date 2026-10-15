@@ -4,7 +4,38 @@ Aggiornato il 15 ottobre 2026. L'obiettivo aggiornato e' un assistente di
 ingegneria backend e blockchain per progetti diversi, non il solo backend
 attivita'. Conservare i servizi configurati senza passaggi automatici a pagamento.
 
-### Ripresa riuscita e nuove capacita': rapporto locale del 15 ottobre
+### Riavvio completo Windows: esito positivo mostrato da Officina
+
+L'utente ha confermato di aver riavviato il PC e ha poi incollato il contenuto
+della pagina aperta automaticamente. Il messaggio e': **Riavvio Windows
+verificato: memoria conservata e sonda ripresa con test Docker superati.**
+La prima voce dei progetti, Sonda dichiarata per verificare recupero dopo
+riavvio completo Windows, risulta Pronto. Questa e' un'evidenza riferita
+dall'interfaccia locale dopo il riavvio reale, non una nuova prova eseguita
+dalla sessione cloud o una garanzia per tutti gli incarichi e permessi futuri.
+
+Il riepilogo Codex precedente al riavvio riferiva 139 test della suite completa
+passati, piu' prove mirate successive: webhook/WebSocket, validatori
+infrastrutturali, licenze Go e correzioni del controller. Backup salvati,
+confronto di 13 progetti senza differenze e avvio automatico verificato erano
+controlli preparatori. Non attribuire il conteggio 139 alla sonda dopo riavvio.
+
+Al centro della pagina e' ancora selezionato e32ae57b463c406381faa8efec493542:
+i cinque test, hash 55159101... e operazioni del 14 ottobre sono prove storiche
+del vecchio backend attivita', non il rapporto aggiornato della sonda. La
+matrice incollata contiene ancora le descrizioni pre-riavvio (riavvio non
+eseguito; migrazioni SQLite della sonda da verificare). Va riconciliata dal
+Codex locale con il rapporto effettivo della sonda, senza ripeterla o azzerare
+contatori. Non assegnare a migrazioni o autorizzazioni tecniche una riuscita
+non descritta dal nuovo rapporto. Il report dettagliato dopo riavvio non e'
+stato trasmesso al cloud: e' disponibile la notifica dell'interfaccia.
+
+Restano le limitazioni della matrice, tra cui Solana reale bloccata da
+io_uring/seccomp mantenendo le protezioni e l'invio Solana non implementato.
+La nuova documentazione registra l'esito, senza trasferire nel cloud i sorgenti
+della versione Windows o modificare i suoi progetti.
+
+### Cronologia: prima ripresa e nuove capacita', rapporto da 119 test
 
 Il nuovo riepilogo del Codex locale, incollato dall'utente, riferisce ripresa
 dai file recenti con dati, credenziali e contatori conservati. Officina e'

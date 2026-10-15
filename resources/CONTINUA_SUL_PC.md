@@ -7,7 +7,28 @@ Leggere AGENTS.md e lo STATO_PROGETTO.md locale prima di agire. Ridurre le
 richieste all'utente alle sole informazioni o autorizzazioni indispensabili
 realmente mancanti. Non chiedere riconferme per il lavoro ordinario autorizzato.
 
-## Stato attuale: lavoro locale ripreso, verifica dopo riavvio ancora mancante
+## Stato attuale: notifica positiva dopo riavvio completo Windows
+
+L'utente ha riavviato il PC e incollato il contenuto della pagina Officina
+aperta automaticamente. Messaggio: **Riavvio Windows verificato: memoria
+conservata e sonda ripresa con test Docker superati.** Prima sonda nell'elenco
+Pronto. Il report Codex prima del riavvio riferiva 139 test passati piu' prove
+mirate, backup e confronto di 13 progetti senza differenze. Distinguerli dalle
+prove della sonda dopo il riavvio, i cui dettagli non sono nel testo incollato.
+
+La pagina seleziona ancora e32ae57b463c406381faa8efec493542, con prove del
+14 ottobre: non confonderle con la nuova sonda. La matrice mostra ancora
+riavvio non eseguito e migrazioni della sonda da verificare. Consultare il
+rapporto locale attuale e aggiornare solo le voci suffragate dalle prove;
+non ripetere la sonda, cambiare contatori o trattare descrizioni precedenti
+come un nuovo fallimento. La sonda era indicata prima del riavvio dal prefisso
+a9cfd658; recuperare l'identificativo completo localmente. Solana resta bloccata.
+
+I nuovi sorgenti e i dettagli dei rapporti sono nel PC. Non applicare il vecchio
+codice cloud sopra il lavoro locale. La sessione cloud ha registrato la notifica,
+non eseguito una verifica indipendente del ripristino o di ogni autorizzazione.
+
+## Cronologia: prima ripresa riferita dal Codex locale
 
 Il successivo rapporto del Codex locale conferma ripresa dai file recenti,
 Officina avviata e dati/credenziali/contatori conservati. Dichiarati disponibili
