@@ -5,6 +5,29 @@ autonomamente sui file e sui processi necessari a questo progetto, conservando
 dati e credenziali. L'utente descrive il risultato; l'agente gestisce i passaggi
 tecnici, il piano, le correzioni e le prove.
 
+## Incarico e ripresa persistenti
+
+- All'inizio di una sessione leggi resources/INCARICO_E_RIPRESA_OFFICINA.md,
+  lo STATO_PROGETTO.md locale e .data/CONTINUA_SUL_PC.md, se presente. Controlla
+  anche cronologia, file e operazioni interrotte: non presumere che una nuova
+  sessione debba ripartire da zero. Lo stato locale puo' essere piu' recente
+  della copia GitHub, soprattutto dopo il lavoro Windows del 14 ottobre.
+- L'obiettivo aggiornato e' un assistente di ingegneria backend e blockchain
+  per progetti diversi. Il backend attivita' e' una prova di regressione, non
+  il requisito obbligatorio universale. Il codice cloud precedente e' ancora
+  specializzato: non presentarlo come implementazione del nuovo obiettivo.
+- Registra nuove richieste, correzioni di obiettivo e autorizzazioni esplicite
+  durante il lavoro, senza segreti. Salva checkpoint dopo ogni traguardo e prima
+  di operazioni lunghe. Non affidare il recupero solo al salvataggio in uscita.
+- Distingui consenso dell'utente, permessi tecnici effettivi e loro durata.
+  Un'istruzione salvata non sostituisce un'autorizzazione Windows o un controllo
+  di accesso. Riusa i permessi validi e non richiedere di nuovo il consenso gia'
+  documentato per le normali operazioni del progetto.
+- Se la shell fallisce, non concludere che la memoria sia persa. Conserva gli
+  archivi e diagnostica gli strumenti prima di ricreare sessioni o progetti.
+  La ripresa deve essere verificata con chiusura e riapertura; il riavvio reale
+  di Windows richiede una prova distinta, da non dichiarare eseguita sul cloud.
+
 ## Autonomia e comunicazione
 
 - Comunica in italiano semplice. Dai aggiornamenti brevi durante il lavoro.

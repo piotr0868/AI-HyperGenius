@@ -1,11 +1,35 @@
 # Ripresa di Officina sul PC
 
-Aggiornato il 14 ottobre 2026. L'utente vuole lavoro autonomo: descrivere il
+Aggiornato il 15 ottobre 2026. L'utente vuole lavoro autonomo: descrivere il
 risultato in italiano e lasciare all'agente pianificazione, decisioni tecniche,
 file, prove e correzioni. Ha gia' autorizzato le operazioni necessarie al progetto.
 Leggere AGENTS.md e lo STATO_PROGETTO.md locale prima di agire. Ridurre le
 richieste all'utente alle sole informazioni o autorizzazioni indispensabili
 realmente mancanti. Non chiedere riconferme per il lavoro ordinario autorizzato.
+
+## Priorita' attuale: recuperare il lavoro locale senza ricominciare
+
+Leggere resources/INCARICO_E_RIPRESA_OFFICINA.md. L'obiettivo e' un assistente
+backend/blockchain per richieste diverse; il backend attivita' e' soltanto una
+prova. Il Codex Windows avrebbe lavorato circa cinque ore sul nuovo mandato.
+Queste modifiche non sono disponibili nella copia cloud: ispezionare prima lo
+stato locale, conservarlo e non sostituirlo con i vecchi sorgenti del repository.
+
+La cronologia e gli archivi di Codex risultano sani secondo Doctor. Il blocco
+segnalato e' il provisioning del sandbox elevated con helper_unknown_error;
+non trattarlo come prova di memoria cancellata. WinGet non offre ancora la
+0.162.1 segnalata da Doctor. Il successivo setup amministrativo ufficiale
+della 0.161.0 e' riuscito per melon in C:\Users\melon\.codex secondo il log
+ricevuto. Riaprire Codex con l'account ordinario, nella cartella del progetto,
+e verificare la lettura dei file. Ripresa operativa e recupero dopo riavvio
+Windows restano da verificare sul PC.
+
+Una volta ripristinati gli strumenti, recuperare richieste e autorizzazioni
+dalla cronologia locale, aggiornare checkpoint e registro delle decisioni e
+continuare dal primo requisito incompleto. Non chiedere all'utente di
+ricostruire il mandato. Distinguere permessi tecnici temporanei e consenso
+persistente; non tentare di aggirare controlli o convertire il consenso in
+accesso illimitato. Le sezioni successive descrivono prove storiche.
 
 ## Ambiente e dati
 

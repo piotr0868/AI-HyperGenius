@@ -1,7 +1,44 @@
 # Stato progetto — Officina v0.2 (Groq)
 
-Aggiornato il 14 ottobre 2026. Il nuovo obiettivo è usare il piano gratuito Groq,
-con quote operative, senza passaggio automatico a servizi a pagamento.
+Aggiornato il 15 ottobre 2026. L'obiettivo aggiornato e' un assistente di
+ingegneria backend e blockchain per progetti diversi, non il solo backend
+attivita'. Conservare i servizi configurati senza passaggi automatici a pagamento.
+
+### Incarico generale, lavoro locale e ripresa del 15 ottobre
+
+L'utente ha chiarito che il backend attivita' era un esempio di accettazione.
+Ha chiesto un incarico completo per Codex relativo al lavoro di un Senior
+Blockchain Backend Engineer. Quel mandato e' stato consegnato in chat; l'utente
+riferisce poi circa cinque ore di lavoro del Codex sul proprio PC. Il contenuto
+di quelle modifiche e il punto di interruzione non sono stati trasmessi al cloud:
+lo stato Windows e i file locali restano la fonte da ispezionare. Non applicare
+la vecchia copia cloud sopra il lavoro locale e non dichiarare completate le
+nuove capacita' senza leggere i relativi risultati.
+
+La ripresa con resume --last ha incontrato un errore relativo al pacchetto e
+al server in background; con --no-daemon l'interfaccia si e' riaperta, ma il
+Codex locale ha segnalato comandi shell senza risposta. I rapporti Doctor
+incollati dall'utente indicano Codex 0.161.0, installazione consistente, accesso
+configurato, provider raggiungibile, database sani e inventario delle sessioni
+coerente con gli archivi. Non attestano la perdita del lavoro. Il sandbox
+elevated registra invece un fallimento di provisioning helper_unknown_error.
+L'avviso generico su Defender non dimostra un blocco effettivo. Il problema
+MCP facoltativo non dimostra di essere la causa della shell ferma.
+
+Doctor segnala 0.162.1 disponibile, ma winget upgrade non trova aggiornamenti
+nelle origini configurate. Il successivo comando ufficiale della 0.161.0
+sandbox setup --elevated --current-user da PowerShell amministrativa ha
+restituito: Windows elevated sandbox setup completed for melon at
+C:\Users\melon\.codex. Il setup e' dunque riuscito secondo il log ricevuto.
+Esecuzione dei comandi nella sessione ripresa e riavvio Windows restano da
+verificare. Non disabilitare sandbox o protezioni per aggirare eventuali errori.
+
+resources/INCARICO_E_RIPRESA_OFFICINA.md conserva il mandato e i requisiti di
+continuita'. AGENTS.md ne richiede la lettura all'avvio. Sono istruzioni e
+documentazione persistenti nel repository, non una riparazione della shell o
+un nuovo meccanismo di checkpoint gia' installato sul PC. La prova di recupero
+dopo riavvio Windows, con richieste e decisioni ritrovate, resta da verificare
+localmente. Conservare i risultati storici sotto senza attribuirli a questa prova.
 
 ### Nuova prova reale Windows riuscita
 
