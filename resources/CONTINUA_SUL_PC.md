@@ -7,7 +7,26 @@ Leggere AGENTS.md e lo STATO_PROGETTO.md locale prima di agire. Ridurre le
 richieste all'utente alle sole informazioni o autorizzazioni indispensabili
 realmente mancanti. Non chiedere riconferme per il lavoro ordinario autorizzato.
 
-## Stato attuale: notifica positiva dopo riavvio completo Windows
+## Stato attuale: rapporto del riavvio verificato e prova Go/PostgreSQL passata
+
+Il Codex locale ha riferito lettura del rapporto effettivo dopo il riavvio senza
+ripetere la sonda: memoria conservata, 13 test Docker superati, contatori
+invariati. Stato, checkpoint e matrice locali aggiornati; confermate anche le
+migrazioni SQLite documentate. Non ripetere il collaudo o proporre un nuovo
+riavvio per la verifica gia' conclusa.
+
+Nuova prova con agente reale di Officina: Go/PostgreSQL, 6 test e verifica
+indipendente di concorrenza, idempotenza e recupero dopo arresto del database.
+Suite locale: 145 test passati. Conteggi distinti, non da sommare. ID/hash,
+provider e comandi non inclusi nel riepilogo: leggerli localmente se necessari.
+
+Officina riaperta, usare Apri Officina. Solana resta bloccata con protezioni
+attive; architetture con piu' microservizi richiedono prove dedicate. Consultare
+la matrice locale aggiornata per gli altri requisiti e conservare tutte le
+evidenze precedenti. Fonte: riepilogo del Codex locale incollato dall'utente,
+non esecuzione o ispezione dei rapporti Windows da parte del cloud.
+
+## Cronologia: notifica positiva prima della lettura del rapporto dettagliato
 
 L'utente ha riavviato il PC e incollato il contenuto della pagina Officina
 aperta automaticamente. Messaggio: **Riavvio Windows verificato: memoria

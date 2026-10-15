@@ -1,10 +1,34 @@
-# Stato progetto — Officina v0.2 (Groq)
+# Stato progetto — Officina
 
 Aggiornato il 15 ottobre 2026. L'obiettivo aggiornato e' un assistente di
 ingegneria backend e blockchain per progetti diversi, non il solo backend
 attivita'. Conservare i servizi configurati senza passaggi automatici a pagamento.
 
-### Riavvio completo Windows: esito positivo mostrato da Officina
+### Rapporto locale: riavvio confermato e nuova prova Go/PostgreSQL
+
+Il successivo riepilogo del Codex locale, incollato dall'utente il 15 ottobre,
+riferisce lettura del rapporto effettivo dopo il riavvio **senza ripetere la
+sonda**: memoria conservata, **13 test Docker superati e contatori invariati**.
+STATO_PROGETTO.md, checkpoint e matrice locali sono stati aggiornati; confermate
+anche le migrazioni SQLite documentate. La precedente discordanza della matrice
+risulta quindi risolta secondo il rapporto, senza azzerare i contatori.
+
+Riferita inoltre una nuova prova tramite l'agente reale di Officina in
+**Go/PostgreSQL**, con **6 test** e verifica indipendente di concorrenza,
+idempotenza e recupero dopo arresto del database. Suite Officina locale:
+**145 test passati**. Non sommare questi conteggi: riguardano la sonda di
+riavvio, il progetto Go e la suite del controller rispettivamente. Il riepilogo
+non include ID/hash del nuovo progetto, provider, comandi o rapporto JSON
+completo. Sono risultati attribuiti al Codex locale, non eseguiti dal cloud.
+
+Officina riaperta, avvio abituale Apri Officina sul Desktop. Per la verifica
+di riavvio descritta non sono necessari altri clic o una nuova esecuzione.
+Restano Solana bloccata con protezioni attive e prove dedicate ancora richieste
+per architetture con piu' microservizi. Non dichiarare concluso l'intero incarico
+professionale da questi risultati. I nuovi sorgenti e rapporti dettagliati
+rimangono nella copia Windows; questo aggiornamento registra solo il riepilogo.
+
+### Cronologia: notifica del riavvio prima dell'allineamento della matrice
 
 L'utente ha confermato di aver riavviato il PC e ha poi incollato il contenuto
 della pagina aperta automaticamente. Il messaggio e': **Riavvio Windows

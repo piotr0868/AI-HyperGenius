@@ -230,3 +230,21 @@ prove del 14 ottobre. La matrice non riflette ancora il nuovo messaggio: leggere
 il rapporto della sonda e riconciliare stato e capacita', senza ripetere prove
 gia' concluse o azzerare contatori. Non estendere l'esito a tutte le operazioni,
 ai permessi del sistema o all'intero incarico professionale.
+
+## Conferma successiva del rapporto locale: 13 test di riavvio, 145 di suite
+
+Il successivo riepilogo del Codex locale riferisce rapporto del riavvio
+verificato senza ripetere la sonda: memoria conservata, 13 test Docker passati
+e contatori invariati. Stato, checkpoint e matrice aggiornati; migrazioni
+SQLite documentate confermate. Non richiedere un nuovo riavvio o la ripetizione
+del test per questa verifica gia' conclusa.
+
+Riferita anche una nuova prova dell'agente reale in Go/PostgreSQL: 6 test e
+controllo indipendente di concorrenza, idempotenza e recupero dopo arresto del
+database. Suite Officina locale: 145 test passati. Fonte: rapporto incollato
+dall'utente, non prove eseguite dal cloud. Il riepilogo non contiene tutti i
+comandi/ID/hash: conservarli e consultarli nella copia locale, senza inventarli.
+Restano Solana bloccata con protezioni attive e prove di architetture con piu'
+microservizi. Conservare il mandato completo e distinguere le capacita' provate
+dai requisiti ancora incompleti; non presentare il ruolo professionale come
+interamente coperto da un numero di test.
