@@ -508,15 +508,16 @@
     "tests/test_completion_budget.py": "0c432f898f64704ab3f1359ebc9862924cee9b77d8303a5ad50bd4bce2305751",
     "APRI_OFFICINA.bat": "8ac0bc60b8d384dda70677aed47e5f368584dab1c7d03c0e8a4ce594ed8d271d",
     "scripts/apri_officina.py": "cfcb19a875eb8e1a9fbe0c85e594758dafe980a9e0f63f6f33533d651280bae3",
-    "AGENTS.md": "862abad4b66579563fa80cc756af90591927e3b5115dee7814538d0f6defb91e",
+    "AGENTS.md": "ce58b7bc5c834e981b44257196449f26334b8f30e805394551a6ee24a56e25c6",
     "tests/test_autonomous_completion.py": "919e85c7120f1c8ffa0f7b9cf3be6a62150d1b962665ba27e03b07919e7d1f16",
     "resources/ATTIVA_AUTONOMIA_PC.md": "7d9c27f4f2ea1d474b01bb6cf0860ed156ebf7866b982fa64f83e530b8cc3176",
-    "resources/CONTINUA_SUL_PC.md": "7f61376c5d39ce679a0bc1d93ebfb6d7330a9c8571c98d84607c956afa24883e",
+    "resources/CONTINUA_SUL_PC.md": "da27c1d0018101891f9e4e47a8a40d34b18bc8d18677bf14a240d500dd18b194",
     "app/progress.py": "f153ab38ea4a203f44309fed176ab353a45fe232f18700a4c65b2c832b5f388e",
     "app/templates/test_activity_api.py.txt": "00ac28423aa4015928dd20d74682b5fe3139de114c87993af9ea265cf12c52cf",
     "tests/test_progress.py": "46c0b1261eb97e4a19d29c0882d723af2bf35821ce6f33d4bd68b48fc979e903",
     "resources/RISOLVI_CICLO_SCRITTURE_PC.md": "a410aca3f9a290d890e94b7cbd01085a0fc983cf81457b47fb40f940c8617b6e",
-    "resources/INCARICO_E_RIPRESA_OFFICINA.md": "f1723f490ce1d4e8ef758f8f2aa72d42aa9253ef5a1ae55ee45b80aae8f9b566"
+    "resources/INCARICO_E_RIPRESA_OFFICINA.md": "f1723f490ce1d4e8ef758f8f2aa72d42aa9253ef5a1ae55ee45b80aae8f9b566",
+    "resources/SALVA_E_RIPRENDI_SUL_PC.md": "8b88e1d2d44e534fefacd0f6bd60dc51215734d4c80f44efacd799a8311080fa"
   },
   "version": "0.2.0",
   "provider": "groq",
@@ -1010,5 +1011,19 @@
     "windows_document_installation": "not verified",
     "local_five_hour_work": "must be inspected and preserved; not replaced by older cloud sources",
     "new_runtime_checkpoint_and_restart_test": "User-confirmed Windows reboot and subsequent local Codex report review: memory preserved, 13 Docker tests passed, counters unchanged; no claim about all technical permissions"
+  },
+  "save_for_tomorrow_2026_10_15": {
+    "source": "User request to preserve all relevant Codex work and resume tomorrow without reconstructing context",
+    "instructions": "resources/SALVA_E_RIPRENDI_SUL_PC.md",
+    "status": "instructions prepared; actual Windows backup and shortcut not yet executed or verified by this cloud session",
+    "required_artifacts": [
+      "persistent mandate and handoff",
+      "verified consistent local project/data backup",
+      "current Codex session reference",
+      "Riprendi lavoro Officina Desktop shortcut"
+    ],
+    "remote_source_copy": "only if existing GitHub access works; no secrets, private memory or conversations in Git",
+    "current_windows_sources": "not contained in cloud checkout",
+    "no_new_project_tests_or_generations": "saving does not require repeating passed probes or broad test suites"
   }
 }

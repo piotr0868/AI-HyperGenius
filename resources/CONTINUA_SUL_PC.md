@@ -7,6 +7,15 @@ Leggere AGENTS.md e lo STATO_PROGETTO.md locale prima di agire. Ridurre le
 richieste all'utente alle sole informazioni o autorizzazioni indispensabili
 realmente mancanti. Non chiedere riconferme per il lavoro ordinario autorizzato.
 
+## Richiesta piu' recente: salvataggio prima di fermarsi
+
+Prima di nuovi sviluppi eseguire resources/SALVA_E_RIPRENDI_SUL_PC.md sulla
+copia Windows attuale: consegna persistente, backup coerente verificato e
+collegamento Riprendi lavoro Officina alla conversazione corretta. L'utente
+vuole riprendere domani senza riscrivere richieste e decisioni. Non sostituire
+i file locali con vecchi sorgenti cloud e non confondere queste istruzioni con
+un backup gia' eseguito. Riavvio e prove passate non vanno ripetuti per salvare.
+
 ## Stato attuale: rapporto del riavvio verificato e prova Go/PostgreSQL passata
 
 Il Codex locale ha riferito lettura del rapporto effettivo dopo il riavvio senza

@@ -4,6 +4,20 @@ Aggiornato il 15 ottobre 2026. L'obiettivo aggiornato e' un assistente di
 ingegneria backend e blockchain per progetti diversi, non il solo backend
 attivita'. Conservare i servizi configurati senza passaggi automatici a pagamento.
 
+### Richiesta attuale: salvare tutto per la ripresa di domani
+
+L'utente chiede di conservare il lavoro di Codex e poter riprendere domani senza
+ricostruire l'incarico. Preparata resources/SALVA_E_RIPRENDI_SUL_PC.md per il
+Codex locale: consegna persistente, backup coerente verificato dei sorgenti e
+dati necessari, riferimento alla conversazione corretta e collegamento Desktop
+Riprendi lavoro Officina. Copia Git dei soli sorgenti/istruzioni se l'accesso
+e' gia' utilizzabile, senza segreti o memoria privata.
+
+Questa pubblicazione contiene istruzioni, non un backup dei nuovi file sul PC.
+Esecuzione e verifica del salvataggio locale ancora da ricevere: non dichiararle
+completate sulla base di questo documento. Non ripetere generazioni o collaudi
+gia' passati e non iniziare nuovi sviluppi prima del salvataggio richiesto.
+
 ### Rapporto locale: riavvio confermato e nuova prova Go/PostgreSQL
 
 Il successivo riepilogo del Codex locale, incollato dall'utente il 15 ottobre,

@@ -19,6 +19,10 @@ tecnici, il piano, le correzioni e le prove.
 - Registra nuove richieste, correzioni di obiettivo e autorizzazioni esplicite
   durante il lavoro, senza segreti. Salva checkpoint dopo ogni traguardo e prima
   di operazioni lunghe. Non affidare il recupero solo al salvataggio in uscita.
+- Quando l'utente chiede di salvare il lavoro per domani, completa prima il
+  salvataggio coerente e la consegna: resources/SALVA_E_RIPRENDI_SUL_PC.md.
+  Non avviare altri sviluppi. Il backup degli ultimi sorgenti e dati Windows
+  deve essere eseguito e verificato sul PC, non dedotto dai riepiloghi cloud.
 - Distingui consenso dell'utente, permessi tecnici effettivi e loro durata.
   Un'istruzione salvata non sostituisce un'autorizzazione Windows o un controllo
   di accesso. Riusa i permessi validi e non richiedere di nuovo il consenso gia'
